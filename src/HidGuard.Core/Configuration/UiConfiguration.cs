@@ -1,0 +1,22 @@
+namespace HidGuard.Core.Configuration;
+
+public sealed record UiConfiguration
+{
+    private static readonly HashSet<string> ValidThemes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Dark", "Light", "System"
+    };
+
+    public bool StartMinimizedToTray { get; init; } = true;
+    public bool NotifyOnAllowedDevices { get; init; }
+    public bool NotifyOnBlockedDevices { get; init; } = true;
+    public string Theme { get; init; } = "Dark";
+
+    public void Validate()
+    {
+        if (string.IsNullOrWhiteSpace(Theme) || !ValidThemes.Contains(Theme))
+        {
+            throw new ArgumentException("Theme must be one of Dark, Light, System.", nameof(Theme));
+        }
+    }
+}
