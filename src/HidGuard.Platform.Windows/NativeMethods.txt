@@ -34,3 +34,17 @@ RI_KEY_BREAK
 RI_KEY_MAKE
 GIDC_ARRIVAL
 GIDC_REMOVAL
+SetWindowsHookEx
+UnhookWindowsHookEx
+CallNextHookEx
+WINDOWS_HOOK_ID
+KBDLLHOOKSTRUCT
+LockWorkStation
+GetModuleHandle
+CM_Locate_DevNode
+CM_Disable_DevNode
+CM_Enable_DevNode
+HOOKPROC
+GetCurrentThreadId
+PostThreadMessage
+MSG
