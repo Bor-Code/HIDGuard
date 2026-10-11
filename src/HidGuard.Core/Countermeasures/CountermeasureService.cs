@@ -1,0 +1,217 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using HidGuard.Core.Policy;
+using HidGuard.Core.Trust;
+
+namespace HidGuard.Core.Countermeasures;
+
+public sealed class CountermeasureService : ICountermeasureService
+{
+    private static readonly Action<ILogger, PolicyAction, string, Exception?> LogPolicyActionExecutedDelegate =
+        LoggerMessage.Define<PolicyAction, string>(
+            LogLevel.Information,
+            new EventId(1, nameof(CountermeasureService)),
+            "Executing countermeasure action {Action} for device {DeviceId}");
+
+    private static readonly Action<ILogger, string, Exception?> LogSoleKeyboardProtectedDelegate =
+        LoggerMessage.Define<string>(
+            LogLevel.Warning,
+            new EventId(2, nameof(CountermeasureService)),
+            "Sole attached keyboard {DeviceId} protected from hardware disabling.");
+
+    private readonly IWorkstationLocker locker;
+    private readonly IDeviceDisabler deviceDisabler;
+    private readonly IKeystrokeInterceptor interceptor;
+    private readonly ITrustStore trustStore;
+    private readonly ILogger<CountermeasureService> logger;
+
+    public event EventHandler<CountermeasureExecutionResult>? CountermeasureExecuted;
+
+    public CountermeasureService(
+        IWorkstationLocker locker,
+        IDeviceDisabler deviceDisabler,
+        IKeystrokeInterceptor interceptor,
+        ITrustStore trustStore,
+        ILogger<CountermeasureService>? logger = null)
+    {
+        ArgumentNullException.ThrowIfNull(locker);
+        ArgumentNullException.ThrowIfNull(deviceDisabler);
+        ArgumentNullException.ThrowIfNull(interceptor);
+        ArgumentNullException.ThrowIfNull(trustStore);
+
+        this.locker = locker;
+        this.deviceDisabler = deviceDisabler;
+        this.interceptor = interceptor;
+        this.trustStore = trustStore;
+        this.logger = logger ?? NullLogger<CountermeasureService>.Instance;
+    }
+
+    public async Task<CountermeasureExecutionResult> ExecuteAsync(
+        PolicyDecision decision,
+        int totalKeyboardsAttached,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(decision);
+
+        LogPolicyActionExecutedDelegate(logger, decision.Action, decision.DeviceId.FormattedHardwareId, null);
+
+        var result = decision.Action switch
+        {
+            PolicyAction.Allow => HandleAllow(decision),
+            PolicyAction.AlertOnly => HandleAlertOnly(decision),
+            PolicyAction.PromptUser => HandlePromptUser(decision),
+            PolicyAction.LockWorkstation => HandleLockWorkstation(decision),
+            PolicyAction.BlockDevice => await HandleBlockDeviceAsync(decision, totalKeyboardsAttached, cancellationToken).ConfigureAwait(false),
+            PolicyAction.LockAndBlock => await HandleLockAndBlockAsync(decision, totalKeyboardsAttached, cancellationToken).ConfigureAwait(false),
+            _ => HandleAllow(decision)
+        };
+
+        CountermeasureExecuted?.Invoke(this, result);
+        return result;
+    }
+
+    private CountermeasureExecutionResult HandleAllow(PolicyDecision decision)
+    {
+        return new CountermeasureExecutionResult
+        {
+            Decision = decision,
+            WorkstationLockAttempted = false,
+            WorkstationLockSucceeded = false,
+            DeviceDisableAttempted = false,
+            DeviceDisableSucceeded = false,
+            KeystrokeSuppressionActive = interceptor.IsSuppressionActive,
+            ExecutedAt = DateTimeOffset.UtcNow,
+            Message = "Allowed without countermeasures."
+        };
+    }
+
+    private CountermeasureExecutionResult HandleAlertOnly(PolicyDecision decision)
+    {
+        return new CountermeasureExecutionResult
+        {
+            Decision = decision,
+            WorkstationLockAttempted = false,
+            WorkstationLockSucceeded = false,
+            DeviceDisableAttempted = false,
+            DeviceDisableSucceeded = false,
+            KeystrokeSuppressionActive = interceptor.IsSuppressionActive,
+            ExecutedAt = DateTimeOffset.UtcNow,
+            Message = "Alert triggered; no blocking countermeasures executed."
+        };
+    }
+
+    private CountermeasureExecutionResult HandlePromptUser(PolicyDecision decision)
+    {
+        return new CountermeasureExecutionResult
+        {
+            Decision = decision,
+            WorkstationLockAttempted = false,
+            WorkstationLockSucceeded = false,
+            DeviceDisableAttempted = false,
+            DeviceDisableSucceeded = false,
+            KeystrokeSuppressionActive = interceptor.IsSuppressionActive,
+            ExecutedAt = DateTimeOffset.UtcNow,
+            Message = "User prompt requested."
+        };
+    }
+
+    private CountermeasureExecutionResult HandleLockWorkstation(PolicyDecision decision)
+    {
+        interceptor.IsSuppressionActive = true;
+        var lockSucceeded = locker.LockWorkstation();
+
+        return new CountermeasureExecutionResult
+        {
+            Decision = decision,
+            WorkstationLockAttempted = true,
+            WorkstationLockSucceeded = lockSucceeded,
+            DeviceDisableAttempted = false,
+            DeviceDisableSucceeded = false,
+            KeystrokeSuppressionActive = true,
+            ExecutedAt = DateTimeOffset.UtcNow,
+            Message = "Workstation locked to neutralize keystroke injection."
+        };
+    }
+
+    private async Task<CountermeasureExecutionResult> HandleBlockDeviceAsync(
+        PolicyDecision decision,
+        int totalKeyboardsAttached,
+        CancellationToken cancellationToken)
+    {
+        interceptor.IsSuppressionActive = true;
+
+        if (totalKeyboardsAttached <= 1)
+        {
+            LogSoleKeyboardProtectedDelegate(logger, decision.DeviceId.FormattedHardwareId, null);
+            var lockSucceeded = locker.LockWorkstation();
+
+            return new CountermeasureExecutionResult
+            {
+                Decision = decision,
+                WorkstationLockAttempted = true,
+                WorkstationLockSucceeded = lockSucceeded,
+                DeviceDisableAttempted = false,
+                DeviceDisableSucceeded = false,
+                KeystrokeSuppressionActive = true,
+                ExecutedAt = DateTimeOffset.UtcNow,
+                Message = "Device disable skipped to prevent sole keyboard lockout. Workstation locked instead."
+            };
+        }
+
+        var disableSucceeded = await deviceDisabler.DisableDeviceAsync(decision.DeviceId, cancellationToken).ConfigureAwait(false);
+        await trustStore.SetTrustLevelAsync(decision.DeviceId, DeviceTrustLevel.Blocked, "CountermeasureEngine", cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new CountermeasureExecutionResult
+        {
+            Decision = decision,
+            WorkstationLockAttempted = false,
+            WorkstationLockSucceeded = false,
+            DeviceDisableAttempted = true,
+            DeviceDisableSucceeded = disableSucceeded,
+            KeystrokeSuppressionActive = true,
+            ExecutedAt = DateTimeOffset.UtcNow,
+            Message = disableSucceeded ? "Device disabled at PnP level and marked blocked." : "Failed to disable device at PnP level."
+        };
+    }
+
+    private async Task<CountermeasureExecutionResult> HandleLockAndBlockAsync(
+        PolicyDecision decision,
+        int totalKeyboardsAttached,
+        CancellationToken cancellationToken)
+    {
+        interceptor.IsSuppressionActive = true;
+        var lockSucceeded = locker.LockWorkstation();
+
+        if (totalKeyboardsAttached <= 1)
+        {
+            LogSoleKeyboardProtectedDelegate(logger, decision.DeviceId.FormattedHardwareId, null);
+
+            return new CountermeasureExecutionResult
+            {
+                Decision = decision,
+                WorkstationLockAttempted = true,
+                WorkstationLockSucceeded = lockSucceeded,
+                DeviceDisableAttempted = false,
+                DeviceDisableSucceeded = false,
+                KeystrokeSuppressionActive = true,
+                ExecutedAt = DateTimeOffset.UtcNow,
+                Message = "Workstation locked. Device disable skipped for sole attached keyboard."
+            };
+        }
+
+        var disableSucceeded = await deviceDisabler.DisableDeviceAsync(decision.DeviceId, cancellationToken).ConfigureAwait(false);
+        await trustStore.SetTrustLevelAsync(decision.DeviceId, DeviceTrustLevel.Blocked, "CountermeasureEngine", cancellationToken: cancellationToken).ConfigureAwait(false);
+
+        return new CountermeasureExecutionResult
+        {
+            Decision = decision,
+            WorkstationLockAttempted = true,
+            WorkstationLockSucceeded = lockSucceeded,
+            DeviceDisableAttempted = true,
+            DeviceDisableSucceeded = disableSucceeded,
+            KeystrokeSuppressionActive = true,
+            ExecutedAt = DateTimeOffset.UtcNow,
+            Message = "Workstation locked and device disabled at PnP level."
+        };
+    }
+}
