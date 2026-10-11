@@ -16,6 +16,8 @@ public sealed record DeviceIdentifier
 
     public string FormattedHardwareId => $"VID_{VendorId:X4}&PID_{ProductId:X4}";
 
+    public static DeviceIdentifier Synthetic { get; } = new("SOFTWARE_INJECTED_INPUT", 0, 0);
+
     public override string ToString() => FormattedHardwareId;
 
     public static bool TryParseIds(string path, out ushort vendorId, out ushort productId)
