@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>HidGuard.Simulator</RootNamespace>
+    <AssemblyName>HidGuard.Simulator</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\HidGuard.Core\HidGuard.Core.csproj" />
+  </ItemGroup>
+</Project>
