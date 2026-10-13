@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using HidGuard.Core.Countermeasures;
 using HidGuard.Core.Domain;
 using HidGuard.Core.Events;
+using HidGuard.Core.Incidents;
 using HidGuard.Core.Input;
 using HidGuard.Core.Policy;
 using HidGuard.Core.Timing;
@@ -39,6 +40,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
     private readonly ITrustStore trustStore;
     private readonly IKeystrokeInterceptor interceptor;
     private readonly IPipelineEventAggregator eventAggregator;
+    private readonly IIncidentStore? incidentStore;
     private readonly PolicyOptions policyOptions;
     private readonly ILogger<KeystrokePipeline> logger;
 
@@ -65,6 +67,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
         IKeystrokeInterceptor interceptor,
         IPipelineEventAggregator eventAggregator,
         PolicyOptions? policyOptions = null,
+        IIncidentStore? incidentStore = null,
         ILogger<KeystrokePipeline>? logger = null)
     {
         ArgumentNullException.ThrowIfNull(keystrokeSource);
@@ -83,6 +86,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
         this.interceptor = interceptor;
         this.eventAggregator = eventAggregator;
         this.policyOptions = policyOptions ?? new PolicyOptions();
+        this.incidentStore = incidentStore;
         this.logger = logger ?? NullLogger<KeystrokePipeline>.Instance;
 
         var options = new BoundedChannelOptions(10_000)
@@ -261,6 +265,36 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
                         if (cmResult.WorkstationLockAttempted || cmResult.DeviceDisableAttempted || cmResult.KeystrokeSuppressionActive)
                         {
                             Interlocked.Increment(ref totalAttacksNeutralized);
+                        }
+
+                        if (incidentStore != null)
+                        {
+                            var deviceHwId = keystroke.DeviceId.FormattedHardwareId;
+                            var ruleText = anomaly.TriggeredSignals.Count > 0
+                                ? string.Join(", ", anomaly.TriggeredSignals)
+                                : "TimingAnomaly";
+                            var actionText = decision.Action.ToString();
+                            _ = Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    await incidentStore.RecordIncidentAsync(new CreateIncidentRequest
+                                    {
+                                        DeviceId = deviceHwId,
+                                        AnomalyScore = anomaly.Score,
+                                        TriggeredRule = ruleText,
+                                        CountermeasureAction = actionText,
+                                        Metadata = new Dictionary<string, string>
+                                        {
+                                            ["DeviceId"] = deviceHwId,
+                                            ["Path"] = keystroke.DeviceId.Path
+                                        }
+                                    }, token).ConfigureAwait(false);
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            }, CancellationToken.None);
                         }
                     }
 

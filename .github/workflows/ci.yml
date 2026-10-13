@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - chore/repo-foundation
   pull_request:
     branches:
       - main
+      - chore/repo-foundation
 
 permissions:
   contents: read
@@ -29,8 +31,17 @@ jobs:
       - name: Build solution
         run: dotnet build HidGuard.sln --configuration Release --no-restore
 
-      - name: Run tests
+      - name: Run unit and integration tests
         run: dotnet test HidGuard.sln --configuration Release --no-build --logger "trx;LogFileName=test_results.trx" --results-directory ./TestResults
+
+      - name: Run end-to-end attack simulation verification
+        run: dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj --configuration Release --no-build -- --verify
+
+      - name: Publish HIDGuard WPF Application
+        run: dotnet publish src/HidGuard.App/HidGuard.App.csproj --configuration Release --output ./dist/app
+
+      - name: Publish HIDGuard Simulator Tool
+        run: dotnet publish tools/HidGuard.Simulator/HidGuard.Simulator.csproj --configuration Release --output ./dist/simulator
 
       - name: Upload test results
         if: always()
@@ -39,3 +50,17 @@ jobs:
           name: test-results
           path: ./TestResults/*.trx
           if-no-files-found: warn
+
+      - name: Upload application binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: hidguard-app-win-x64
+          path: ./dist/app
+          if-no-files-found: error
+
+      - name: Upload simulator binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: hidguard-simulator-win-x64
+          path: ./dist/simulator
+          if-no-files-found: error

@@ -1,0 +1,155 @@
+<UserControl x:Class="HidGuard.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="750" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="24">
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Security Configuration" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                        <TextBlock Text="Configure timing analysis sensitivity, countermeasure behaviors, and tray integration." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Content="Reset Defaults" Command="{Binding ResetDefaultsCommand}" Style="{StaticResource NavButtonStyle}" Margin="0,0,8,0"/>
+                        <Button Content="Save Settings" Command="{Binding SaveSettingsCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <TextBlock Text="{Binding FeedbackMessage}"
+                       Foreground="{Binding FeedbackColor}"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       Margin="4,0,0,16"/>
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Timing Detection Thresholds" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Rolling Window Size" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Number of consecutive intervals evaluated for dynamics." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding WindowSize, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Human Feasibility Floor (ms)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Minimum physiologically possible interval for manual typing." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding HumanFeasibilityFloorMs, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Sub-Human Ratio Threshold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Proportion of impossibly fast intervals that triggers alert (0.0 to 1.0)." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding SubHumanRatioThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Coefficient of Variation Threshold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Variation ratio below which robotic keystrokes are flagged." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding CoefficientOfVariationThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Suspicion Score Threshold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Overall anomaly confidence score threshold triggering action." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding SuspicionScoreThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Active Defense &amp; Countermeasures" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                    <CheckBox Content="Lock Windows Workstation upon Attack Detection"
+                              IsChecked="{Binding LockWorkstationEnabled}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
+                    <CheckBox Content="Disable Malicious USB Hardware via PnP Device Node"
+                              IsChecked="{Binding DeviceDisableEnabled}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
+                    <CheckBox Content="Suppress Injected Keystrokes via Low-Level Keyboard Hook"
+                              IsChecked="{Binding KeySuppressionEnabled}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Temporary Key Suppression Duration (Seconds)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Duration of active keystroke swallowing while alert is active." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding TemporarySuppressionSeconds, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <TextBlock Text="Application &amp; System Tray Options" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                    <CheckBox Content="Start Minimized to System Tray on Launch"
+                              IsChecked="{Binding StartMinimizedToTray}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
+                    <CheckBox Content="Display Windows Notifications when Devices are Blocked"
+                              IsChecked="{Binding NotifyOnBlockedDevices}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
+                    <CheckBox Content="Display Windows Notifications when Known Devices are Allowed"
+                              IsChecked="{Binding NotifyOnAllowedDevices}"
+                              Style="{StaticResource ModernCheckBoxStyle}"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
