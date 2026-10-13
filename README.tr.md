@@ -1,6 +1,8 @@
 # HIDGuard: Teknik Mimari ve Gelistirme Dokumantasyonu
 
-Bu dokuman, HIDGuard projesinin sifirdan Asama 7 (WPF Arayuzu ve Sistem Tepsisi) dahil olmak uzere gelistirilen tum katmanlarini, algoritmalarini, Windows Win32 API entegrasyonlarini ve guvenlik ilkelerini teknik derinligiyle aciklamaktadir.
+[English](README.md) | [Türkçe](README.tr.md)
+
+Bu dokuman, HIDGuard projesinin sifirdan Asama 9 dahil olmak uzere gelistirilen tum katmanlarini, algoritmalarini, Windows Win32 API entegrasyonlarini ve guvenlik ilkelerini teknik derinligiyle aciklamaktadir.
 
 ---
 
@@ -274,10 +276,15 @@ dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mod
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 ```
 
+### Dagitim Paketini Olusturma
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
+```
+
 ---
 
 ## 6. Gelecek Asamalar
 
 - [x] Asama 8 (Attack Simulator & Verification Tooling): tools/HidGuard.Simulator projesi tamamlandi; DuckyScript motoru, burst, jitter ve insan profilleri olusturuldu, uctan uca 5 otomatik dogrulama senaryosu tamamlandi.
-- [ ] Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai Ingilizce dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, MSI/ZIP dagitim paketleme betikleri ve surum yayini.
+- [x] Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, SECURITY.md, GitHub Actions CI/CD hatti ve otomatik dagitim paketleme betigi tamamlandi.
 

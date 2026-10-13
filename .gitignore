@@ -17,3 +17,5 @@ TestResults/
 *.nupkg
 *.snupkg
 publish/
+artifacts/
+dist/
