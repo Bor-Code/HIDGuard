@@ -1,283 +1,181 @@
-# HIDGuard: Teknik Mimari ve Gelistirme Dokumantasyonu
+# HIDGuard
 
-Bu dokuman, HIDGuard projesinin sifirdan Asama 7 (WPF Arayuzu ve Sistem Tepsisi) dahil olmak uzere gelistirilen tum katmanlarini, algoritmalarini, Windows Win32 API entegrasyonlarini ve guvenlik ilkelerini teknik derinligiyle aciklamaktadir.
+Defensive Keystroke Injection & BadUSB Mitigation System for Windows
 
----
-
-## 1. Proje Amaci ve Tehdit Modeli
-
-### 1.1 Saldiri Mekanizmasi (Keystroke Injection / BadUSB)
-Geleneksel isletim sistemleri ve antivirus / EDR yazilimlari, USB baglanti noktasina takilan donanimlarin kimlik bildirimlerine varsayilan olarak guvenir. Rubber Ducky, BadUSB, Digispark, Teensy ve Flipper Zero gibi mikrokontrolcu tabanli cihazlar, bilgisayara takildiklarinda kendilerini standart bir USB Insan Arayuz Aygiti (HID - Human Interface Device) klavye olarak tanitirlar.
-
-Isletim sistemi bu cihazi mesru bir klavye kabul ettigi anda saldirgan cihaz, saniyede yuzlerce veya binlerce tus vurusunu sisteme enjekte eder:
-- Win + R kombinasyonu acilir.
-- powershell -WindowStyle Hidden -Enc ... komutu gonderilir.
-- Bellekte zararli kod (payload) calistirilir veya yetki yukseltme gerceklestirilir.
-- Tum bu surec insan gozunun fark edemeyecegi bir hizda (100 ila 500 milisaniye icinde) tamamlanir.
-
-### 1.2 HIDGuard Cozum Yaklasimi
-HIDGuard, saldiriyi imza veya dosya taramasiyla degil, tus vuruslarinin fiziksel ve biyomekanik dinamiklerini (inter-keystroke timing analysis) analiz ederek engeller:
-1. Insan parmaklarinin fizyolojik hareket kabiliyetinin bir alt siniri vardir (fizyolojik esik).
-2. Insanlar yazarken tuslar arasi surelerde dogal bir duzensizlik (jitter / standart sapma) sergiler.
-3. Donanimsal enjeksiyon araclari ise mikrosaniye hassasiyetinde esbicimli (uniform / sifira yakin standart sapma) ve olaganustu yuksek hizlarda (> 180-300 WPM) veri gonderir.
-4. HIDGuard, bu anormalligi tespit ettigi anda saldiriyi havada yutar (WH_KEYBOARD_LL), isletim sistemini kilitler (LockWorkStation) ve gerekirse aygiti surucu duzeyinde devre disi birakir (CM_Disable_DevNode).
+[English](README.md) | [Türkçe](README.tr.md)
 
 ---
 
-## 2. Mimari Genel Bakis
+## 1. Overview and Threat Model
 
-Proje, bagimliliklarin yonunu domain merkezine dogru tutan temiz mimari (Clean Architecture) ve katmanli yapi uzerinde insa edilmistir:
+Traditional endpoint security and antivirus solutions trust USB devices by default upon enumeration. Operating systems lack inherent mechanisms to distinguish between physical human typing on a legitimate keyboard and microcontrollers masquerading as Standard USB Human Interface Devices (HID).
+
+Attack hardware such as the **Hak5 USB Rubber Ducky**, **Digispark**, **Teensy**, **Flipper Zero**, and **Raspberry Pi Pico** exploit this trust. Upon physical insertion, these devices enumerate as compliant USB keyboards and immediately transmit pre-programmed keystrokes at hardware speeds (sub-10 millisecond intervals), opening command prompts or run dialogs to execute malicious code in under 500 milliseconds.
+
+### The Defensive Approach
+
+HIDGuard protects Windows endpoints not through static file signatures, but by analyzing the **biomechanical and temporal properties** of incoming keystrokes:
+
+1. **Physiological Speed Floor**: Human fingers have structural mechanical limits; sustained typing below 25-30 milliseconds per stroke is biologically impossible.
+2. **Natural Human Jitter**: Human typing inherently produces variable inter-keystroke intervals (standard deviations typically between 25 ms and 70 ms).
+3. **Machine Uniformity Anomaly**: Microcontroller firmware loops deliver keystrokes with ultra-low variance (standard deviations < 1.5 ms), a distinct signature of synthetic injection.
+4. **Hardware Identity Validation**: Unrecognized hardware devices are subjected to strict policy evaluation.
+5. **Active Multi-Tier Countermeasures**: Upon anomaly detection, HIDGuard suppresses malicious keystrokes in flight via a low-level keyboard hook (`WH_KEYBOARD_LL`), locks the user workstation (`LockWorkStation`), and optionally disables the offensive device at the Windows device-node level (`CM_Disable_DevNode`).
+
+---
+
+## 2. Architecture and Data Flow
+
+HIDGuard follows Clean Architecture principles, ensuring complete decoupling between domain policies, platform interop, user interfaces, and attack simulation tools.
 
 ```
-[ Donanim / Klavye Girisleri ]
-              |
-              v
 +-------------------------------------------------------------+
-| HidGuard.Platform.Windows (Win32 Raw Input)                 |
-| - Message-only Window (HWND)                                |
+|               Physical & Synthetic Keystrokes               |
++-------------------------------------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+| HidGuard.Platform.Windows (Win32 Interop Layer)             |
+| - Message-only HWND Window                                  |
 | - RegisterRawInputDevices (RIDEV_INPUTSINK)                 |
-| - Raw Input Parsing & Handle Resolution                     |
+| - GetRawInputDeviceInfo Handle Resolution                   |
+| - Win32 Keyboard Hook (WH_KEYBOARD_LL)                      |
+| - Device Disabler (CM_Disable_DevNode)                      |
+| - Workstation Locker (LockWorkStation)                      |
 +-----------------------------+-------------------------------+
                               | KeystrokeEvent
                               v
 +-------------------------------------------------------------+
-| HidGuard.Core (Boru Hatti & Degerlendirme)                  |
-| - System.Threading.Channels (Bounded, Non-blocking)         |
-| - TimingAnalysisEngine (Sliding Window, Mean, StdDev)       |
+| HidGuard.Core (Analysis Engine & Policy Matrix)             |
+| - System.Threading.Channels Bounded Pipeline                |
+| - KeystrokeTimingAnalyzer (Sliding Window & Welford WPM)    |
 | - AnomalyScorer (Confidence Calculation)                    |
-| - TrustStore (Hardware Trust Management)                    |
+| - TrustStore (Persistent Device Enrollment)                 |
 | - PolicyEngine (Decision Matrix & Anti-Lockout)             |
-| - PipelineEventAggregator (Event Publishing)                |
+| - CountermeasureService (Multi-Tier Defense Orchestration)  |
+| - FileAuditTrailService (Privacy-Safe Append-Only Audit)    |
 +-----------------------------+-------------------------------+
-                              | PolicyDecision
-                              v
-+-------------------------------------------------------------+
-| HidGuard.Platform.Windows (Karsi Onlemler)                  |
-| - WindowsLowLevelKeyboardHook (WH_KEYBOARD_LL)              |
-| - WindowsWorkstationLocker (LockWorkStation)                |
-| - WindowsDeviceDisabler (CfgMgr32 CM_Disable_DevNode)       |
-+-----------------------------+-------------------------------+
-                              | Telemetri & Olaylar
-                              v
-+-------------------------------------------------------------+
-| HidGuard.App (Kullanici Arayuzu & Sistem Tepsisi)           |
-| - WPF Modern Dark Mode Dashboard                            |
-| - System.Windows.Forms.NotifyIcon Entegrasyonu              |
-| - Tekil Ornek (Single-Instance Mutex) Kontrolu              |
-| - MVVM Katmani (DispatchToUi Senkronizasyonu)               |
-+-------------------------------------------------------------+
+                              | Pipeline Events
+              +---------------+---------------+
+              |                               |
+              v                               v
++-----------------------------+ +-----------------------------+
+| HidGuard.App (UI & Tray)    | | HidGuard.Simulator (Tooling)|
+| - WPF Dark Theme Dashboard  | | - DuckyScript 1.0/2.0 Engine|
+| - Single Instance Mutex     | | - Win32 SendInput Injector  |
+| - UAC Elevation Management  | | - Burst & Jitter Profiles   |
+| - NotifyIcon Tray Service   | | - E2E Verification Suite    |
++-----------------------------+ +-----------------------------+
 ```
 
 ---
 
-## 3. Katmanlar ve Detayli Teknik Inceleme
+## 3. Core Architectural Guarantees
 
-### Asama 0: Proje Temeli ve Kod Kalitesi Standartlari
-- Teknoloji: .NET 8 (C# 12).
-- Derleme Kurallari: Directory.Build.props uzerinden TreatWarningsAsErrors = true, Nullable = enable, AnalysisMode = AllEnabledByDefault.
-- Kod Analizcileri: Microsoft .editorconfig analiz kurallari en siki seviyeye (error) cekilmistir (CA1062 null kontrolu, CA1848 yuksek performansli loglama, CA2007 ConfigureAwait, CA1305 InvariantCulture kullanimi).
-- Yorum ve Emoji Yasagi: Kodun kendini belgelemesi ilkesi geregi repo genelinde sifir yorum satiri ve sifir emoji kurali uygulanmaktadir.
+### 3.1 Zero-Keylogging Privacy Invariant
+HIDGuard enforces an absolute guarantee regarding user privacy:
+- The system **never** records, logs, stores, or transmits virtual key codes, scan codes, or typed alphanumeric characters.
+- Pipeline event models and audit trail entries (`AuditEvent`) record only non-sensitive metadata: hardware device identifiers (VID/PID), inter-keystroke intervals, anomaly confidence scores, action decisions, and timestamps.
+- This invariant is enforced by automated test suites using reflection to assert the complete absence of key data fields in public models and audit sinks.
 
----
+### 3.2 Offline and Zero-Telemetry Operation
+- HIDGuard runs entirely offline and contains zero external telemetry, tracking, or network communication code.
+- Configuration and audit trails are persisted locally on the host machine.
 
-### Asama 1: Cekirdek Domain ve Zamanlama Analiz Motoru (HidGuard.Core.Timing)
-
-Zamanlama analizi, her klavye aygiti icin ayri tutulan sinirli bir kayan pencere (SlidingWindow) uzerinde isletilir:
-
-#### Matematiksel Hesaplamalar ve Istatistiksel Analiz
-1. Tuslar Arasi Aralik (Inter-Keystroke Interval - Delta t):
-   Ardilik iki tusa basilma ani arasindaki milisaniye farki: Delta t = t_i - t_{i-1}
-2. Ortalama Aralik (Mean):
-   Tum araliklarin aritmetik ortalamasi.
-3. Standart Sapma (Standard Deviation):
-   Araliklarin ortalamadan sapma derecesi.
-4. Varyasyon Katsayisi (Coefficient of Variation - CV):
-   CV = Standart Sapma / Ortalama
-5. Yazma Hizi Tahmini (WPM - Words Per Minute):
-   Standart tipografik kural geregi 1 kelime ortalama 5 karaktere esittir:
-   WPM = (60,000 / Ortalama) / 5
-
-#### Karar Esikleri
-- Fizyolojik Alt Sinir (HumanFeasibilityFloorMs = 25 ms): Insan parmaginin motor kontrol sinirlari dahilinde ardisik iki tusa 25 ms'den daha kisa surede basmasi imkansiza yakindir. Pencere icindeki araliklarin yuzde 35'inden fazlasi bu esigin altindaysa dogrudan saldiri sinyali uretilir.
-- Robotik Esbicimlilik (CoefficientOfVariationThreshold = 0.18): BadUSB cihazlari genelde sabit delay komutlari kullanir. CV < 0.18 olmasi, insan yazimindaki dogal gecikme dagiliminin (jitter) bulunmadigini, yazimin bir cip tarafindan yapildigini kanitlar.
-- Hiz Asimi (MaxAllowedWpm = 180 WPM): Profesyonel daktilolar dahi nadiren 150-180 WPM uzerine cikabilir. 250+ WPM hizlar dogrudan yapay enjeksiyon olarak siniflandirilir.
+### 3.3 Anti-Lockout Safeguard
+- If multiple physical keyboards are connected, an offensive device can be disabled at the Windows device tree level.
+- If only one keyboard is attached, HIDGuard strictly prevents hardware disabling, protecting administrators and users from permanent lockout while maintaining temporary keystroke suppression and workstation locking.
 
 ---
 
-### Asama 2: Windows Ham Giris Yakalama Katmani (HidGuard.Platform.Windows)
+## 4. Component Deep Dive
 
-Klasik Windows klavye kancalari (SetWindowsHookEx), tusa basildigini bildirir ancak tusun hangi fiziksel USB cihazindan geldigini soyleyemez. Bir BadUSB saldirgani sisteme sizdiginda, orijinal klavye ile sahte klavye ayirt edilemezse sistem savunmasiz kalir.
+### 4.1 Win32 Raw Input Interoperability (`HidGuard.Platform.Windows`)
+- **Message-Only Window**: Registers an invisible message-only window (`HWND_MESSAGE`) receiving `WM_INPUT` messages globally across all desktop sessions (`RIDEV_INPUTSINK`).
+- **Hardware Identifier Resolution**: Resolves raw device handles (`HANDLE`) to hardware device paths (`\\?\HID#VID_xxxx&PID_xxxx...`) using `GetRawInputDeviceInfo`. Distinguishes software-injected synthetic input (`HANDLE.Zero`) from physical hardware controllers.
+- **Active Keystroke Suppression**: Deploys an unmanaged low-level keyboard hook (`SetWindowsHookExW` with `WH_KEYBOARD_LL`) that selectively returns non-zero (`LRESULT(1)`) during active countermeasure periods, discarding synthetic keystrokes before they reach user applications.
 
-#### Win32 Raw Input API Kullanimi
-1. Pencere Olusturma: Arka planda yalnizca mesaj alan bir HWND (HWND_MESSAGE) olusturulur.
-2. Kayit: RegisterRawInputDevices fonksiyonuna RAWINPUTDEVICE yapisi gonderilir:
-   - usUsagePage = 0x01 (Generic Desktop Controls)
-   - usUsage = 0x06 (Keyboard)
-   - dwFlags = RIDEV_INPUTSINK (Pencere odakta olmasa dahi tum sistem genelindeki klavye ham verilerini toplar)
-3. Aygit Tanimlama: WM_INPUT mesaji geldiginde GetRawInputDeviceInfoW cagrilaraq aygitin donanim yolu alinir:
-   \\?\HID#VID_16C0&PID_05DF&MI_00#7&...
-4. Kimlik Cozumleme: DeviceIdentifier sinifi, bu yoldan Vendor ID (VID) ve Product ID (PID) ikilisini ayristirir.
+### 4.2 Analysis and Policy Engine (`HidGuard.Core`)
+- **Sliding Window Timing Analyzer**: Evaluates inter-keystroke intervals within a configurable sliding window (default: 30 strokes). Computes real-time mean interval, standard deviation, coefficient of variation, and words-per-minute metrics using Welford's algorithm.
+- **Anomaly Scoring Engine**: Calculates a normalized confidence score (0.00 to 1.00) based on physiological threshold violations (< 25 ms interval), extreme typing velocity, and unnatural machine uniformity.
+- **Persistent Trust Store**: Maintains hardware authorization records in local JSON storage (`trusted-devices.json`). Allows devices to be marked as `Trusted`, `Unknown`, or `Blocked`.
+- **Policy Engine**: Evaluates the risk score against hardware trust levels and attached device counts to select appropriate countermeasures (`Allow`, `AlertOnly`, `LockWorkstation`, `BlockDevice`, `LockAndBlock`).
 
----
+### 4.3 WPF Dashboard and Tray Application (`HidGuard.App`)
+- **Modern Dark Theme**: Styled with a dark-slate design system, responsive card layouts, and status badges.
+- **System Tray Lifecycle**: Operates within the Windows taskbar notification area. Overrides window close events (`OnClosing`) to minimize to tray without terminating protection.
+- **Single Instance Mutex**: Guarantees a single running instance per session via `Local\HIDGuard_Application_SingleInstance_Mutex`.
+- **UAC Awareness**: Detects elevation status and displays an administrative shield badge when elevated operations are available.
 
-### Asama 3: Donanim Guven Deposu ve Politika Motoru (HidGuard.Core.Trust & Policy)
-
-Sistemde guvenilen aygitlarin beyaz listesi (whitelist) ve engellenen aygitlarin kara listesi (blacklist) yonetilir.
-
-#### Atomik Dosya Yazimi ve Yedekleme (Atomic Persistence)
-Konfigurasyon ve guven deposu dosyalari yazilirken elektrik kesintisi veya cokme durumunda bozulmayi onlemek icin 3 adimli atomik yazma deseni uygulanir:
-1. Veri gecici dosyaya yazilir (truststore.json.tmp).
-2. Var olan dosya yedeklenir (truststore.json.bak).
-3. Gecici dosya asil dosyanin uzerine tasinir (File.Move(..., overwrite: true)).
-
-#### Anti-Lockout (Kendi Kendini Kilitlemeyi Onleme) Guvencesi
-Eger bir saldiri tespit edilirse ve politika motoru klavyeyi devre disi birakmak isterse, once sistemdeki aktif klavye sayisi kontrol edilir:
-- Sistemde takili tek bir klavye varsa, o klavye asla tamamen devre disi birakilmaz.
-- Cunku tek klavye devre disi birakilirsa kullanici sistem yonetimini kaybeder.
-- Bu durumda motor guvenlik derecesini dusurerek aygiti kapatmak yerine istasyonu kilitler (LockWorkStation) veya gecici tus yutma uygular.
+### 4.4 Attack Simulator and E2E Verification Suite (`HidGuard.Simulator`)
+- **DuckyScript 1.0 / 2.0 Parser**: Parses Hak5 Rubber Ducky scripts supporting `STRING`, `STRINGLN`, `DELAY`, `DEFAULT_DELAY`, `REPEAT`, and complex modifiers (`GUI r`, `CTRL ALT DEL`, `ALT F4`).
+- **Attack Profiles**:
+  - `BurstAttackProfile`: High-velocity injection (< 10 ms interval).
+  - `JitterAttackProfile`: Uniform microcontroller delay loops (15 ms +/- 0.1 ms).
+  - `HumanTypingProfile`: Gaussian human typing emulation (130 ms mean, 35 ms std dev).
+  - `DuckyScriptAttackProfile`: Full payload execution.
+- **Automated Verification Runner**: Executes 5 full-pipeline security tests verifying burst attack neutralization, uniformity detection, human passthrough, DuckyScript suppression, and the privacy invariant.
 
 ---
 
-### Asama 4: Aktif Engelleme ve Mudahale Motoru (HidGuard.Core.Countermeasures)
+## 5. Test Suite and Quality Metrics
 
-Saldiri tespit edildigi anda isletim sistemi ve donanim duzeyinde 3 kademeli savunma tetiklenir:
+All components are covered by unit and integration test suites using xUnit and Shouldly. The solution compiles with zero warnings under `TreatWarningsAsErrors`.
 
-1. Tus Vurusu Yutma (WindowsLowLevelKeyboardHook):
-   - Win32 WH_KEYBOARD_LL kancasi, ozel bir is parcaciginda mesaj dongusuyle (GetMessage, DispatchMessage) calisir.
-   - Kanca geri cagrimi (hook callback) 1 milisaniyenin altinda yanit verir.
-   - Anomali bayragi aktif oldugu surece CallNextHookEx cagrilmaz; dogrudan 1 dondurulerek tus vurusu isletim sistemi mesaj kuyrugundan silinir (tus ekrana veya komut satirina ulasamaz).
-2. Istasyon Kilitleme (WindowsWorkstationLocker):
-   - user32.dll icindeki LockWorkStation() API'si cagrilaraq Windows aninda kilit ekranina alinir. Bu islem, acilmis olabilecek Run veya PowerShell pencerelerine komut yazilmasini durdurur.
-3. PnP Duzeyinde Aygit Devre Disi Birakma (WindowsDeviceDisabler):
-   - cfgmgr32.dll API'leri (CM_Locate_DevNodeW, CM_Disable_DevNode) kullanilarak saldirgan USB aygitinin aygit yoneticisi dugumu surucu seviyesinde kapatilir.
-
----
-
-### Asama 5: Uctan Uca Boru Hatti Entegrasyonu (HidGuard.Core.Pipeline)
-
-Girdi yakalama ile analiz ve mudahale motorlari System.Threading.Channels (BoundedChannel) ile birbirinden tamamen ayrilmistir (producer-consumer deseni).
-
-- Girdi Ureticisi (Producer): Win32 Raw Input dinleyicisi tusu yakalar ve kanala yazar. Kanal kapasitesi 10,000 ogredir. Kanal dolarsa en eski oge atilir; UI veya donanim dinleyicisi asla kilitlenmez.
-- Tuketici (Consumer): Arka plan is parcacigi kanaldan tuslari okur, zamanlama analiz motoruna verir, anomali skorunu hesaplar ve gerekirse karsi onlemleri tetikler.
-- Performans: Boru hatti saniyede 10,000'den fazla tus vurusunu milisaniyenin altindaki gecikmelerle isleme kapasitesine sahiptir.
-
----
-
-### Asama 6: Yapilandirma, Gunlukleme ve Denetim Izi (Configuration, Audit, Logging)
-
-#### Gizlilik Ilkesi (Zero-Keylogger Guarantee)
-HIDGuard bir guvenlik aracidir ve kesinlikle bir casus yazilima (keylogger) donusmemelidir.
-- AuditEvent ve log modellerinde basilan karakteri veya sanal tus kodunu (VirtualKey / VKCode) tutan hicbir alan yoktur.
-- Yalnizca aygit kimligi, zaman damgasi, uygulanan karsi onlem ve anomali yuzdesi kaydedilir.
-- Bu kural, AuditTrailTests icinde Reflection ile denetlenmekte; model uzerinde tus verisi tasiyabilecek bir ozellik eklendiginde testler derleme aninda basarisiz olmaktadir.
-
-#### Denetim Izi (Audit Trail) ve Gunlukleme (Logging)
-- FileAuditTrailService: Gunluk olarak bolunen JSON Lines formatinda (audit-yyyyMMdd.jsonl) append-only denetim kaydi tutar.
-- FileConfigurationManager: FileSystemWatcher ile diskteki config.json dosyasini izler; dosya harici olarak duzenlendiginde uygulama kapatilmadan ayarlar dinamik olarak yenilenir (hot-reload).
-- HidGuardLoggingFactory: Serilog ile 50 MB dosya siniri, 30 gunluk saklama ve InvariantCulture ile bicimlendirilmis yapilandirilmis log uretir.
-
----
-
-### Asama 7: WPF Arayuzu ve Sistem Tepsisi Paneli (HidGuard.App)
-
-#### Mimari Ozellikler
-1. Sistem Tepsisi Yasam Dongusu (TrayIconService):
-   - Windows tepsi alaninda kalkan simgesiyle yer alir.
-   - Kullanici ana pencereyi kapattiginda, MainWindow.OnClosing metodu iptal edilir (e.Cancel = true) ve pencere gizlenir (Hide()). Uygulama arka planda korumaya devam eder.
-   - Uygulama yalnizca tepsi menusundeki Exit secenegiyle sonlandirilir.
-2. Tekil Ornek Denetimi (SingleInstanceService):
-   - Local\HIDGuard_Application_SingleInstance_Mutex adlandirilmis Mutex'i ile sistemde ayni anda yalnizca tek bir HIDGuard orneginin calismasi garanti edilir. Ikinci bir kopya acilirsa hemen sonlanir.
-3. UAC Ayricalik Farkindaligi (UacElevationService):
-   - Donanim kapatma islemleri yonetici yetkisi gerektirdiginden, uygulamanin yonetici haklariyla calisip calismadigi (WindowsBuiltInRole.Administrator) denetlenir ve arayuzde rozet olarak gosterilir.
-4. Dispatcher Senkronizasyonu (DispatchToUi):
-   - Arka plan olaylari UI is parcacigina tasinirken Application.Current?.Dispatcher kullanilir; birim test ortamlarinda ise dogrudan senkron cagri yapilarak testlerin kilitlenmesi onlenir.
-
-#### Dashboard Bolumleri
-- Overview: Canli koruma anahtari, anlik toplam tus vurusu, engellenen tuslar, tespit edilen saldirilar, notrlestirilen tehditler, anlik WPM ve anomali cubugu.
-- Devices: Entegre klavyelerin donanim kimlikleri (VID/PID), guven seviyeleri (Trusted, Unknown, Blocked) ve Trust / Block / Reset butonlari.
-- Live Metrics: Ortalama vurus araligi, standart sapma, hiz ve son vuruslarin zamanlama grafigi.
-- Audit Trail: Filtrelenebilir ve aranabilir denetim izi tablosu.
-- Settings: Kayan pencere boyutu, standart sapma esigi, maksimum WPM ve karsi onlem anahtarlari.
-
----
-
-### Asama 8: Saldiri Simulatoru ve Uctan Uca Dogrulama Araclari (HidGuard.Simulator)
-
-#### Mimari Ozellikler
-1. Sentetik Enjeksiyon Soyutlamasi (IKeystrokeInjector):
-   - Win32KeystrokeInjector: PInvoke.SendInput uzerinden aktif Windows masaustu pencerelerine dogrudan klavye olaylari (tus basma, kombinasyon, bekleme) gonderir.
-   - SimulatedKeystrokeInjector: Masaustune temas etmeksizin bellek uzerinde calisir; birim testlerde ve CI ortamlinda tam guvenli, deterministik dogrulama saglar.
-2. DuckyScript Cozumleyici (DuckyScriptParser):
-   - Hak5 USB Rubber Ducky 1.0 / 2.0 syntax destegi (STRING, STRINGLN, DELAY, DEFAULT_DELAY, REPEAT, ENTER, GUI/WINDOWS, CTRL, ALT, SHIFT kombinasyonlari, F1-F24).
-   - Sanal tus kodlarini (VirtualKeyMap) eksiksiz sekilde Win32 sanal tus kodlarina esler.
-3. Saldiri Profilleri (Attack Profiles):
-   - BurstAttackProfile: Donanimsal USB saat hizinda (< 10ms, ornegin 3-4ms araliklarla) yuksek hizli tus enjeksiyonu.
-   - JitterAttackProfile: Mikrokontrolcu dongulerini modelleyen sabit aralikli ve sifira yakin varyansli (15ms +/- 0.1ms) esbicimli saldiri.
-   - HumanTypingProfile: Box-Muller Gauss dagilimiyla insan biyomekanik parmak hareketlerini (ortalama 130ms, standart sapma 35ms, kelime arasi dogal duraklamalar) modelleyen insan klavye emulasyonu.
-   - DuckyScriptAttackProfile: Cozumlenen DuckyScript talimatlarini gercek zamanli veya sanal saatle uygulayan profil.
-4. Uctan Uca Dogrulama Kosucusu (VerificationRunner):
-   - 5 kritik guvenlik senaryosunu canli boru hatti uzerinde otomatik olarak dogrular:
-     1. Burst Attack Tespiti ve Karsi Onlem (Anomali skoru yukselir, tuslar yutulur, aygit engellenir).
-     2. Dusuk Jitter / Esbicimlilik Tespiti (Mikrokontrolcu dongusu standart sapma anomalisiyle yakalanir).
-     3. Mesru Insan Yazimi Gecisi (Sifir yanlis alarm, sifir engelleme, kesintisiz gecis).
-     4. DuckyScript Zararli Payload Notrlestirme (PowerShell / cmd calistirma girisimi basariyla yutulur).
-     5. Gizlilik Ilkesi Dogrulamasi (Denetim izi ve veri modellerinde asla sanal tus kodu veya metin saklanmaz).
-
----
-
-## 4. Test Kapsami ve Kalite Metrikleri
-
-Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmistir.
-
-| Proje | Test Sayisi | Durum | Kapsanan Alanlar |
+| Project | Test Count | Status | Scope |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 105 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, uctan uca boru hatti, atomik konfigurasyon, gizlilik dogrulamasi |
-| HidGuard.Platform.Windows.Tests | 23 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi |
-| HidGuard.App.Tests | 17 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar ve ana pencere gezinmesi |
-| HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
-| Toplam | 173 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| HidGuard.Core.Tests | 105 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, privacy invariant |
+| HidGuard.Platform.Windows.Tests | 23 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory |
+| HidGuard.App.Tests | 17 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, view navigation |
+| HidGuard.Simulator.Tests | 28 | Passed | DuckyScript parser, token mapping, attack profiles, 5-scenario end-to-end verification suite |
+| **Total Solution** | **173** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
-## 5. Projeyi Derleme ve Calistirma
+## 6. Building and Running
 
-### Gereksinimler
+### Prerequisites
 - Windows 10 / 11 (x64)
-- .NET 8 SDK (v8.0.x veya v10.0.x)
+- .NET 8 SDK (v8.0.x or higher)
 
-### Derleme
+### Build Solution
 ```powershell
 dotnet build HidGuard.sln --configuration Release
 ```
 
-### Testleri Calistirma
+### Run All Tests
 ```powershell
 dotnet test HidGuard.sln --configuration Release
 ```
 
-### Arayuz Uygulamasini Baslatma
+### Launch the Dashboard Application
 ```powershell
 dotnet run --project src/HidGuard.App/HidGuard.App.csproj --configuration Release
 ```
 
-### Saldiri Simulatorunu Calistirma
+### Run the Attack Simulator & Verification Suite
 ```powershell
-# Otomatik uctan uca guvenlik dogrulama raporunu calistirma
+# Run the automated 5-scenario verification report
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --verify
 
-# Komut satiri saldiri profilleri (Dry-run / Guvenli Kip)
+# Execute simulated attack profiles (safe dry-run mode)
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode burst --dry-run
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode jitter --dry-run
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode human --dry-run
 
-# Etkilesimli konsol menusunu baslatma
+# Launch the interactive terminal menu
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
+```
+
+### Create Release Distribution Package
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
 ```
 
 ---
 
-## 6. Gelecek Asamalar
+## 7. Contributing and Security
 
-- [x] Asama 8 (Attack Simulator & Verification Tooling): tools/HidGuard.Simulator projesi tamamlandi; DuckyScript motoru, burst, jitter ve insan profilleri olusturuldu, uctan uca 5 otomatik dogrulama senaryosu tamamlandi.
-- [ ] Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai Ingilizce dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, MSI/ZIP dagitim paketleme betikleri ve surum yayini.
-
+- [Contributing Guidelines](.github/CONTRIBUTING.md): Branching model, conventional commits, zero-comment and zero-emoji standards.
+- [Security Policy](SECURITY.md): Threat model, privacy guarantees, vulnerability disclosure.
+- [License](LICENSE): MIT License.
