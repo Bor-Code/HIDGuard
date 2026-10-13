@@ -1,13 +1,16 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Input;
 using HidGuard.App.Mvvm;
 using HidGuard.Core.Audit;
+using HidGuard.Core.Incidents;
 
 namespace HidGuard.App.ViewModels;
 
 public sealed class AuditLogViewModel : ObservableObject
 {
     private readonly IAuditTrailService auditTrail;
+    private readonly IIncidentStore? incidentStore;
     private readonly List<AuditEventItemViewModel> allEvents = new();
     private string searchText = string.Empty;
     private AuditEventType? selectedTypeFilter;
@@ -50,14 +53,24 @@ public sealed class AuditLogViewModel : ObservableObject
     public ICommand RefreshCommand { get; }
     public ICommand ClearFilterCommand { get; }
 
-    public AuditLogViewModel(IAuditTrailService auditTrail)
+    public AuditLogViewModel(IAuditTrailService auditTrail, IIncidentStore? incidentStore = null)
     {
         this.auditTrail = auditTrail ?? throw new ArgumentNullException(nameof(auditTrail));
+        this.incidentStore = incidentStore;
 
         RefreshCommand = new AsyncRelayCommand(LoadAuditEventsAsync);
         ClearFilterCommand = new RelayCommand(ClearFilter);
 
         this.auditTrail.AuditEventRecorded += OnAuditEventRecorded;
+    }
+
+    public async Task ExportReportAsync(Stream outputStream, IncidentExportFormat format = IncidentExportFormat.Json)
+    {
+        ArgumentNullException.ThrowIfNull(outputStream);
+        if (incidentStore != null)
+        {
+            await incidentStore.ExportMetadataReportAsync(outputStream, format).ConfigureAwait(false);
+        }
     }
 
     public async Task LoadAuditEventsAsync()

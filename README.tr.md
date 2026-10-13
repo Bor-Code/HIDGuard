@@ -169,9 +169,23 @@ Girdi yakalama ile analiz ve mudahale motorlari System.Threading.Channels (Bound
 
 #### Gizlilik Ilkesi (Zero-Keylogger Guarantee)
 HIDGuard bir guvenlik aracidir ve kesinlikle bir casus yazilima (keylogger) donusmemelidir.
-- AuditEvent ve log modellerinde basilan karakteri veya sanal tus kodunu (VirtualKey / VKCode) tutan hicbir alan yoktur.
+- Normal calisma dongusunde AuditEvent ve log modellerinde basilan karakteri veya sanal tus kodunu (VirtualKey / VKCode) tutan hicbir alan yoktur.
 - Yalnizca aygit kimligi, zaman damgasi, uygulanan karsi onlem ve anomali yuzdesi kaydedilir.
 - Bu kural, AuditTrailTests icinde Reflection ile denetlenmekte; model uzerinde tus verisi tasiyabilecek bir ozellik eklendiginde testler derleme aninda basarisiz olmaktadir.
+
+#### Sifrelenmis Yerel Olay Deposu (EncryptedIncidentStore & DPAPI)
+Adli bilisim ve saldiri analizi icin gelistirilen olay depolama katmani en yuksek gizlilik standartlarini saglar:
+1. Opt-In Icerik Yakalama (EnableOptInPayloadCapture):
+   - Varsayilan olarak kesinlikle kapalidir (false).
+   - Yalnizca sistem yoneticisi acikca izin verirse (opt-in) ve yalnizca tespit edilen aktif bir saldiri anomalisinde tetikleyici tus dizisi yakalanir (arka plan yazimi asla yakalanmaz).
+2. DPAPI Sifreleme (ProtectedData.Protect):
+   - Yakalanan anomali icerigi disk yazilmadan once Windows DPAPI (DataProtectionScope.CurrentUser) ile aninda sifrelenir. Dosyalar harici ortama aktarilsa dahi yalnizca ayni Windows kullanici oturumunda cozumlenebilir.
+3. Boyut ve Saklama Sinirlari:
+   - MaxPayloadBytes (varsayilan: 4 KB) ile olay basina boyut sinirlandirilir.
+   - RetentionDays (varsayilan: 30 gun) suresi dolan olaylar PurgeExpiredIncidentsAsync ile otomatik silinir.
+   - MaxIncidentCount (varsayilan: 1000) kapasitesi asildiginda en eski olaylar otomatik temizlenir.
+4. Yalnizca Metadata Iceren Rapor Disari Aktarimi (ExportMetadataReportAsync):
+   - Guvenlik analistleri veya SOC ekipleriyle paylasilmak uzere uretilen JSON veya CSV raporlarinda ham veya sifreli tus icerigi kesinlikle yer almaz; yalnizca metadata (DeviceId, AnomalyScore, Rule, Action, Timestamp vb.) aktarilir.
 
 #### Denetim Izi (Audit Trail) ve Gunlukleme (Logging)
 - FileAuditTrailService: Gunluk olarak bolunen JSON Lines formatinda (audit-yyyyMMdd.jsonl) append-only denetim kaydi tutar.

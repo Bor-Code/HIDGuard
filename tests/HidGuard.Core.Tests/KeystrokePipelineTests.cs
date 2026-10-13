@@ -3,6 +3,7 @@ using Xunit;
 using HidGuard.Core.Countermeasures;
 using HidGuard.Core.Domain;
 using HidGuard.Core.Events;
+using HidGuard.Core.Incidents;
 using HidGuard.Core.Input;
 using HidGuard.Core.Pipeline;
 using HidGuard.Core.Policy;
@@ -453,5 +454,93 @@ public sealed class KeystrokePipelineTests
         keystrokesPerSecond.ShouldBeGreaterThan(1000.0);
 
         await pipeline.StopAsync();
+    }
+
+    [Fact]
+    public async Task PipelineShouldRecordIncidentWhenAttackDetected()
+    {
+        var source = new TestKeystrokeSource();
+        source.SetConnectedKeyboards(new[] { HumanKeyboard, BadUsbKeyboard });
+
+        var locker = new TestWorkstationLocker();
+        var disabler = new TestDeviceDisabler();
+        var interceptor = new TestKeystrokeInterceptor();
+        using var trustStore = new TestTrustStore();
+        await trustStore.SetTrustLevelAsync(HumanKeyboard, DeviceTrustLevel.Trusted, "Admin");
+        await trustStore.SetTrustLevelAsync(BadUsbKeyboard, DeviceTrustLevel.Blocked, "System");
+
+        var eventAggregator = new PipelineEventAggregator();
+        var timingEngine = new TimingAnalysisEngine(new TimingThresholds(), new AnomalyScorer());
+        var policyEngine = new PolicyEngine(trustStore);
+        var countermeasureService = new CountermeasureService(locker, disabler, interceptor, trustStore);
+        var incidentStore = new TestIncidentStore();
+
+        await using var pipeline = new KeystrokePipeline(
+            source,
+            timingEngine,
+            policyEngine,
+            countermeasureService,
+            trustStore,
+            interceptor,
+            eventAggregator,
+            policyOptions: null,
+            incidentStore: incidentStore);
+
+        await pipeline.StartAsync();
+
+        var now = DateTimeOffset.UtcNow;
+        for (var i = 0; i < 20; i++)
+        {
+            source.EmitKeystroke(new KeystrokeEvent(
+                BadUsbKeyboard,
+                now.AddMilliseconds(i * 2),
+                KeyTransitionState.KeyDown,
+                (uint)(0x41 + (i % 26))));
+        }
+
+        await Task.Delay(200);
+
+        lock (incidentStore.RecordedRequests)
+        {
+            incidentStore.RecordedRequests.Count.ShouldBeGreaterThan(0);
+            var req = incidentStore.RecordedRequests[0];
+            req.DeviceId.ShouldContain("VID_16C0&PID_05DF");
+            req.AnomalyScore.ShouldBeGreaterThan(50.0);
+        }
+
+        await pipeline.StopAsync();
+    }
+
+    private sealed class TestIncidentStore : IIncidentStore
+    {
+        public List<CreateIncidentRequest> RecordedRequests { get; } = new();
+        public event EventHandler<IncidentRecord>? IncidentRecorded;
+
+        public Task<IncidentRecord> RecordIncidentAsync(CreateIncidentRequest request, CancellationToken cancellationToken = default)
+        {
+            lock (RecordedRequests)
+            {
+                RecordedRequests.Add(request);
+            }
+            var record = new IncidentRecord
+            {
+                Id = Guid.NewGuid(),
+                DeviceId = request.DeviceId,
+                AnomalyScore = request.AnomalyScore,
+                TriggeredRule = request.TriggeredRule,
+                CountermeasureAction = request.CountermeasureAction,
+                RetentionExpiresAt = DateTimeOffset.UtcNow.AddDays(30)
+            };
+            IncidentRecorded?.Invoke(this, record);
+            return Task.FromResult(record);
+        }
+
+        public Task<IReadOnlyList<IncidentRecord>> GetIncidentsAsync(int limit = 100, CancellationToken cancellationToken = default) =>
+            Task.FromResult<IReadOnlyList<IncidentRecord>>(Array.Empty<IncidentRecord>());
+        public Task<IncidentRecord?> GetIncidentByIdAsync(Guid id, CancellationToken cancellationToken = default) => Task.FromResult<IncidentRecord?>(null);
+        public Task<int> PurgeExpiredIncidentsAsync(CancellationToken cancellationToken = default) => Task.FromResult(0);
+        public Task ExportMetadataReportAsync(Stream outputStream, IncidentExportFormat format = IncidentExportFormat.Json, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task<byte[]?> DecryptPayloadAsync(Guid incidentId, CancellationToken cancellationToken = default) => Task.FromResult<byte[]?>(null);
+        public void Dispose() { }
     }
 }
