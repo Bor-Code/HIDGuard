@@ -10,6 +10,7 @@ public sealed record HidGuardConfiguration
     public CountermeasureConfiguration Countermeasures { get; init; } = new();
     public LoggingConfiguration Logging { get; init; } = new();
     public UiConfiguration Ui { get; init; } = new();
+    public IncidentStoreConfiguration Incidents { get; init; } = new();
 
     public void Validate()
     {
@@ -18,5 +19,6 @@ public sealed record HidGuardConfiguration
         Countermeasures.Validate();
         Logging.Validate();
         Ui.Validate();
+        Incidents.Validate();
     }
 }

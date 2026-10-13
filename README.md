@@ -54,6 +54,7 @@ HIDGuard follows Clean Architecture principles, ensuring complete decoupling bet
 | - PolicyEngine (Decision Matrix & Anti-Lockout)             |
 | - CountermeasureService (Multi-Tier Defense Orchestration)  |
 | - FileAuditTrailService (Privacy-Safe Append-Only Audit)    |
+| - EncryptedIncidentStore (DPAPI-Protected Incident Storage) |
 +-----------------------------+-------------------------------+
                               | Pipeline Events
               +---------------+---------------+
@@ -72,11 +73,13 @@ HIDGuard follows Clean Architecture principles, ensuring complete decoupling bet
 
 ## 3. Core Architectural Guarantees
 
-### 3.1 Zero-Keylogging Privacy Invariant
+### 3.1 Zero-Keylogging Privacy Invariant & Encrypted Incident Store
 HIDGuard enforces an absolute guarantee regarding user privacy:
-- The system **never** records, logs, stores, or transmits virtual key codes, scan codes, or typed alphanumeric characters.
+- The system **never** records, logs, stores, or transmits virtual key codes, scan codes, or typed alphanumeric characters during normal operation.
 - Pipeline event models and audit trail entries (`AuditEvent`) record only non-sensitive metadata: hardware device identifiers (VID/PID), inter-keystroke intervals, anomaly confidence scores, action decisions, and timestamps.
-- This invariant is enforced by automated test suites using reflection to assert the complete absence of key data fields in public models and audit sinks.
+- **Opt-in Incident Payload Capture**: If explicit opt-in payload capture is enabled in configuration (`EnableOptInPayloadCapture = true`), payload bytes associated with detected attack anomalies are encrypted immediately using Windows DPAPI (`DataProtectionScope.CurrentUser`) before writing to disk, bounded by strict size limits (`MaxPayloadBytes`, default: 4 KB) and automatic retention expiry (`RetentionDays`, default: 30 days).
+- **Metadata-Only Export**: Incident reports exported for analysis (`ExportMetadataReportAsync`) output exclusively non-sensitive metadata in JSON or CSV format, stripping any raw or encrypted payload data to ensure safe operational sharing without risk of keystroke leakage.
+- These invariants are enforced by automated unit test suites verifying reflection properties, DPAPI roundtrips, and zero payload leakage in export formats.
 
 ### 3.2 Offline and Zero-Telemetry Operation
 - HIDGuard runs entirely offline and contains zero external telemetry, tracking, or network communication code.

@@ -27,6 +27,11 @@ public sealed class SettingsViewModel : ObservableObject
     private bool notifyOnAllowedDevices;
     private string theme = "Dark";
 
+    private bool enableOptInPayloadCapture;
+    private int maxIncidentCount = 1000;
+    private int retentionDays = 30;
+    private int maxPayloadBytes = 4096;
+
     private string feedbackMessage = string.Empty;
     private string feedbackColor = "#10B981";
 
@@ -120,6 +125,30 @@ public sealed class SettingsViewModel : ObservableObject
         set => SetProperty(ref theme, value);
     }
 
+    public bool EnableOptInPayloadCapture
+    {
+        get => enableOptInPayloadCapture;
+        set => SetProperty(ref enableOptInPayloadCapture, value);
+    }
+
+    public int MaxIncidentCount
+    {
+        get => maxIncidentCount;
+        set => SetProperty(ref maxIncidentCount, value);
+    }
+
+    public int RetentionDays
+    {
+        get => retentionDays;
+        set => SetProperty(ref retentionDays, value);
+    }
+
+    public int MaxPayloadBytes
+    {
+        get => maxPayloadBytes;
+        set => SetProperty(ref maxPayloadBytes, value);
+    }
+
     public string FeedbackMessage
     {
         get => feedbackMessage;
@@ -166,6 +195,11 @@ public sealed class SettingsViewModel : ObservableObject
         NotifyOnBlockedDevices = config.Ui.NotifyOnBlockedDevices;
         NotifyOnAllowedDevices = config.Ui.NotifyOnAllowedDevices;
         Theme = config.Ui.Theme;
+
+        EnableOptInPayloadCapture = config.Incidents.EnableOptInPayloadCapture;
+        MaxIncidentCount = config.Incidents.MaxIncidentCount;
+        RetentionDays = config.Incidents.RetentionDays;
+        MaxPayloadBytes = config.Incidents.MaxPayloadBytes;
     }
 
     private async Task SaveSettingsAsync()
@@ -197,6 +231,13 @@ public sealed class SettingsViewModel : ObservableObject
                     NotifyOnBlockedDevices = NotifyOnBlockedDevices,
                     NotifyOnAllowedDevices = NotifyOnAllowedDevices,
                     Theme = Theme
+                },
+                Incidents = new IncidentStoreConfiguration
+                {
+                    EnableOptInPayloadCapture = EnableOptInPayloadCapture,
+                    MaxIncidentCount = MaxIncidentCount,
+                    RetentionDays = RetentionDays,
+                    MaxPayloadBytes = MaxPayloadBytes
                 }
             };
 
