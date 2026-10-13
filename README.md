@@ -201,6 +201,30 @@ HIDGuard bir guvenlik aracidir ve kesinlikle bir casus yazilima (keylogger) donu
 
 ---
 
+### Asama 8: Saldiri Simulatoru ve Uctan Uca Dogrulama Araclari (HidGuard.Simulator)
+
+#### Mimari Ozellikler
+1. Sentetik Enjeksiyon Soyutlamasi (IKeystrokeInjector):
+   - Win32KeystrokeInjector: PInvoke.SendInput uzerinden aktif Windows masaustu pencerelerine dogrudan klavye olaylari (tus basma, kombinasyon, bekleme) gonderir.
+   - SimulatedKeystrokeInjector: Masaustune temas etmeksizin bellek uzerinde calisir; birim testlerde ve CI ortamlinda tam guvenli, deterministik dogrulama saglar.
+2. DuckyScript Cozumleyici (DuckyScriptParser):
+   - Hak5 USB Rubber Ducky 1.0 / 2.0 syntax destegi (STRING, STRINGLN, DELAY, DEFAULT_DELAY, REPEAT, ENTER, GUI/WINDOWS, CTRL, ALT, SHIFT kombinasyonlari, F1-F24).
+   - Sanal tus kodlarini (VirtualKeyMap) eksiksiz sekilde Win32 sanal tus kodlarina esler.
+3. Saldiri Profilleri (Attack Profiles):
+   - BurstAttackProfile: Donanimsal USB saat hizinda (< 10ms, ornegin 3-4ms araliklarla) yuksek hizli tus enjeksiyonu.
+   - JitterAttackProfile: Mikrokontrolcu dongulerini modelleyen sabit aralikli ve sifira yakin varyansli (15ms +/- 0.1ms) esbicimli saldiri.
+   - HumanTypingProfile: Box-Muller Gauss dagilimiyla insan biyomekanik parmak hareketlerini (ortalama 130ms, standart sapma 35ms, kelime arasi dogal duraklamalar) modelleyen insan klavye emulasyonu.
+   - DuckyScriptAttackProfile: Cozumlenen DuckyScript talimatlarini gercek zamanli veya sanal saatle uygulayan profil.
+4. Uctan Uca Dogrulama Kosucusu (VerificationRunner):
+   - 5 kritik guvenlik senaryosunu canli boru hatti uzerinde otomatik olarak dogrular:
+     1. Burst Attack Tespiti ve Karsi Onlem (Anomali skoru yukselir, tuslar yutulur, aygit engellenir).
+     2. Dusuk Jitter / Esbicimlilik Tespiti (Mikrokontrolcu dongusu standart sapma anomalisiyle yakalanir).
+     3. Mesru Insan Yazimi Gecisi (Sifir yanlis alarm, sifir engelleme, kesintisiz gecis).
+     4. DuckyScript Zararli Payload Notrlestirme (PowerShell / cmd calistirma girisimi basariyla yutulur).
+     5. Gizlilik Ilkesi Dogrulamasi (Denetim izi ve veri modellerinde asla sanal tus kodu veya metin saklanmaz).
+
+---
+
 ## 4. Test Kapsami ve Kalite Metrikleri
 
 Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmistir.
@@ -210,7 +234,8 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 | HidGuard.Core.Tests | 105 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, uctan uca boru hatti, atomik konfigurasyon, gizlilik dogrulamasi |
 | HidGuard.Platform.Windows.Tests | 23 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi |
 | HidGuard.App.Tests | 17 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar ve ana pencere gezinmesi |
-| Toplam | 145 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
+| Toplam | 173 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 
@@ -230,14 +255,29 @@ dotnet build HidGuard.sln --configuration Release
 dotnet test HidGuard.sln --configuration Release
 ```
 
-### Uygulamayi Baslatma
+### Arayuz Uygulamasini Baslatma
 ```powershell
 dotnet run --project src/HidGuard.App/HidGuard.App.csproj --configuration Release
+```
+
+### Saldiri Simulatorunu Calistirma
+```powershell
+# Otomatik uctan uca guvenlik dogrulama raporunu calistirma
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --verify
+
+# Komut satiri saldiri profilleri (Dry-run / Guvenli Kip)
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode burst --dry-run
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode jitter --dry-run
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode human --dry-run
+
+# Etkilesimli konsol menusunu baslatma
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 ```
 
 ---
 
 ## 6. Gelecek Asamalar
 
-- Asama 8 (Attack Simulator & Verification Tooling): tools/HidGuard.Simulator projesinin tamamlanmasi; sentetik BadUSB saldiri paternleri (DuckyScript emulasyonu, sabit gecikmeli enjeksiyon, jitter eklenmis gizli enjeksiyon) ureterek savunma mekanizmalarinin sahada dogrulanmasi.
-- Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai Ingilizce dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, MSI/ZIP dagitim paketleme betikleri ve surum yayini.
+- [x] Asama 8 (Attack Simulator & Verification Tooling): tools/HidGuard.Simulator projesi tamamlandi; DuckyScript motoru, burst, jitter ve insan profilleri olusturuldu, uctan uca 5 otomatik dogrulama senaryosu tamamlandi.
+- [ ] Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai Ingilizce dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, MSI/ZIP dagitim paketleme betikleri ve surum yayini.
+
