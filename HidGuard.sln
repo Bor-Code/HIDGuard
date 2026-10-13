@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidGuard.Platform.Windows.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidGuard.App.Tests", "tests\HidGuard.App.Tests\HidGuard.App.Tests.csproj", "{B9165D38-D135-4A18-9C9B-9A1B924A1AB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidGuard.Simulator.Tests", "tests\HidGuard.Simulator.Tests\HidGuard.Simulator.Tests.csproj", "{4B88C894-DC86-407D-A2C0-5FA934E6B23F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,18 @@ Global
 		{B9165D38-D135-4A18-9C9B-9A1B924A1AB4}.Release|x64.Build.0 = Release|Any CPU
 		{B9165D38-D135-4A18-9C9B-9A1B924A1AB4}.Release|x86.ActiveCfg = Release|Any CPU
 		{B9165D38-D135-4A18-9C9B-9A1B924A1AB4}.Release|x86.Build.0 = Release|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Release|x64.Build.0 = Release|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,5 +142,6 @@ Global
 		{0C477FAC-F89F-41DC-AC63-94066601DF73} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{168CBC89-3B04-4164-B878-01CB7CCB09E7} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{B9165D38-D135-4A18-9C9B-9A1B924A1AB4} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{4B88C894-DC86-407D-A2C0-5FA934E6B23F} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal
