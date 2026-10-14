@@ -178,14 +178,20 @@ Adli bilisim ve saldiri analizi icin gelistirilen olay depolama katmani en yukse
 1. Opt-In Icerik Yakalama (EnableOptInPayloadCapture):
    - Varsayilan olarak kesinlikle kapalidir (false).
    - Yalnizca sistem yoneticisi acikca izin verirse (opt-in) ve yalnizca tespit edilen aktif bir saldiri anomalisinde tetikleyici tus dizisi yakalanir (arka plan yazimi asla yakalanmaz).
-2. DPAPI Sifreleme (ProtectedData.Protect):
-   - Yakalanan anomali icerigi disk yazilmadan once Windows DPAPI (DataProtectionScope.CurrentUser) ile aninda sifrelenir. Dosyalar harici ortama aktarilsa dahi yalnizca ayni Windows kullanici oturumunda cozumlenebilir.
-3. Boyut ve Saklama Sinirlari:
+2. Bellek Ici Dairesel Arabellek (IncidentPayloadBuffer):
+   - Yalnizca opt-in yakalama etkinken calisir; kapaliyken tum tus vuruslari aninda bellekten dusurulur.
+   - Aygit basina bagimsiz kuyrukta yalnizca son CaptureWindowKeystrokes (varsayilan: 64, azami: 1024) adet KeyDown sanal tus kodunu tutar.
+   - Saldiri tespit edildigi anda TakeSnapshot ile anlik goruntu alinip arabellek aninda temizlenir.
+3. DPAPI Sifreleme ve Bellek Temizligi:
+   - Yakalanan anomali icerigi disk yazilmadan once Windows DPAPI (DataProtectionScope.CurrentUser) ile aninda sifrelenir.
+   - Duz metin tus dizisi sifrelenir sifrelenmez Array.Clear ile yonetilen bellekten aninda sifirlanir; boylece bellek dokumlerinde (memory dump) tus izi birakilmaz.
+4. Boyut, Saklama Sinirlari ve Otomatik Bakim (IncidentMaintenanceService):
    - MaxPayloadBytes (varsayilan: 4 KB) ile olay basina boyut sinirlandirilir.
-   - RetentionDays (varsayilan: 30 gun) suresi dolan olaylar PurgeExpiredIncidentsAsync ile otomatik silinir.
-   - MaxIncidentCount (varsayilan: 1000) kapasitesi asildiginda en eski olaylar otomatik temizlenir.
-4. Yalnizca Metadata Iceren Rapor Disari Aktarimi (ExportMetadataReportAsync):
+   - RetentionDays (varsayilan: 30 gun) suresi dolan olaylar ve MaxIncidentCount (varsayilan: 1000) siniri IncidentMaintenanceService tarafindan arka planda periyodik olarak (PurgeIntervalMinutes, varsayilan: 60 dk) otomatik temizlenir.
+   - Calisma aninda IConfigurationManager.ConfigurationChanged olayini dinleyerek ayar degisikliklerini yeniden baslatma gerekmeksizin dinamik olarak uygular.
+5. Yalnizca Metadata Iceren Rapor Disari Aktarimi (ExportMetadataReportAsync):
    - Guvenlik analistleri veya SOC ekipleriyle paylasilmak uzere uretilen JSON veya CSV raporlarinda ham veya sifreli tus icerigi kesinlikle yer almaz; yalnizca metadata (DeviceId, AnomalyScore, Rule, Action, Timestamp vb.) aktarilir.
+   - Audit Log arayuzundeki "Export Report" butonu ile kullanici dosya kaydetme penceresi uzerinden tek tikla rapor uretebilir.
 
 #### Denetim Izi (Audit Trail) ve Gunlukleme (Logging)
 - FileAuditTrailService: Gunluk olarak bolunen JSON Lines formatinda (audit-yyyyMMdd.jsonl) append-only denetim kaydi tutar.
@@ -212,8 +218,8 @@ Adli bilisim ve saldiri analizi icin gelistirilen olay depolama katmani en yukse
 - Overview: Canli koruma anahtari, anlik toplam tus vurusu, engellenen tuslar, tespit edilen saldirilar, notrlestirilen tehditler, anlik WPM ve anomali cubugu.
 - Devices: Entegre klavyelerin donanim kimlikleri (VID/PID), guven seviyeleri (Trusted, Unknown, Blocked) ve Trust / Block / Reset butonlari.
 - Live Metrics: Ortalama vurus araligi, standart sapma, hiz ve son vuruslarin zamanlama grafigi.
-- Audit Trail: Filtrelenebilir ve aranabilir denetim izi tablosu.
-- Settings: Kayan pencere boyutu, standart sapma esigi, maksimum WPM ve karsi onlem anahtarlari.
+- Audit Trail: Filtrelenebilir ve aranabilir denetim izi tablosu ve olay raporu disari aktarma butonu (Export Report).
+- Settings: Kayan pencere boyutu, standart sapma esigi, karsi onlem anahtarlari ve Sifrelenmis Olay Deposu / Adli Bilisim yapilandirma karti.
 
 ---
 
@@ -247,11 +253,11 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 
 | Proje | Test Sayisi | Durum | Kapsanan Alanlar |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 105 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, uctan uca boru hatti, atomik konfigurasyon, gizlilik dogrulamasi |
-| HidGuard.Platform.Windows.Tests | 23 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi |
-| HidGuard.App.Tests | 17 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar ve ana pencere gezinmesi |
+| HidGuard.Core.Tests | 129 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi |
+| HidGuard.Platform.Windows.Tests | 27 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu |
+| HidGuard.App.Tests | 19 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma ve ana pencere gezinmesi |
 | HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
-| Toplam | 173 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| Toplam | 203 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 
@@ -301,4 +307,5 @@ powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
 
 - [x] Asama 8 (Attack Simulator & Verification Tooling): tools/HidGuard.Simulator projesi tamamlandi; DuckyScript motoru, burst, jitter ve insan profilleri olusturuldu, uctan uca 5 otomatik dogrulama senaryosu tamamlandi.
 - [x] Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, SECURITY.md, GitHub Actions CI/CD hatti ve otomatik dagitim paketleme betigi tamamlandi.
+- [x] Asama 10 (Encrypted Incident Store, Payload Buffering & UI Controls): DPAPI ile sifrelenmis olay deposu, RAM ici dairesel kuyruk (IncidentPayloadBuffer), otomatik temizlik ve calisma ani dinamik yapilandirma servisi (IncidentMaintenanceService), Settings paneli ve CSV/JSON metadata raporu disari aktarma entegrasyonu 203 birim test ile tamamlandi.
 
