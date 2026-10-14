@@ -31,7 +31,7 @@ public sealed class EncryptedIncidentStore : IIncidentStore
             "Purged {PurgedCount} expired incidents.");
 
     private readonly string storageDirectory;
-    private readonly IncidentStoreConfiguration configuration;
+    private volatile IncidentStoreConfiguration configuration;
     private readonly IDataProtector dataProtector;
     private readonly ILogger<EncryptedIncidentStore> logger;
     private readonly SemaphoreSlim syncGate = new(1, 1);
@@ -58,21 +58,37 @@ public sealed class EncryptedIncidentStore : IIncidentStore
         }
     }
 
+    public void UpdateConfiguration(IncidentStoreConfiguration configuration)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        configuration.Validate();
+        this.configuration = configuration;
+    }
+
     public async Task<IncidentRecord> RecordIncidentAsync(CreateIncidentRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
+        var config = configuration;
         byte[]? encryptedPayload = null;
         int? unencryptedLength = null;
         var hasPayload = false;
 
-        if (configuration.EnableOptInPayloadCapture && request.RawPayload != null && request.RawPayload.Length > 0)
+        if (config.EnableOptInPayloadCapture && request.RawPayload != null && request.RawPayload.Length > 0)
         {
-            var length = Math.Min(request.RawPayload.Length, configuration.MaxPayloadBytes);
+            var length = Math.Min(request.RawPayload.Length, config.MaxPayloadBytes);
             var payloadToProtect = new byte[length];
             Array.Copy(request.RawPayload, payloadToProtect, length);
 
-            encryptedPayload = dataProtector.Protect(payloadToProtect);
+            try
+            {
+                encryptedPayload = dataProtector.Protect(payloadToProtect);
+            }
+            finally
+            {
+                Array.Clear(payloadToProtect);
+            }
+
             hasPayload = true;
             unencryptedLength = length;
         }
@@ -88,7 +104,7 @@ public sealed class EncryptedIncidentStore : IIncidentStore
             HasEncryptedPayload = hasPayload,
             EncryptedPayload = encryptedPayload,
             UnencryptedPayloadLength = unencryptedLength,
-            RetentionExpiresAt = DateTimeOffset.UtcNow.AddDays(configuration.RetentionDays),
+            RetentionExpiresAt = DateTimeOffset.UtcNow.AddDays(config.RetentionDays),
             Metadata = request.Metadata ?? new Dictionary<string, string>()
         };
 
@@ -102,7 +118,7 @@ public sealed class EncryptedIncidentStore : IIncidentStore
             await File.WriteAllTextAsync(tempFilePath, json, cancellationToken).ConfigureAwait(false);
             File.Move(tempFilePath, filePath, overwrite: true);
 
-            EnforceCapacityLimit();
+            EnforceCapacityLimit(config.MaxIncidentCount);
         }
         finally
         {
@@ -313,7 +329,7 @@ public sealed class EncryptedIncidentStore : IIncidentStore
         return Path.Combine(storageDirectory, $"incident_{id:N}.json");
     }
 
-    private void EnforceCapacityLimit()
+    private void EnforceCapacityLimit(int maxIncidentCount)
     {
         if (!Directory.Exists(storageDirectory))
         {
@@ -325,12 +341,12 @@ public sealed class EncryptedIncidentStore : IIncidentStore
             .OrderBy(f => f.LastWriteTimeUtc)
             .ToList();
 
-        if (files.Count <= configuration.MaxIncidentCount)
+        if (files.Count <= maxIncidentCount)
         {
             return;
         }
 
-        var excessCount = files.Count - configuration.MaxIncidentCount;
+        var excessCount = files.Count - maxIncidentCount;
         for (var i = 0; i < excessCount; i++)
         {
             try

@@ -28,9 +28,11 @@ public sealed class SettingsViewModel : ObservableObject
     private string theme = "Dark";
 
     private bool enableOptInPayloadCapture;
+    private int captureWindowKeystrokes = 64;
     private int maxIncidentCount = 1000;
     private int retentionDays = 30;
     private int maxPayloadBytes = 4096;
+    private int purgeIntervalMinutes = 60;
 
     private string feedbackMessage = string.Empty;
     private string feedbackColor = "#10B981";
@@ -131,6 +133,12 @@ public sealed class SettingsViewModel : ObservableObject
         set => SetProperty(ref enableOptInPayloadCapture, value);
     }
 
+    public int CaptureWindowKeystrokes
+    {
+        get => captureWindowKeystrokes;
+        set => SetProperty(ref captureWindowKeystrokes, value);
+    }
+
     public int MaxIncidentCount
     {
         get => maxIncidentCount;
@@ -147,6 +155,12 @@ public sealed class SettingsViewModel : ObservableObject
     {
         get => maxPayloadBytes;
         set => SetProperty(ref maxPayloadBytes, value);
+    }
+
+    public int PurgeIntervalMinutes
+    {
+        get => purgeIntervalMinutes;
+        set => SetProperty(ref purgeIntervalMinutes, value);
     }
 
     public string FeedbackMessage
@@ -197,9 +211,11 @@ public sealed class SettingsViewModel : ObservableObject
         Theme = config.Ui.Theme;
 
         EnableOptInPayloadCapture = config.Incidents.EnableOptInPayloadCapture;
+        CaptureWindowKeystrokes = config.Incidents.CaptureWindowKeystrokes;
         MaxIncidentCount = config.Incidents.MaxIncidentCount;
         RetentionDays = config.Incidents.RetentionDays;
         MaxPayloadBytes = config.Incidents.MaxPayloadBytes;
+        PurgeIntervalMinutes = config.Incidents.PurgeIntervalMinutes;
     }
 
     private async Task SaveSettingsAsync()
@@ -235,9 +251,11 @@ public sealed class SettingsViewModel : ObservableObject
                 Incidents = new IncidentStoreConfiguration
                 {
                     EnableOptInPayloadCapture = EnableOptInPayloadCapture,
+                    CaptureWindowKeystrokes = CaptureWindowKeystrokes,
                     MaxIncidentCount = MaxIncidentCount,
                     RetentionDays = RetentionDays,
-                    MaxPayloadBytes = MaxPayloadBytes
+                    MaxPayloadBytes = MaxPayloadBytes,
+                    PurgeIntervalMinutes = PurgeIntervalMinutes
                 }
             };
 

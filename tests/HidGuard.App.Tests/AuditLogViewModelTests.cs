@@ -1,7 +1,10 @@
+using System.IO;
 using Shouldly;
 using Xunit;
 using HidGuard.App.ViewModels;
 using HidGuard.Core.Audit;
+using HidGuard.Core.Configuration;
+using HidGuard.Core.Incidents;
 
 namespace HidGuard.App.Tests;
 
@@ -92,5 +95,75 @@ public sealed class AuditLogViewModelTests
 
         vm.FilteredEvents.Count.ShouldBe(1);
         vm.FilteredEvents[0].EventType.ShouldBe(AuditEventType.AnomalyDetected);
+    }
+
+    [Fact]
+    public async Task AuditLogViewModelShouldExportReportWhenPathSelected()
+    {
+        var audit = new StubAuditTrailService();
+        var store = new StubIncidentStore();
+        var tempFile = Path.Combine(Path.GetTempPath(), $"test-export-{Guid.NewGuid():N}.json");
+
+        try
+        {
+            var vm = new AuditLogViewModel(audit, store, () => tempFile);
+            vm.ExportReportCommand.CanExecute(null).ShouldBeTrue();
+            await vm.ExportReportInteractiveAsync();
+
+            store.ExportCallCount.ShouldBe(1);
+            store.LastFormat.ShouldBe(IncidentExportFormat.Json);
+            File.Exists(tempFile).ShouldBeTrue();
+            (await File.ReadAllTextAsync(tempFile)).ShouldBe("stub-report");
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task AuditLogViewModelShouldDoNothingWhenCancelledOrNoStore()
+    {
+        var audit = new StubAuditTrailService();
+        var store = new StubIncidentStore();
+
+        var vmWithCancelledDialog = new AuditLogViewModel(audit, store, () => null);
+        await vmWithCancelledDialog.ExportReportInteractiveAsync();
+        store.ExportCallCount.ShouldBe(0);
+
+        var vmWithoutStore = new AuditLogViewModel(audit, incidentStore: null, () => "path.json");
+        await vmWithoutStore.ExportReportInteractiveAsync();
+        store.ExportCallCount.ShouldBe(0);
+    }
+
+    private sealed class StubIncidentStore : IIncidentStore
+    {
+        public int ExportCallCount { get; private set; }
+        public IncidentExportFormat LastFormat { get; private set; }
+        public event EventHandler<IncidentRecord>? IncidentRecorded { add { } remove { } }
+
+        public void UpdateConfiguration(IncidentStoreConfiguration configuration) { }
+        public Task<IncidentRecord> RecordIncidentAsync(CreateIncidentRequest request, CancellationToken cancellationToken = default) =>
+            throw new NotSupportedException();
+        public Task<IReadOnlyList<IncidentRecord>> GetIncidentsAsync(int limit = 100, CancellationToken cancellationToken = default) =>
+            Task.FromResult<IReadOnlyList<IncidentRecord>>(Array.Empty<IncidentRecord>());
+        public Task<IncidentRecord?> GetIncidentByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+            Task.FromResult<IncidentRecord?>(null);
+        public Task<int> PurgeExpiredIncidentsAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult(0);
+        public Task ExportMetadataReportAsync(Stream outputStream, IncidentExportFormat format = IncidentExportFormat.Json, CancellationToken cancellationToken = default)
+        {
+            ExportCallCount++;
+            LastFormat = format;
+            var bytes = "stub-report"u8.ToArray();
+            outputStream.Write(bytes, 0, bytes.Length);
+            return Task.CompletedTask;
+        }
+        public Task<byte[]?> DecryptPayloadAsync(Guid incidentId, CancellationToken cancellationToken = default) =>
+            Task.FromResult<byte[]?>(null);
+        public void Dispose() { }
     }
 }
