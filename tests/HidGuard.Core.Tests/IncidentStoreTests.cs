@@ -51,6 +51,18 @@ public sealed class IncidentStoreTests
 
         Should.Throw<InvalidOperationException>(() =>
             new IncidentStoreConfiguration { MaxPayloadBytes = 100_000 }.Validate());
+
+        Should.Throw<InvalidOperationException>(() =>
+            new IncidentStoreConfiguration { CaptureWindowKeystrokes = 0 }.Validate());
+
+        Should.Throw<InvalidOperationException>(() =>
+            new IncidentStoreConfiguration { CaptureWindowKeystrokes = IncidentStoreConfiguration.MaxCaptureWindowKeystrokes + 1 }.Validate());
+
+        Should.Throw<InvalidOperationException>(() =>
+            new IncidentStoreConfiguration { PurgeIntervalMinutes = 0 }.Validate());
+
+        Should.NotThrow(() =>
+            new IncidentStoreConfiguration().Validate());
     }
 
     [Fact]

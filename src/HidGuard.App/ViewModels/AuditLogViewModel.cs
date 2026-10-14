@@ -48,18 +48,26 @@ public sealed class AuditLogViewModel : ObservableObject
         set => SetProperty(ref eventCount, value);
     }
 
+    private readonly Func<string?>? saveFilePathProvider;
+
     public IReadOnlyList<AuditEventType> AvailableEventTypes { get; } = Enum.GetValues<AuditEventType>();
 
     public ICommand RefreshCommand { get; }
     public ICommand ClearFilterCommand { get; }
+    public ICommand ExportReportCommand { get; }
 
-    public AuditLogViewModel(IAuditTrailService auditTrail, IIncidentStore? incidentStore = null)
+    public AuditLogViewModel(
+        IAuditTrailService auditTrail,
+        IIncidentStore? incidentStore = null,
+        Func<string?>? saveFilePathProvider = null)
     {
         this.auditTrail = auditTrail ?? throw new ArgumentNullException(nameof(auditTrail));
         this.incidentStore = incidentStore;
+        this.saveFilePathProvider = saveFilePathProvider;
 
         RefreshCommand = new AsyncRelayCommand(LoadAuditEventsAsync);
         ClearFilterCommand = new RelayCommand(ClearFilter);
+        ExportReportCommand = new AsyncRelayCommand(ExportReportInteractiveAsync);
 
         this.auditTrail.AuditEventRecorded += OnAuditEventRecorded;
     }
@@ -71,6 +79,42 @@ public sealed class AuditLogViewModel : ObservableObject
         {
             await incidentStore.ExportMetadataReportAsync(outputStream, format).ConfigureAwait(false);
         }
+    }
+
+    public async Task ExportReportInteractiveAsync()
+    {
+        if (incidentStore == null)
+        {
+            return;
+        }
+
+        var filePath = saveFilePathProvider != null
+            ? saveFilePathProvider()
+            : DefaultSaveFilePathProvider();
+
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            return;
+        }
+
+        var format = filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase)
+            ? IncidentExportFormat.Csv
+            : IncidentExportFormat.Json;
+
+        await using var stream = File.Create(filePath);
+        await ExportReportAsync(stream, format).ConfigureAwait(false);
+    }
+
+    private static string? DefaultSaveFilePathProvider()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Filter = "JSON Report (*.json)|*.json|CSV Report (*.csv)|*.csv",
+            DefaultExt = ".json",
+            FileName = $"incident-report-{DateTimeOffset.UtcNow:yyyyMMdd-HHmmss}.json"
+        };
+
+        return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
 
     public async Task LoadAuditEventsAsync()

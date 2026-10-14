@@ -33,6 +33,12 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
             new EventId(3, nameof(KeystrokePipeline)),
             "Keystroke injection attack detected from device {DeviceId}");
 
+    private static readonly Action<ILogger, string, Exception?> LogIncidentRecordFailedDelegate =
+        LoggerMessage.Define<string>(
+            LogLevel.Warning,
+            new EventId(4, nameof(KeystrokePipeline)),
+            "Failed to record security incident for device {DeviceId}");
+
     private readonly IKeystrokeSource keystrokeSource;
     private readonly ITimingAnalysisEngine timingEngine;
     private readonly IPolicyEngine policyEngine;
@@ -41,6 +47,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
     private readonly IKeystrokeInterceptor interceptor;
     private readonly IPipelineEventAggregator eventAggregator;
     private readonly IIncidentStore? incidentStore;
+    private readonly IncidentPayloadBuffer? payloadBuffer;
     private readonly PolicyOptions policyOptions;
     private readonly ILogger<KeystrokePipeline> logger;
 
@@ -68,6 +75,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
         IPipelineEventAggregator eventAggregator,
         PolicyOptions? policyOptions = null,
         IIncidentStore? incidentStore = null,
+        IncidentPayloadBuffer? payloadBuffer = null,
         ILogger<KeystrokePipeline>? logger = null)
     {
         ArgumentNullException.ThrowIfNull(keystrokeSource);
@@ -87,6 +95,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
         this.eventAggregator = eventAggregator;
         this.policyOptions = policyOptions ?? new PolicyOptions();
         this.incidentStore = incidentStore;
+        this.payloadBuffer = payloadBuffer;
         this.logger = logger ?? NullLogger<KeystrokePipeline>.Instance;
 
         var options = new BoundedChannelOptions(10_000)
@@ -190,6 +199,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
 
     private void OnKeystrokeReceived(KeystrokeEvent keystroke)
     {
+        payloadBuffer?.Record(keystroke);
         channel.Writer.TryWrite(keystroke);
     }
 
@@ -222,6 +232,7 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
     private void OnDeviceDisconnected(DeviceIdentifier device)
     {
         timingEngine.RemoveDevice(device);
+        payloadBuffer?.RemoveDevice(device);
         eventAggregator.PublishDeviceLifecycle(new DeviceLifecycleEvent(
             device,
             DeviceLifecycleEventType.Removed,
@@ -274,27 +285,28 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
                                 ? string.Join(", ", anomaly.TriggeredSignals)
                                 : "TimingAnomaly";
                             var actionText = decision.Action.ToString();
-                            _ = Task.Run(async () =>
+                            var rawPayload = payloadBuffer?.TakeSnapshot(keystroke.DeviceId);
+
+                            try
                             {
-                                try
+                                await incidentStore.RecordIncidentAsync(new CreateIncidentRequest
                                 {
-                                    await incidentStore.RecordIncidentAsync(new CreateIncidentRequest
+                                    DeviceId = deviceHwId,
+                                    AnomalyScore = anomaly.Score,
+                                    TriggeredRule = ruleText,
+                                    CountermeasureAction = actionText,
+                                    RawPayload = rawPayload,
+                                    Metadata = new Dictionary<string, string>
                                     {
-                                        DeviceId = deviceHwId,
-                                        AnomalyScore = anomaly.Score,
-                                        TriggeredRule = ruleText,
-                                        CountermeasureAction = actionText,
-                                        Metadata = new Dictionary<string, string>
-                                        {
-                                            ["DeviceId"] = deviceHwId,
-                                            ["Path"] = keystroke.DeviceId.Path
-                                        }
-                                    }, token).ConfigureAwait(false);
-                                }
-                                catch (Exception)
-                                {
-                                }
-                            }, CancellationToken.None);
+                                        ["DeviceId"] = deviceHwId,
+                                        ["Path"] = keystroke.DeviceId.Path
+                                    }
+                                }, token).ConfigureAwait(false);
+                            }
+                            catch (Exception ex)
+                            {
+                                LogIncidentRecordFailedDelegate(logger, deviceHwId, ex);
+                            }
                         }
                     }
 

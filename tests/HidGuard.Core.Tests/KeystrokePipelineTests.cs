@@ -1,5 +1,6 @@
 using Shouldly;
 using Xunit;
+using HidGuard.Core.Configuration;
 using HidGuard.Core.Countermeasures;
 using HidGuard.Core.Domain;
 using HidGuard.Core.Events;
@@ -474,6 +475,12 @@ public sealed class KeystrokePipelineTests
         var policyEngine = new PolicyEngine(trustStore);
         var countermeasureService = new CountermeasureService(locker, disabler, interceptor, trustStore);
         var incidentStore = new TestIncidentStore();
+        var payloadConfig = new IncidentStoreConfiguration
+        {
+            EnableOptInPayloadCapture = true,
+            CaptureWindowKeystrokes = 64
+        };
+        var payloadBuffer = new IncidentPayloadBuffer(payloadConfig);
 
         await using var pipeline = new KeystrokePipeline(
             source,
@@ -484,7 +491,8 @@ public sealed class KeystrokePipelineTests
             interceptor,
             eventAggregator,
             policyOptions: null,
-            incidentStore: incidentStore);
+            incidentStore: incidentStore,
+            payloadBuffer: payloadBuffer);
 
         await pipeline.StartAsync();
 
@@ -498,7 +506,10 @@ public sealed class KeystrokePipelineTests
                 (uint)(0x41 + (i % 26))));
         }
 
-        await Task.Delay(200);
+        var record = await incidentStore.WaitForIncidentAsync(TimeSpan.FromSeconds(5));
+        record.ShouldNotBeNull();
+        record.DeviceId.ShouldContain("VID_16C0&PID_05DF");
+        record.AnomalyScore.ShouldBeGreaterThan(50.0);
 
         lock (incidentStore.RecordedRequests)
         {
@@ -506,6 +517,8 @@ public sealed class KeystrokePipelineTests
             var req = incidentStore.RecordedRequests[0];
             req.DeviceId.ShouldContain("VID_16C0&PID_05DF");
             req.AnomalyScore.ShouldBeGreaterThan(50.0);
+            req.RawPayload.ShouldNotBeNull();
+            req.RawPayload.Length.ShouldBeGreaterThan(0);
         }
 
         await pipeline.StopAsync();
@@ -513,8 +526,19 @@ public sealed class KeystrokePipelineTests
 
     private sealed class TestIncidentStore : IIncidentStore
     {
+        private readonly TaskCompletionSource<IncidentRecord> incidentTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
         public List<CreateIncidentRequest> RecordedRequests { get; } = new();
         public event EventHandler<IncidentRecord>? IncidentRecorded;
+        public IncidentStoreConfiguration Configuration { get; private set; } = new();
+
+        public Task<IncidentRecord> WaitForIncidentAsync(TimeSpan timeout) =>
+            incidentTcs.Task.WaitAsync(timeout);
+
+        public void UpdateConfiguration(IncidentStoreConfiguration configuration)
+        {
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        }
 
         public Task<IncidentRecord> RecordIncidentAsync(CreateIncidentRequest request, CancellationToken cancellationToken = default)
         {
@@ -531,6 +555,7 @@ public sealed class KeystrokePipelineTests
                 CountermeasureAction = request.CountermeasureAction,
                 RetentionExpiresAt = DateTimeOffset.UtcNow.AddDays(30)
             };
+            incidentTcs.TrySetResult(record);
             IncidentRecorded?.Invoke(this, record);
             return Task.FromResult(record);
         }

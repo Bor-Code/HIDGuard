@@ -22,11 +22,15 @@
                     <TextBlock Text="Security Audit Trail" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
                     <TextBlock Text="Append-only log of security countermeasures and policy decisions. Keystrokes are strictly never recorded." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0"/>
                 </StackPanel>
-                <Button Grid.Column="1"
-                        Content="Refresh Log"
-                        Command="{Binding RefreshCommand}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Export Report"
+                            Command="{Binding ExportReportCommand}"
+                            Style="{StaticResource NavButtonStyle}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Refresh Log"
+                            Command="{Binding RefreshCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"/>
+                </StackPanel>
             </Grid>
         </Border>
 

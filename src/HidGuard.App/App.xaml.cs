@@ -8,6 +8,7 @@ using HidGuard.Core.Audit;
 using HidGuard.Core.Configuration;
 using HidGuard.Core.DependencyInjection;
 using HidGuard.Core.Events;
+using HidGuard.Core.Incidents;
 using HidGuard.Core.Pipeline;
 using HidGuard.Platform.Windows.DependencyInjection;
 
@@ -20,6 +21,7 @@ public partial class App : System.Windows.Application
     private SingleInstanceService? singleInstanceService;
     private ITrayIconService? trayIconService;
     private IKeystrokePipeline? pipeline;
+    private IncidentMaintenanceService? incidentMaintenanceService;
     private MainWindow? mainWindow;
     private readonly CancellationTokenSource shutdownCts = new();
 
@@ -45,6 +47,9 @@ public partial class App : System.Windows.Application
 
         pipeline = serviceProvider.GetRequiredService<IKeystrokePipeline>();
         await pipeline.StartAsync(shutdownCts.Token).ConfigureAwait(true);
+
+        incidentMaintenanceService = serviceProvider.GetService<IncidentMaintenanceService>();
+        incidentMaintenanceService?.Start();
 
         var mainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
         mainWindow = new MainWindow(mainViewModel);
@@ -76,6 +81,11 @@ public partial class App : System.Windows.Application
         ArgumentNullException.ThrowIfNull(e);
 
         await shutdownCts.CancelAsync().ConfigureAwait(false);
+
+        if (incidentMaintenanceService != null)
+        {
+            await incidentMaintenanceService.DisposeAsync().ConfigureAwait(false);
+        }
 
         if (pipeline != null)
         {

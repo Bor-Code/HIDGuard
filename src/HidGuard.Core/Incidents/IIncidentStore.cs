@@ -1,3 +1,5 @@
+using HidGuard.Core.Configuration;
+
 namespace HidGuard.Core.Incidents;
 
 public interface IIncidentStore : IDisposable
@@ -8,5 +10,6 @@ public interface IIncidentStore : IDisposable
     Task<int> PurgeExpiredIncidentsAsync(CancellationToken cancellationToken = default);
     Task ExportMetadataReportAsync(Stream outputStream, IncidentExportFormat format = IncidentExportFormat.Json, CancellationToken cancellationToken = default);
     Task<byte[]?> DecryptPayloadAsync(Guid incidentId, CancellationToken cancellationToken = default);
+    void UpdateConfiguration(IncidentStoreConfiguration configuration);
     event EventHandler<IncidentRecord>? IncidentRecorded;
 }
