@@ -130,6 +130,77 @@
                 </StackPanel>
             </Border>
 
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Encrypted Incident Store &amp; Attack Forensics" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                    <CheckBox Content="Capture Triggering Keystrokes on Attack Detection (Encrypted via DPAPI)"
+                              IsChecked="{Binding EnableOptInPayloadCapture}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Capture Keystroke Window Size" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Number of preceding keystrokes preserved in encrypted incident evidence (1 - 1024)." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding CaptureWindowKeystrokes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Maximum Incidents Retained" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Maximum number of historical incident records stored before rolling eviction." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding MaxIncidentCount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Incident Retention Period (Days)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Number of days before expired incident records are automatically purged." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding RetentionDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Maximum Payload Size (Bytes)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Hard upper limit for encrypted payload evidence per incident." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding MaxPayloadBytes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Maintenance Purge Interval (Minutes)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Frequency of background cleanup runs for expired incident records." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Text="{Binding PurgeIntervalMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
             <Border Style="{StaticResource CardBorderStyle}">
                 <StackPanel>
                     <TextBlock Text="Application &amp; System Tray Options" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>

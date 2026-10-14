@@ -42,6 +42,13 @@ public static class HidGuardWindowsPlatformServiceCollectionExtensions
             var logger = sp.GetService<ILogger<EncryptedIncidentStore>>();
             return new EncryptedIncidentStore(incidentDir, incidentConfig, protector, logger);
         });
+        services.TryAddSingleton<IncidentPayloadBuffer>(sp =>
+        {
+            var configManager = sp.GetService<IConfigurationManager>();
+            var incidentConfig = configManager?.CurrentConfiguration.Incidents ?? new IncidentStoreConfiguration();
+            return new IncidentPayloadBuffer(incidentConfig);
+        });
+        services.TryAddSingleton<IncidentMaintenanceService>();
         services.TryAddSingleton<IKeystrokeSource, WindowsRawInputListener>();
         services.TryAddSingleton<IKeystrokeInterceptor, WindowsLowLevelKeyboardHook>();
         services.TryAddSingleton<IWorkstationLocker, WindowsWorkstationLocker>();
