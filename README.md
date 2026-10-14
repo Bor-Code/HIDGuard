@@ -54,6 +54,8 @@ HIDGuard follows Clean Architecture principles, ensuring complete decoupling bet
 | - PolicyEngine (Decision Matrix & Anti-Lockout)             |
 | - CountermeasureService (Multi-Tier Defense Orchestration)  |
 | - FileAuditTrailService (Privacy-Safe Append-Only Audit)    |
+| - IncidentPayloadBuffer (Opt-In RAM Ring Buffer)            |
+| - IncidentMaintenanceService (Dynamic Config & Purge Loop)  |
 | - EncryptedIncidentStore (DPAPI-Protected Incident Storage) |
 +-----------------------------+-------------------------------+
                               | Pipeline Events
@@ -77,9 +79,12 @@ HIDGuard follows Clean Architecture principles, ensuring complete decoupling bet
 HIDGuard enforces an absolute guarantee regarding user privacy:
 - The system **never** records, logs, stores, or transmits virtual key codes, scan codes, or typed alphanumeric characters during normal operation.
 - Pipeline event models and audit trail entries (`AuditEvent`) record only non-sensitive metadata: hardware device identifiers (VID/PID), inter-keystroke intervals, anomaly confidence scores, action decisions, and timestamps.
-- **Opt-in Incident Payload Capture**: If explicit opt-in payload capture is enabled in configuration (`EnableOptInPayloadCapture = true`), payload bytes associated with detected attack anomalies are encrypted immediately using Windows DPAPI (`DataProtectionScope.CurrentUser`) before writing to disk, bounded by strict size limits (`MaxPayloadBytes`, default: 4 KB) and automatic retention expiry (`RetentionDays`, default: 30 days).
+- **Opt-in Incident Payload Capture**: If explicit opt-in payload capture is enabled in configuration (`EnableOptInPayloadCapture = true`), only keystrokes immediately triggering an active attack anomaly are captured from a bounded in-memory ring buffer (`IncidentPayloadBuffer`). Normal background typing is never recorded.
+- **In-Memory Ring Buffer & Sanitization**: The buffer retains up to `CaptureWindowKeystrokes` (default: 64, max: 1024) in volatile memory. When an attack is flagged, the snapshot is extracted, the buffer is cleared, and plaintext bytes in managed memory are sanitized using `Array.Clear` immediately after DPAPI encryption.
+- **DPAPI Encryption**: Stored payloads are encrypted using Windows Data Protection API (`DataProtectionScope.CurrentUser`) before disk writes, bounded by strict limits (`MaxPayloadBytes`, default: 4 KB; `MaxIncidentCount`, default: 1000) and automatic retention expiry (`RetentionDays`, default: 30 days).
+- **Background Maintenance**: `IncidentMaintenanceService` runs an asynchronous background loop purging expired incidents on a configurable interval (`PurgeIntervalMinutes`, default: 60) and dynamically applies configuration changes at runtime without requiring application restarts.
 - **Metadata-Only Export**: Incident reports exported for analysis (`ExportMetadataReportAsync`) output exclusively non-sensitive metadata in JSON or CSV format, stripping any raw or encrypted payload data to ensure safe operational sharing without risk of keystroke leakage.
-- These invariants are enforced by automated unit test suites verifying reflection properties, DPAPI roundtrips, and zero payload leakage in export formats.
+- These invariants are enforced by automated unit test suites verifying reflection properties, DPAPI roundtrips, ring buffer eviction, and zero payload leakage in export formats.
 
 ### 3.2 Offline and Zero-Telemetry Operation
 - HIDGuard runs entirely offline and contains zero external telemetry, tracking, or network communication code.
@@ -103,12 +108,14 @@ HIDGuard enforces an absolute guarantee regarding user privacy:
 - **Anomaly Scoring Engine**: Calculates a normalized confidence score (0.00 to 1.00) based on physiological threshold violations (< 25 ms interval), extreme typing velocity, and unnatural machine uniformity.
 - **Persistent Trust Store**: Maintains hardware authorization records in local JSON storage (`trusted-devices.json`). Allows devices to be marked as `Trusted`, `Unknown`, or `Blocked`.
 - **Policy Engine**: Evaluates the risk score against hardware trust levels and attached device counts to select appropriate countermeasures (`Allow`, `AlertOnly`, `LockWorkstation`, `BlockDevice`, `LockAndBlock`).
+- **Incident Storage & Forensics Engine**: Manages encrypted incident records on disk with DPAPI protection, dynamic capacity enforcement, opt-in ring buffering, and scheduled maintenance purging.
 
 ### 4.3 WPF Dashboard and Tray Application (`HidGuard.App`)
 - **Modern Dark Theme**: Styled with a dark-slate design system, responsive card layouts, and status badges.
 - **System Tray Lifecycle**: Operates within the Windows taskbar notification area. Overrides window close events (`OnClosing`) to minimize to tray without terminating protection.
 - **Single Instance Mutex**: Guarantees a single running instance per session via `Local\HIDGuard_Application_SingleInstance_Mutex`.
 - **UAC Awareness**: Detects elevation status and displays an administrative shield badge when elevated operations are available.
+- **Incident Forensics Controls**: Settings view includes a dedicated configuration card for incident store parameters (window size, retention, payload bounds). Audit Log view features one-click metadata report export in JSON or CSV format.
 
 ### 4.4 Attack Simulator and E2E Verification Suite (`HidGuard.Simulator`)
 - **DuckyScript 1.0 / 2.0 Parser**: Parses Hak5 Rubber Ducky scripts supporting `STRING`, `STRINGLN`, `DELAY`, `DEFAULT_DELAY`, `REPEAT`, and complex modifiers (`GUI r`, `CTRL ALT DEL`, `ALT F4`).
@@ -127,11 +134,11 @@ All components are covered by unit and integration test suites using xUnit and S
 
 | Project | Test Count | Status | Scope |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 105 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, privacy invariant |
-| HidGuard.Platform.Windows.Tests | 23 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory |
-| HidGuard.App.Tests | 17 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, view navigation |
+| HidGuard.Core.Tests | 129 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service |
+| HidGuard.Platform.Windows.Tests | 27 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection |
+| HidGuard.App.Tests | 19 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, view navigation |
 | HidGuard.Simulator.Tests | 28 | Passed | DuckyScript parser, token mapping, attack profiles, 5-scenario end-to-end verification suite |
-| **Total Solution** | **173** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **203** | **100% Green** | Zero warnings, zero errors |
 
 ---
 

@@ -4,11 +4,14 @@
 
 HIDGuard is a defensive host-security application designed to mitigate automated keystroke injection and BadUSB attacks on Windows operating systems. The software is built around strict security and privacy invariants:
 
-### 1.1 Zero-Keylogging Invariant
+### 1.1 Zero-Keylogging Invariant & Forensic Data Protection
 HIDGuard strictly enforces an absolute privacy guarantee:
-- The system never records, logs, stores, or transmits virtual key codes, scan codes, or typed alphanumeric characters.
+- The system never records, logs, stores, or transmits virtual key codes, scan codes, or typed alphanumeric characters during normal operation.
 - Event models in the pipeline and audit trail records (`AuditEvent`) contain only non-sensitive metadata: timestamps, hardware device identifiers (VID/PID), inter-keystroke intervals (in milliseconds), anomaly confidence scores, and countermeasure execution results.
-- This invariant is verified via automated unit and integration tests asserting property reflection on all audit and event models.
+- **Opt-In Attack Evidence Capture**: When explicit opt-in capture is enabled (`EnableOptInPayloadCapture = true`), only keystrokes immediately triggering an active anomaly are buffered in volatile memory via a bounded ring buffer (`IncidentPayloadBuffer`). Normal human typing is never buffered or saved.
+- **Immediate DPAPI Encryption & RAM Sanitization**: Captured attack evidence is encrypted via the Windows Data Protection API (`DataProtectionScope.CurrentUser`) before disk persistence. The plaintext byte array in managed memory is sanitized using `Array.Clear` immediately after encryption.
+- **Metadata-Only Export**: Incident reports exported for analysis (`ExportMetadataReportAsync`) output exclusively non-sensitive metadata in JSON or CSV format, stripping all raw and encrypted payload data to prevent keystroke leakage.
+- These invariants are verified via automated unit and integration tests asserting property reflection, DPAPI roundtrips, and zero payload leakage in export formats.
 
 ### 1.2 Local-Only and Zero-Telemetry Invariant
 - HIDGuard operates entirely offline and contains zero external telemetry, cloud analytics, or network communications.
