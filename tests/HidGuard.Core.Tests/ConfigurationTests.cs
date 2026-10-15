@@ -110,4 +110,16 @@ public sealed class ConfigurationTests
             }
         }
     }
+
+    [Fact]
+    public void AssemblyVersionShouldMatchReleaseVersion()
+    {
+        var assembly = typeof(HidGuardConfiguration).Assembly;
+        var version = assembly.GetName().Version;
+
+        version.ShouldNotBeNull();
+        version.Major.ShouldBe(1);
+        version.Minor.ShouldBe(0);
+        version.Build.ShouldBe(0);
+    }
 }

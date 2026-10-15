@@ -1,7 +1,8 @@
 param(
     [string]$Version = "1.0.0",
     [string]$Configuration = "Release",
-    [string]$OutputDir = "./artifacts"
+    [string]$OutputDir = "./artifacts",
+    [switch]$SelfContained = $true
 )
 
 $ErrorActionPreference = "Stop"
@@ -33,11 +34,29 @@ dotnet test HidGuard.sln --configuration $Configuration --no-build
 Write-Host "Running automated end-to-end attack simulation verification..."
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj --configuration $Configuration --no-build -- --verify
 
+$appPublishArgs = @(
+    "--configuration", $Configuration,
+    "--output", "$stagingPath/app"
+)
+
+if ($SelfContained) {
+    $appPublishArgs += @("--runtime", "win-x64", "--self-contained", "true")
+}
+
 Write-Host "Publishing application binaries..."
-dotnet publish src/HidGuard.App/HidGuard.App.csproj --configuration $Configuration --output "$stagingPath/app"
+dotnet publish src/HidGuard.App/HidGuard.App.csproj @appPublishArgs
+
+$simPublishArgs = @(
+    "--configuration", $Configuration,
+    "--output", "$stagingPath/simulator"
+)
+
+if ($SelfContained) {
+    $simPublishArgs += @("--runtime", "win-x64", "--self-contained", "true")
+}
 
 Write-Host "Publishing simulator binaries..."
-dotnet publish tools/HidGuard.Simulator/HidGuard.Simulator.csproj --configuration $Configuration --output "$stagingPath/simulator"
+dotnet publish tools/HidGuard.Simulator/HidGuard.Simulator.csproj @simPublishArgs
 
 Copy-Item -Path "$rootPath/README.md" -Destination "$stagingPath/README.md"
 Copy-Item -Path "$rootPath/README.tr.md" -Destination "$stagingPath/README.tr.md"
