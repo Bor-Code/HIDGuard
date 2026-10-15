@@ -253,11 +253,11 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 
 | Proje | Test Sayisi | Durum | Kapsanan Alanlar |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 129 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi |
+| HidGuard.Core.Tests | 130 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi |
 | HidGuard.Platform.Windows.Tests | 27 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu |
 | HidGuard.App.Tests | 19 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma ve ana pencere gezinmesi |
 | HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
-| Toplam | 203 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| Toplam | 204 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 
