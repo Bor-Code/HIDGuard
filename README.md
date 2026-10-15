@@ -134,11 +134,11 @@ All components are covered by unit and integration test suites using xUnit and S
 
 | Project | Test Count | Status | Scope |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 129 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service |
+| HidGuard.Core.Tests | 130 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service |
 | HidGuard.Platform.Windows.Tests | 27 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection |
 | HidGuard.App.Tests | 19 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, view navigation |
 | HidGuard.Simulator.Tests | 28 | Passed | DuckyScript parser, token mapping, attack profiles, 5-scenario end-to-end verification suite |
-| **Total Solution** | **203** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **204** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
