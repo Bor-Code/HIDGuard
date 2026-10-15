@@ -270,9 +270,9 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 | :--- | :--- | :--- | :--- |
 | HidGuard.Core.Tests | 130 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi |
 | HidGuard.Platform.Windows.Tests | 27 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu |
-| HidGuard.App.Tests | 19 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma ve ana pencere gezinmesi |
+| HidGuard.App.Tests | 21 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma, kurulum betigi dogrulamasi ve ana pencere gezinmesi |
 | HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
-| Toplam | 204 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| Toplam | 206 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 
@@ -321,6 +321,11 @@ dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
 ```
 
+### Windows Kurulum Paketini Olusturma (Inno Setup)
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/build-installer.ps1 -Version 1.0.0
+```
+
 ### Yapilandirma ve Dinamik Yeniden Yukleme (Hot-Reload)
 HIDGuard, ayarlarini `%LocalAppData%\HIDGuard\config.json` dosyasinda saklar. Uygulama, dosya guncellendiginde FileSystemWatcher uzerinden degisiklikleri algilayarak programi yeniden baslatmadan ayarlari dinamik olarak gunceller. Tum ayar alanlari ve kabul edilen deger araliklari docs/configuration.md dosyasinda ayrintilandirilmistir.
 
@@ -346,6 +351,7 @@ HIDGuard, ayarlarini `%LocalAppData%\HIDGuard\config.json` dosyasinda saklar. Uy
 - [Tehdit Modeli, Sinirlamalar ve Atlatma Analizi](docs/threat-model-and-limitations.md): Saldirgan yetenekleri, teorik atlatma yontemleri ve mesru girdi ayristirma ilkeleri.
 - [Win32 Raw Input ve SendInput Birlikte Calisabilirlik Analizi](docs/raw-input-and-sendinput-interop.md): Windows isletim sisteminin donanimsal ve yazilimsal tus vuruslarini raporlama farkliliklarina iliskin deneysel bulgular.
 - [Yapilandirma Referansi](docs/configuration.md): config.json dosyasindaki tum alanlarin tipleri, varsayilanlari ve gecerlilik araliklari.
+- [Inno Setup Kurulum Betigi](installer/HIDGuard.iss): Windows kurulum paketi, masaustu kisayollari, baslangic kayitlari ve kaldirici yapilandirmasi.
 - [Katki Rehberi](.github/CONTRIBUTING.md): Dal adlandirma, Conventional Commits ve sifir-yorum/sifir-emoji kurallari.
 - [Guvenlik Politikasi](SECURITY.md): Guvenlik acigi bildirim surecleri ve gizlilik garantileri.
 - [Lisans](LICENSE): MIT Lisansi.
