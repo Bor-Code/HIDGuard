@@ -24,6 +24,21 @@ HIDGuard, saldiriyi imza veya dosya taramasiyla degil, tus vuruslarinin fiziksel
 3. Donanimsal enjeksiyon araclari ise mikrosaniye hassasiyetinde esbicimli (uniform / sifira yakin standart sapma) ve olaganustu yuksek hizlarda (> 180-300 WPM) veri gonderir.
 4. HIDGuard, bu anormalligi tespit ettigi anda saldiriyi havada yutar (WH_KEYBOARD_LL), isletim sistemini kilitler (LockWorkStation) ve gerekirse aygiti surucu duzeyinde devre disi birakir (CM_Disable_DevNode).
 
+### 1.3 Mesru Insan Disi Girdilerin Ele Alinmasi
+Guvenlik aracinin uretim ortaminda yanlis pozitif uretmemesi icin mesru yazilim ve otomasyonlar ozenle ele alinir:
+- Pano Yapistirma (Ctrl+V, Shift+Insert): Isletim sistemi pano transferlerini OLE / WM_PASTE ile bellek duzeyinde gerceklestirir, ardil tus vuruslari olusmaz ve anomali tetiklenmez.
+- Parola Yoneticileri: KeePass, 1Password ve Bitwarden gibi yazilimlar SendInput API'sini kullanir. Windows cekirdegi bu girdilere hDevice == IntPtr.Zero ve LLKHF_INJECTED bayragi atar. HIDGuard yazilim girdilerini fiziksel USB cihaz kuyruklarindan ayirir.
+- Erisilebilirlik ve Ekran Klavyesi (osk.exe): Windows erisilebilirlik alt sisteminin urettigi sanal girdiler tespit edilerek fiziksel aygit anomali puanlamasindan muaf tutulur.
+- Uzak Masaustu (RDP, Citrix, VNC): Uzak oturum girdileri Terminal Services sanal surucusu (TS_KBD) uzerinden gelir; fiziksel yerel USB kok dugumleriyle karistirilmaz.
+- Hizli Insan Daktilolari: Hiz 150+ WPM seviyesine ulassa dahi insan motor kontrolu dogal varyansini (degisim katsayisi > 0.20) korur ve ardisik vuruslarda 25 ms fizyolojik tabaninin altina inmez. Cok parametreli skorlama sayesinde yanlis engelleme olusmaz.
+
+### 1.4 Durust Sinirlamalar ve Bilinen Atlatma Yontemleri
+Guvenlik muhendisligi seffafligi geregi bilinen tasarim sinirliliklari acikca belgelenmistir:
+- Rastgele Gecikmeli Jitter / Insan Emulasyonu: Mikrokontrolcuye insan yazim ritmini taklit eden (ortalama 120 ms, standart sapma 35 ms) gecikmeler eklenirse zamanlama analizi atlatilabilir. Ancak bu durum 350 milisaniyelik saldiriyi 15 ila 45 saniyeye uzatarak kullanicinin ekrandaki hareketliligi gorup cihazi fiziken cikarmasina veya pencereyi kapatmasina genis bir mudahale penceresi tanir.
+- Donanim Kimlik Klonlama (VID/PID Spoofing): USB standartlari donanimsal kriptografik dogrulamayi zorunlu kilmadigi icin yetkili bir klavyenin VID ve PID degerleri kotu niyetli cihaza kopyalanabilir. HIDGuard ham aygit yolu topolojisiyle bunu zorlastirir, ancak protokol duzeyinde tam guvence yalnizca kriptografik USB standartlariyla mumkundur.
+- Cekirdek Seviyesi Girdi Enjeksiyonu (Ring 0): Ring 0'da calisan kok kullanici yazilimlari (rootkit) Win32 kullanici kipi hook ve Raw Input katmanini atlatir. HIDGuard isletim sistemi cekirdegini degil, harici fiziksel BadUSB donanimlarini engeller.
+- Tek Klavye Kilitleme Korumasi: Sistemde tek klavye varsa kullanicinin yonetim erisimini kaybetmemesi icin aygit dugumu kapatilmaz; yalnizca tus yutma ve ekran kilitleme uygulanir.
+
 ---
 
 ## 2. Mimari Genel Bakis
@@ -283,16 +298,21 @@ dotnet run --project src/HidGuard.App/HidGuard.App.csproj --configuration Releas
 ```
 
 ### Saldiri Simulatorunu Calistirma
-```powershell
-# Otomatik uctan uca guvenlik dogrulama raporunu calistirma
-dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --verify
 
-# Komut satiri saldiri profilleri (Dry-run / Guvenli Kip)
+Otomatik 5 senaryolu dogrulama raporunu calistirma:
+```powershell
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --verify
+```
+
+Komut satiri saldiri profillerini guvenli dry-run kipinde calistirma:
+```powershell
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode burst --dry-run
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode jitter --dry-run
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode human --dry-run
+```
 
-# Etkilesimli konsol menusunu baslatma
+Etkilesimli konsol menusunu baslatma:
+```powershell
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 ```
 
@@ -301,11 +321,32 @@ dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
 ```
 
+### Yapilandirma ve Dinamik Yeniden Yukleme (Hot-Reload)
+HIDGuard, ayarlarini `%LocalAppData%\HIDGuard\config.json` dosyasinda saklar. Uygulama, dosya guncellendiginde FileSystemWatcher uzerinden degisiklikleri algilayarak programi yeniden baslatmadan ayarlari dinamik olarak gunceller. Tum ayar alanlari ve kabul edilen deger araliklari docs/configuration.md dosyasinda ayrintilandirilmistir.
+
 ---
 
-## 6. Gelecek Asamalar
+## 6. Tamamlanan Asamalar
 
-- [x] Asama 8 (Attack Simulator & Verification Tooling): tools/HidGuard.Simulator projesi tamamlandi; DuckyScript motoru, burst, jitter ve insan profilleri olusturuldu, uctan uca 5 otomatik dogrulama senaryosu tamamlandi.
-- [x] Asama 9 (Final Documentation, CI/CD Packaging & Release): Projenin nihai dokumantasyonu, mimari diyagramlar, CONTRIBUTING.md, SECURITY.md, GitHub Actions CI/CD hatti ve otomatik dagitim paketleme betigi tamamlandi.
-- [x] Asama 10 (Encrypted Incident Store, Payload Buffering & UI Controls): DPAPI ile sifrelenmis olay deposu, RAM ici dairesel kuyruk (IncidentPayloadBuffer), otomatik temizlik ve calisma ani dinamik yapilandirma servisi (IncidentMaintenanceService), Settings paneli ve CSV/JSON metadata raporu disari aktarma entegrasyonu 203 birim test ile tamamlandi.
+- [x] Asama 0 (Repository Foundation): Cozum iskeleti, .editorconfig, Directory.Build.props, MIT lisansi, CI/CD ve contributing belgeleri tamamlandi.
+- [x] Asama 1 (Core Domain & Timing Analysis): Kayan pencere istatistik motoru, Welford ortalama ve standart sapma algoritmalar, fizyolojik hiz esikleri tamamlandi.
+- [x] Asama 2 (Raw Input Capture Layer): HWND_MESSAGE arkasi Raw Input kaydi, VID/PID ayristirma, SendInput ve donanim ayrimi tamamlandi.
+- [x] Asama 3 (Trust Store & Policy Engine): Atomik JSON tabanli guven deposu, politika matrisi ve tek klavye anti-lockout guvencesi tamamlandi.
+- [x] Asama 4 (Response Actions): WH_KEYBOARD_LL tus yutma, LockWorkStation istasyon kilitleme ve CM_Disable_DevNode donanim devre disi birakma tamamlandi.
+- [x] Asama 5 (Encrypted Incident Store): Windows DPAPI sifrelemesi, RAM ici dairesel kuyruk, otomatik temizlik ve metadata rapor disari aktarimi tamamlandi.
+- [x] Asama 6 (Tray Application & UI): Modern WPF karanlik tema, sistem tepsisi yasami, tekil ornek Mutex'i ve UAC elevation yonetimi tamamlandi.
+- [x] Asama 7 (Attack Simulator & Verification Tooling): DuckyScript 1.0/2.0 cozucu, sentetik injection motoru, burst/jitter/human profilleri ve 5 uctan uca guvenlik dogrulamasi tamamlandi.
+- [x] Asama 8 (Release Engineering & Packaging): Self-contained bagimsiz x64 dagitim paketi, SHA256 checksum uretimi, GitHub Actions surum yayinlama workflow'u ve Dependabot otomasyonu tamamlandi.
+- [x] Asama 9 (Technical Documentation & Specifications): Kapsamli mimari belgeleri, tehdit modeli, durust sinirlamalar ve atlatma analizi, SendInput birlikte calisabilirlik raporu ve yapilandirma referansi tamamlandi.
+
+---
+
+## 7. Destekleyici Dokumantasyon ve Baglantilar
+
+- [Tehdit Modeli, Sinirlamalar ve Atlatma Analizi](docs/threat-model-and-limitations.md): Saldirgan yetenekleri, teorik atlatma yontemleri ve mesru girdi ayristirma ilkeleri.
+- [Win32 Raw Input ve SendInput Birlikte Calisabilirlik Analizi](docs/raw-input-and-sendinput-interop.md): Windows isletim sisteminin donanimsal ve yazilimsal tus vuruslarini raporlama farkliliklarina iliskin deneysel bulgular.
+- [Yapilandirma Referansi](docs/configuration.md): config.json dosyasindaki tum alanlarin tipleri, varsayilanlari ve gecerlilik araliklari.
+- [Katki Rehberi](.github/CONTRIBUTING.md): Dal adlandirma, Conventional Commits ve sifir-yorum/sifir-emoji kurallari.
+- [Guvenlik Politikasi](SECURITY.md): Guvenlik acigi bildirim surecleri ve gizlilik garantileri.
+- [Lisans](LICENSE): MIT Lisansi.
 
