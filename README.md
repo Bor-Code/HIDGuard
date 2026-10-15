@@ -151,9 +151,9 @@ All components are covered by unit and integration test suites using xUnit and S
 | :--- | :--- | :--- | :--- |
 | HidGuard.Core.Tests | 130 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service |
 | HidGuard.Platform.Windows.Tests | 27 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection |
-| HidGuard.App.Tests | 19 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, view navigation |
+| HidGuard.App.Tests | 21 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, view navigation |
 | HidGuard.Simulator.Tests | 28 | Passed | DuckyScript parser, token mapping, attack profiles, 5-scenario end-to-end verification suite |
-| **Total Solution** | **204** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **206** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
@@ -202,7 +202,12 @@ dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
 ```
 
-### 6.7 Configuration Management & Dynamic Hot-Reload
+### 6.7 Build Windows Installer Package
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/build-installer.ps1 -Version 1.0.0
+```
+
+### 6.8 Configuration Management & Dynamic Hot-Reload
 HIDGuard stores settings in `%LocalAppData%\HIDGuard\config.json`. The application employs an atomic write mechanism and a background `FileSystemWatcher` to validate and reload updated parameters at runtime without requiring application restarts. Detailed property descriptions and validation ranges are documented in the [Configuration Reference](docs/configuration.md).
 
 ---
@@ -212,6 +217,7 @@ HIDGuard stores settings in `%LocalAppData%\HIDGuard\config.json`. The applicati
 - [Threat Model, Limitations, and Evasion Analysis](docs/threat-model-and-limitations.md): Detailed evaluation of adversary capabilities, theoretical evasion strategies, and legitimate input segregation.
 - [Win32 Raw Input and SendInput Interoperability](docs/raw-input-and-sendinput-interop.md): Empirical verification of Windows input reporting across physical hardware versus synthetic APIs.
 - [Configuration Reference](docs/configuration.md): Complete specification of all `config.json` parameters, validation ranges, and operational impacts.
+- [Inno Setup Installer Script](installer/HIDGuard.iss): Inno Setup configuration for Windows desktop shortcuts, startup registration, and uninstaller.
 - [Contributing Guidelines](.github/CONTRIBUTING.md): Branching model, conventional commits, zero-comment and zero-emoji standards.
 - [Security Policy](SECURITY.md): Threat model, privacy guarantees, vulnerability disclosure.
 - [License](LICENSE): MIT License.
