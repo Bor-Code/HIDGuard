@@ -94,6 +94,21 @@ HIDGuard enforces an absolute guarantee regarding user privacy:
 - If multiple physical keyboards are connected, an offensive device can be disabled at the Windows device tree level.
 - If only one keyboard is attached, HIDGuard strictly prevents hardware disabling, protecting administrators and users from permanent lockout while maintaining temporary keystroke suppression and workstation locking.
 
+### 3.4 Non-Human Legitimate Input Handling
+Legitimate Windows environments process various non-human and automated inputs that must not trigger defensive actions:
+- **Clipboard Transfers (`Ctrl+V`, `Shift+Insert`)**: Text pasting operations transfer memory buffers via internal Win32 OLE messaging without emitting sequential keystroke events. HIDGuard observes only the trigger combination and produces zero anomaly alerts.
+- **Password Managers**: Tools such as KeePass, 1Password, and Bitwarden utilize the `SendInput` API. The Windows kernel sets `hDevice == IntPtr.Zero` and flags `LLKHF_INJECTED` in low-level hooks. HIDGuard segregates synthetic software input from physical hardware timing windows.
+- **Assistive Technologies and On-Screen Keyboard (`osk.exe`)**: Input dispatched by Windows accessibility components is detected as synthetic software input and excluded from physical USB hardware anomaly metrics.
+- **Remote Desktop Sessions (RDP, Citrix, VNC)**: Remote desktop input arrives via virtual terminal keyboard drivers (`TS_KBD`), which are segregated under unique virtual device paths distinct from local USB root hubs.
+- **High-Velocity Human Typists**: Fast human typing exhibits natural inter-keystroke variance (coefficient of variation exceeding 0.20) and never drops below the 25 ms physiological threshold across consecutive strokes. Multi-parameter scoring prevents false positives.
+
+### 3.5 Honest Limitations and Known Evasion Techniques
+In accordance with transparent defensive engineering principles, HIDGuard documents known limitations:
+- **Randomized Jitter / Human Emulation**: Microcontrollers programmed to simulate biological human timing (mean ~120 ms, standard deviation ~35 ms) evade statistical timing heuristics. However, doing so expands attack execution duration from 350 milliseconds to 15-45 seconds, providing a realistic physical window for user detection and manual interruption.
+- **Hardware Identity Spoofing (VID/PID Cloning)**: USB HID specifications lack cryptographic device attestation. An attacker with physical access to an authorized keyboard can clone its Vendor ID, Product ID, and serial strings. HIDGuard mitigates this by tracking full device path topologies where supported by Windows Raw Input.
+- **Kernel-Level Input Injection (Ring 0)**: Rootkits and kernel drivers operating at Ring 0 (`win32kbase.sys`) bypass user-mode Raw Input and low-level keyboard hooks entirely. HIDGuard operates in user mode (Ring 3) and defends against rogue physical peripherals, not compromised OS kernels.
+- **Single-Keyboard Anti-Lockout Trade-Off**: When only one physical keyboard is present on an endpoint, hardware disabling via `CM_Disable_DevNode` is suppressed to preserve administrative access. The system relies on temporary keystroke suppression and workstation locking.
+
 ---
 
 ## 4. Component Deep Dive
@@ -142,50 +157,61 @@ All components are covered by unit and integration test suites using xUnit and S
 
 ---
 
-## 6. Building and Running
+## 6. Building, Running, and Packaging
 
-### Prerequisites
+### 6.1 Prerequisites
 - Windows 10 / 11 (x64)
 - .NET 8 SDK (v8.0.x or higher)
 
-### Build Solution
+### 6.2 Build Solution
 ```powershell
 dotnet build HidGuard.sln --configuration Release
 ```
 
-### Run All Tests
+### 6.3 Run All Tests
 ```powershell
 dotnet test HidGuard.sln --configuration Release
 ```
 
-### Launch the Dashboard Application
+### 6.4 Launch the Dashboard Application
 ```powershell
 dotnet run --project src/HidGuard.App/HidGuard.App.csproj --configuration Release
 ```
 
-### Run the Attack Simulator & Verification Suite
-```powershell
-# Run the automated 5-scenario verification report
-dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --verify
+### 6.5 Run Attack Simulator and Verification Suite
 
-# Execute simulated attack profiles (safe dry-run mode)
+Run the automated 5-scenario verification report:
+```powershell
+dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --verify
+```
+
+Execute simulated attack profiles in safe dry-run mode:
+```powershell
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode burst --dry-run
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode jitter --dry-run
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj -- --mode human --dry-run
+```
 
-# Launch the interactive terminal menu
+Launch the interactive terminal menu:
+```powershell
 dotnet run --project tools/HidGuard.Simulator/HidGuard.Simulator.csproj
 ```
 
-### Create Release Distribution Package
+### 6.6 Create Release Distribution Package
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/package.ps1 -Version 1.0.0
 ```
 
+### 6.7 Configuration Management & Dynamic Hot-Reload
+HIDGuard stores settings in `%LocalAppData%\HIDGuard\config.json`. The application employs an atomic write mechanism and a background `FileSystemWatcher` to validate and reload updated parameters at runtime without requiring application restarts. Detailed property descriptions and validation ranges are documented in the [Configuration Reference](docs/configuration.md).
+
 ---
 
-## 7. Contributing and Security
+## 7. Supporting Documentation and Policies
 
+- [Threat Model, Limitations, and Evasion Analysis](docs/threat-model-and-limitations.md): Detailed evaluation of adversary capabilities, theoretical evasion strategies, and legitimate input segregation.
+- [Win32 Raw Input and SendInput Interoperability](docs/raw-input-and-sendinput-interop.md): Empirical verification of Windows input reporting across physical hardware versus synthetic APIs.
+- [Configuration Reference](docs/configuration.md): Complete specification of all `config.json` parameters, validation ranges, and operational impacts.
 - [Contributing Guidelines](.github/CONTRIBUTING.md): Branching model, conventional commits, zero-comment and zero-emoji standards.
 - [Security Policy](SECURITY.md): Threat model, privacy guarantees, vulnerability disclosure.
 - [License](LICENSE): MIT License.
