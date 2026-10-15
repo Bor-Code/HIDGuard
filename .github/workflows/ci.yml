@@ -45,21 +45,21 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: ./TestResults/*.trx
           if-no-files-found: warn
 
       - name: Upload application binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: hidguard-app-win-x64
           path: ./dist/app
           if-no-files-found: error
 
       - name: Upload simulator binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: hidguard-simulator-win-x64
           path: ./dist/simulator
