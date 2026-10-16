@@ -167,6 +167,8 @@ Saldiri tespit edildigi anda isletim sistemi ve donanim duzeyinde 3 kademeli sav
    - user32.dll icindeki LockWorkStation() API'si cagrilaraq Windows aninda kilit ekranina alinir. Bu islem, acilmis olabilecek Run veya PowerShell pencerelerine komut yazilmasini durdurur.
 3. PnP Duzeyinde Aygit Devre Disi Birakma (WindowsDeviceDisabler):
    - cfgmgr32.dll API'leri (CM_Locate_DevNodeW, CM_Disable_DevNode) kullanilarak saldirgan USB aygitinin aygit yoneticisi dugumu surucu seviyesinde kapatilir.
+4. Windows Olay Gunlugu Entegrasyonu (WindowsEventLogService):
+   - Saldiri anomalisinin tespiti (Event ID 1001), aygitin surucu duzeyinde kapatilmasi (Event ID 1002) ve tek klavye kilitleme korumasi (Event ID 1003) dogrudan Windows Application olay gunlugune HIDGuard kaynagiyla yapilandirilmis guvenlik kayitlari olarak yazilir.
 
 ---
 
@@ -268,11 +270,11 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 
 | Proje | Test Sayisi | Durum | Kapsanan Alanlar |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 130 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi |
-| HidGuard.Platform.Windows.Tests | 27 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu |
+| HidGuard.Core.Tests | 133 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi, olay gunlugu yonetimi |
+| HidGuard.Platform.Windows.Tests | 31 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu, Windows Olay Gunlugu yayincisi |
 | HidGuard.App.Tests | 21 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma, kurulum betigi dogrulamasi ve ana pencere gezinmesi |
 | HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
-| Toplam | 206 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| Toplam | 213 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 

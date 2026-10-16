@@ -1,5 +1,6 @@
 using Shouldly;
 using Xunit;
+using HidGuard.Core.Audit;
 using HidGuard.Core.Countermeasures;
 using HidGuard.Core.Domain;
 using HidGuard.Core.Policy;
@@ -303,5 +304,73 @@ public sealed class CountermeasureServiceTests
 
         await Should.ThrowAsync<ArgumentNullException>(() =>
             service.ExecuteAsync(null!, 2));
+    }
+
+    private sealed class FakeWindowsEventLogService : IWindowsEventLogService
+    {
+        public List<(int EventId, SecurityEventSeverity Severity, string Message)> WrittenEvents { get; } = new();
+
+        public bool WriteSecurityEvent(int eventId, SecurityEventSeverity severity, string message)
+        {
+            WrittenEvents.Add((eventId, severity, message));
+            return true;
+        }
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncWithEventLogShouldLogAttackDetectedOnLockWorkstation()
+    {
+        var locker = new FakeWorkstationLocker();
+        var disabler = new FakeDeviceDisabler();
+        var interceptor = new FakeKeystrokeInterceptor();
+        using var store = new FakeTrustStore();
+        var eventLog = new FakeWindowsEventLogService();
+        var service = new CountermeasureService(locker, disabler, interceptor, store, eventLog);
+
+        var decision = new PolicyDecision(PolicyAction.LockWorkstation, MaliciousKeyboard, DeviceTrustLevel.Blocked, "Rapid injection detected");
+        await service.ExecuteAsync(decision, totalKeyboardsAttached: 2);
+
+        eventLog.WrittenEvents.Count.ShouldBe(1);
+        eventLog.WrittenEvents[0].EventId.ShouldBe(SecurityEventIds.AttackDetected);
+        eventLog.WrittenEvents[0].Severity.ShouldBe(SecurityEventSeverity.Warning);
+        eventLog.WrittenEvents[0].Message.ShouldContain(MaliciousKeyboard.FormattedHardwareId);
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncWithEventLogShouldLogDeviceDisabledOnBlockDevice()
+    {
+        var locker = new FakeWorkstationLocker();
+        var disabler = new FakeDeviceDisabler();
+        var interceptor = new FakeKeystrokeInterceptor();
+        using var store = new FakeTrustStore();
+        var eventLog = new FakeWindowsEventLogService();
+        var service = new CountermeasureService(locker, disabler, interceptor, store, eventLog);
+
+        var decision = new PolicyDecision(PolicyAction.BlockDevice, MaliciousKeyboard, DeviceTrustLevel.Blocked, "Persistent attack");
+        await service.ExecuteAsync(decision, totalKeyboardsAttached: 2);
+
+        eventLog.WrittenEvents.Count.ShouldBe(1);
+        eventLog.WrittenEvents[0].EventId.ShouldBe(SecurityEventIds.DeviceDisabled);
+        eventLog.WrittenEvents[0].Severity.ShouldBe(SecurityEventSeverity.Warning);
+        eventLog.WrittenEvents[0].Message.ShouldContain("succeeded");
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncWithEventLogShouldLogAntiLockoutOnSoleKeyboard()
+    {
+        var locker = new FakeWorkstationLocker();
+        var disabler = new FakeDeviceDisabler();
+        var interceptor = new FakeKeystrokeInterceptor();
+        using var store = new FakeTrustStore();
+        var eventLog = new FakeWindowsEventLogService();
+        var service = new CountermeasureService(locker, disabler, interceptor, store, eventLog);
+
+        var decision = new PolicyDecision(PolicyAction.BlockDevice, MaliciousKeyboard, DeviceTrustLevel.Blocked, "Attack on single keyboard");
+        await service.ExecuteAsync(decision, totalKeyboardsAttached: 1);
+
+        eventLog.WrittenEvents.Count.ShouldBe(1);
+        eventLog.WrittenEvents[0].EventId.ShouldBe(SecurityEventIds.AntiLockoutTriggered);
+        eventLog.WrittenEvents[0].Severity.ShouldBe(SecurityEventSeverity.Warning);
+        eventLog.WrittenEvents[0].Message.ShouldContain("anti-lockout");
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using HidGuard.Core.Audit;
 using HidGuard.Core.Policy;
 using HidGuard.Core.Trust;
 
@@ -23,6 +24,7 @@ public sealed class CountermeasureService : ICountermeasureService
     private readonly IDeviceDisabler deviceDisabler;
     private readonly IKeystrokeInterceptor interceptor;
     private readonly ITrustStore trustStore;
+    private readonly IWindowsEventLogService? eventLogService;
     private readonly ILogger<CountermeasureService> logger;
 
     public event EventHandler<CountermeasureExecutionResult>? CountermeasureExecuted;
@@ -32,6 +34,17 @@ public sealed class CountermeasureService : ICountermeasureService
         IDeviceDisabler deviceDisabler,
         IKeystrokeInterceptor interceptor,
         ITrustStore trustStore,
+        ILogger<CountermeasureService>? logger = null)
+        : this(locker, deviceDisabler, interceptor, trustStore, null, logger)
+    {
+    }
+
+    public CountermeasureService(
+        IWorkstationLocker locker,
+        IDeviceDisabler deviceDisabler,
+        IKeystrokeInterceptor interceptor,
+        ITrustStore trustStore,
+        IWindowsEventLogService? eventLogService,
         ILogger<CountermeasureService>? logger = null)
     {
         ArgumentNullException.ThrowIfNull(locker);
@@ -43,6 +56,7 @@ public sealed class CountermeasureService : ICountermeasureService
         this.deviceDisabler = deviceDisabler;
         this.interceptor = interceptor;
         this.trustStore = trustStore;
+        this.eventLogService = eventLogService;
         this.logger = logger ?? NullLogger<CountermeasureService>.Instance;
     }
 
@@ -67,6 +81,7 @@ public sealed class CountermeasureService : ICountermeasureService
         };
 
         CountermeasureExecuted?.Invoke(this, result);
+        LogToWindowsEventLog(result);
         return result;
     }
 
@@ -213,5 +228,43 @@ public sealed class CountermeasureService : ICountermeasureService
             ExecutedAt = DateTimeOffset.UtcNow,
             Message = "Workstation locked and device disabled at PnP level."
         };
+    }
+
+    private void LogToWindowsEventLog(CountermeasureExecutionResult result)
+    {
+        if (eventLogService == null)
+        {
+            return;
+        }
+
+        if (result.Decision.Action is PolicyAction.Allow or PolicyAction.AlertOnly or PolicyAction.PromptUser)
+        {
+            return;
+        }
+
+        var deviceId = result.Decision.DeviceId.FormattedHardwareId;
+
+        if (result.DeviceDisableAttempted)
+        {
+            var status = result.DeviceDisableSucceeded ? "succeeded" : "failed";
+            eventLogService.WriteSecurityEvent(
+                SecurityEventIds.DeviceDisabled,
+                result.DeviceDisableSucceeded ? SecurityEventSeverity.Warning : SecurityEventSeverity.Error,
+                $"HIDGuard disabled device {deviceId} at PnP level (status: {status}). Decision: {result.Decision.Action}. Reason: {result.Decision.Reason}.");
+        }
+        else if (result.WorkstationLockAttempted && result.Message.Contains("sole keyboard", StringComparison.OrdinalIgnoreCase))
+        {
+            eventLogService.WriteSecurityEvent(
+                SecurityEventIds.AntiLockoutTriggered,
+                SecurityEventSeverity.Warning,
+                $"HIDGuard anti-lockout protection triggered for sole keyboard {deviceId}. Hardware disable skipped; workstation locked instead. Reason: {result.Decision.Reason}.");
+        }
+        else if (result.WorkstationLockAttempted)
+        {
+            eventLogService.WriteSecurityEvent(
+                SecurityEventIds.AttackDetected,
+                SecurityEventSeverity.Warning,
+                $"HIDGuard detected keystroke injection attack from device {deviceId}. Workstation locked. Reason: {result.Decision.Reason}.");
+        }
     }
 }
