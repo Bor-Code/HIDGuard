@@ -274,11 +274,11 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 
 | Proje | Test Sayisi | Durum | Kapsanan Alanlar |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 136 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi, olay gunlugu yonetimi, kullanici guven istemi yonetimi |
+| HidGuard.Core.Tests | 169 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi, olay gunlugu yonetimi, kullanici guven istemi yonetimi, CEF ve RFC 5424 SIEM iletici servisi |
 | HidGuard.Platform.Windows.Tests | 36 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu, Windows Olay Gunlugu yayincisi, Windows baslangic kayit yoneticisi |
 | HidGuard.App.Tests | 28 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma, kurulum betigi dogrulamasi, ana pencere gezinmesi, donanim kurtarma, Windows ile baslatma anahtari, aygit guven istemi diyalogu |
 | HidGuard.Simulator.Tests | 33 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, gelismis saldiri profilleri, uctan uca 7 dogrulama senaryosu |
-| Toplam | 233 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| Toplam | 266 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 
