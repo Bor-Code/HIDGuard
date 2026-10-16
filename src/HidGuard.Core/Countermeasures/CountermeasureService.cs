@@ -25,6 +25,7 @@ public sealed class CountermeasureService : ICountermeasureService
     private readonly IKeystrokeInterceptor interceptor;
     private readonly ITrustStore trustStore;
     private readonly IWindowsEventLogService? eventLogService;
+    private readonly IDevicePromptService? promptService;
     private readonly ILogger<CountermeasureService> logger;
 
     public event EventHandler<CountermeasureExecutionResult>? CountermeasureExecuted;
@@ -35,7 +36,7 @@ public sealed class CountermeasureService : ICountermeasureService
         IKeystrokeInterceptor interceptor,
         ITrustStore trustStore,
         ILogger<CountermeasureService>? logger = null)
-        : this(locker, deviceDisabler, interceptor, trustStore, null, logger)
+        : this(locker, deviceDisabler, interceptor, trustStore, null, null, logger)
     {
     }
 
@@ -45,6 +46,18 @@ public sealed class CountermeasureService : ICountermeasureService
         IKeystrokeInterceptor interceptor,
         ITrustStore trustStore,
         IWindowsEventLogService? eventLogService,
+        ILogger<CountermeasureService>? logger = null)
+        : this(locker, deviceDisabler, interceptor, trustStore, eventLogService, null, logger)
+    {
+    }
+
+    public CountermeasureService(
+        IWorkstationLocker locker,
+        IDeviceDisabler deviceDisabler,
+        IKeystrokeInterceptor interceptor,
+        ITrustStore trustStore,
+        IWindowsEventLogService? eventLogService,
+        IDevicePromptService? promptService,
         ILogger<CountermeasureService>? logger = null)
     {
         ArgumentNullException.ThrowIfNull(locker);
@@ -57,6 +70,7 @@ public sealed class CountermeasureService : ICountermeasureService
         this.interceptor = interceptor;
         this.trustStore = trustStore;
         this.eventLogService = eventLogService;
+        this.promptService = promptService;
         this.logger = logger ?? NullLogger<CountermeasureService>.Instance;
     }
 
@@ -73,7 +87,7 @@ public sealed class CountermeasureService : ICountermeasureService
         {
             PolicyAction.Allow => HandleAllow(decision),
             PolicyAction.AlertOnly => HandleAlertOnly(decision),
-            PolicyAction.PromptUser => HandlePromptUser(decision),
+            PolicyAction.PromptUser => await HandlePromptUserAsync(decision, cancellationToken).ConfigureAwait(false),
             PolicyAction.LockWorkstation => HandleLockWorkstation(decision),
             PolicyAction.BlockDevice => await HandleBlockDeviceAsync(decision, totalKeyboardsAttached, cancellationToken).ConfigureAwait(false),
             PolicyAction.LockAndBlock => await HandleLockAndBlockAsync(decision, totalKeyboardsAttached, cancellationToken).ConfigureAwait(false),
@@ -115,8 +129,57 @@ public sealed class CountermeasureService : ICountermeasureService
         };
     }
 
-    private CountermeasureExecutionResult HandlePromptUser(PolicyDecision decision)
+    private async Task<CountermeasureExecutionResult> HandlePromptUserAsync(
+        PolicyDecision decision,
+        CancellationToken cancellationToken)
     {
+        if (promptService != null)
+        {
+            var choice = await promptService.PromptDeviceTrustAsync(decision.DeviceId, null, cancellationToken).ConfigureAwait(false);
+            if (choice == DeviceTrustLevel.Trusted)
+            {
+                await trustStore.SetTrustLevelAsync(decision.DeviceId, DeviceTrustLevel.Trusted, "UserPrompt", cancellationToken: cancellationToken).ConfigureAwait(false);
+                eventLogService?.WriteSecurityEvent(
+                    SecurityEventIds.DeviceReEnabled,
+                    SecurityEventSeverity.Information,
+                    $"HIDGuard device {decision.DeviceId.FormattedHardwareId} trusted via user prompt.");
+
+                return new CountermeasureExecutionResult
+                {
+                    Decision = decision,
+                    WorkstationLockAttempted = false,
+                    WorkstationLockSucceeded = false,
+                    DeviceDisableAttempted = false,
+                    DeviceDisableSucceeded = false,
+                    KeystrokeSuppressionActive = interceptor.IsSuppressionActive,
+                    ExecutedAt = DateTimeOffset.UtcNow,
+                    Message = "User prompt: Device trusted."
+                };
+            }
+
+            if (choice == DeviceTrustLevel.Blocked)
+            {
+                await trustStore.SetTrustLevelAsync(decision.DeviceId, DeviceTrustLevel.Blocked, "UserPrompt", cancellationToken: cancellationToken).ConfigureAwait(false);
+                var disableSucceeded = await deviceDisabler.DisableDeviceAsync(decision.DeviceId, cancellationToken).ConfigureAwait(false);
+                eventLogService?.WriteSecurityEvent(
+                    SecurityEventIds.DeviceDisabled,
+                    disableSucceeded ? SecurityEventSeverity.Warning : SecurityEventSeverity.Error,
+                    $"HIDGuard device {decision.DeviceId.FormattedHardwareId} blocked via user prompt.");
+
+                return new CountermeasureExecutionResult
+                {
+                    Decision = decision,
+                    WorkstationLockAttempted = false,
+                    WorkstationLockSucceeded = false,
+                    DeviceDisableAttempted = true,
+                    DeviceDisableSucceeded = disableSucceeded,
+                    KeystrokeSuppressionActive = interceptor.IsSuppressionActive,
+                    ExecutedAt = DateTimeOffset.UtcNow,
+                    Message = "User prompt: Device blocked and disabled."
+                };
+            }
+        }
+
         return new CountermeasureExecutionResult
         {
             Decision = decision,

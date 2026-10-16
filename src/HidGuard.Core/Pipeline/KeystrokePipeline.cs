@@ -222,6 +222,15 @@ public sealed class KeystrokePipeline : IKeystrokePipeline
                     var decision = await policyEngine.EvaluateAsync(device, null, count).ConfigureAwait(false);
                     await countermeasureService.ExecuteAsync(decision, count).ConfigureAwait(false);
                 }
+                else if (trustLevel == DeviceTrustLevel.Unknown)
+                {
+                    var count = keystrokeSource.GetConnectedKeyboards().Count;
+                    var decision = await policyEngine.EvaluateAsync(device, null, count).ConfigureAwait(false);
+                    if (decision.Action == PolicyAction.PromptUser)
+                    {
+                        await countermeasureService.ExecuteAsync(decision, count).ConfigureAwait(false);
+                    }
+                }
             }
             catch (Exception)
             {
