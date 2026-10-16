@@ -11,6 +11,7 @@ public sealed record HidGuardConfiguration
     public LoggingConfiguration Logging { get; init; } = new();
     public UiConfiguration Ui { get; init; } = new();
     public IncidentStoreConfiguration Incidents { get; init; } = new();
+    public SiemConfiguration Siem { get; init; } = new();
 
     public void Validate()
     {
@@ -20,5 +21,6 @@ public sealed record HidGuardConfiguration
         Logging.Validate();
         Ui.Validate();
         Incidents.Validate();
+        Siem.Validate();
     }
 }

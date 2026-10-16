@@ -100,6 +100,21 @@ Controls dashboard and tray application display options.
 | `NotifyOnBlockedDevices` | boolean | `true` | `true`, `false` | Displays warning notification when an unknown or blocked device is detected. |
 | `Theme` | string | `Dark` | `Dark`, `Light`, `System` | UI color palette theme. |
 
+### 2.7 Enterprise SIEM Forwarding (`Siem`)
+
+Configures real-time security event streaming to SOC/SIEM platforms (e.g., Splunk, Microsoft Sentinel, IBM QRadar, Wazuh).
+
+| Property | Type | Default | Allowed Values | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `Enabled` | boolean | `false` | `true`, `false` | Enables real-time UDP/TCP event forwarding to external SIEM collectors. |
+| `Host` | string | `"127.0.0.1"` | Valid hostname or IP | IP address or FQDN of the SIEM collector or syslog listener. |
+| `Port` | integer | `514` | 1 - 65535 | Target network port on the collector (default 514 for syslog). |
+| `Protocol` | string | `Udp` | `Udp`, `Tcp` | Transport layer protocol. |
+| `Format` | string | `Cef` | `Cef`, `Rfc5424` | Security event serialization format: Common Event Format (CEF) or RFC 5424 Syslog. |
+| `Facility` | integer | `10` | 0 - 23 | Syslog facility code (default 10 for Security/authorization messages 2). |
+| `AppName` | string | `"HIDGuard"` | String | Application identifier tag sent in syslog headers. |
+| `TimeoutMilliseconds` | integer | `2000` | 100 - 30000 | Network dispatch timeout in milliseconds before graceful failure. |
+
 ---
 
 ## 3. Example `config.json`
@@ -151,6 +166,16 @@ Controls dashboard and tray application display options.
     "NotifyOnAllowedDevices": false,
     "NotifyOnBlockedDevices": true,
     "Theme": "Dark"
+  },
+  "Siem": {
+    "Enabled": false,
+    "Host": "127.0.0.1",
+    "Port": 514,
+    "Protocol": "Udp",
+    "Format": "Cef",
+    "Facility": 10,
+    "AppName": "HIDGuard",
+    "TimeoutMilliseconds": 2000
   }
 }
 ```
