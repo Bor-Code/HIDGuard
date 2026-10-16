@@ -125,6 +125,7 @@ In accordance with transparent defensive engineering principles, HIDGuard docume
 - **Persistent Trust Store**: Maintains hardware authorization records in local JSON storage (`trusted-devices.json`). Allows devices to be marked as `Trusted`, `Unknown`, or `Blocked`.
 - **Policy Engine**: Evaluates the risk score against hardware trust levels and attached device counts to select appropriate countermeasures (`Allow`, `AlertOnly`, `LockWorkstation`, `BlockDevice`, `LockAndBlock`).
 - **Incident Storage & Forensics Engine**: Manages encrypted incident records on disk with DPAPI protection, dynamic capacity enforcement, opt-in ring buffering, and scheduled maintenance purging.
+- **Enterprise SOC/SIEM Forwarding Service**: Implements `ISecurityEventForwarder` streaming structured security alerts (anomalies detected, countermeasures executed, hardware state changes) over UDP/TCP in ArcSight Common Event Format (CEF) or RFC 5424 Syslog with resilient fault tolerance.
 
 ### 4.3 WPF Dashboard and Tray Application (`HidGuard.App`)
 - **Modern Dark Theme**: Styled with a dark-slate design system, responsive card layouts, and status badges.
@@ -152,11 +153,11 @@ All components are covered by unit and integration test suites using xUnit and S
 
 | Project | Test Count | Status | Scope |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 136 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service, event log orchestration, interactive device prompt integration |
+| HidGuard.Core.Tests | 169 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service, event log orchestration, interactive device prompt integration, CEF and RFC 5424 SIEM forwarder service |
 | HidGuard.Platform.Windows.Tests | 36 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection, Windows Event Log publisher, startup registration service |
 | HidGuard.App.Tests | 28 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, view navigation, hardware recovery, runtime start with Windows toggle, device trust prompt dialog |
 | HidGuard.Simulator.Tests | 33 | Passed | DuckyScript parser, token mapping, advanced attack profiles, 7-scenario end-to-end verification suite |
-| **Total Solution** | **233** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **266** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
