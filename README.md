@@ -140,7 +140,9 @@ In accordance with transparent defensive engineering principles, HIDGuard docume
   - `JitterAttackProfile`: Uniform microcontroller delay loops (15 ms +/- 0.1 ms).
   - `HumanTypingProfile`: Gaussian human typing emulation (130 ms mean, 35 ms std dev).
   - `DuckyScriptAttackProfile`: Full payload execution.
-- **Automated Verification Runner**: Executes 5 full-pipeline security tests verifying burst attack neutralization, uniformity detection, human passthrough, DuckyScript suppression, and the privacy invariant.
+  - `StealthMicroBurstProfile`: Mixed-cadence evasion attack interspersing human-rate decoy typing with high-speed micro-burst injection.
+  - `StagedPayloadProfile`: Multi-stage exploit workflow simulating Run dialog invocation, wait delays, and staged command execution.
+- **Automated Verification Runner**: Executes 7 full-pipeline security tests verifying burst attack neutralization, uniformity detection, human passthrough, DuckyScript suppression, stealth micro-burst evasion mitigation, multi-stage exploit neutralization, and the privacy invariant.
 
 ---
 
@@ -153,8 +155,8 @@ All components are covered by unit and integration test suites using xUnit and S
 | HidGuard.Core.Tests | 136 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service, event log orchestration, interactive device prompt integration |
 | HidGuard.Platform.Windows.Tests | 36 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection, Windows Event Log publisher, startup registration service |
 | HidGuard.App.Tests | 28 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, view navigation, hardware recovery, runtime start with Windows toggle, device trust prompt dialog |
-| HidGuard.Simulator.Tests | 28 | Passed | DuckyScript parser, token mapping, attack profiles, 5-scenario end-to-end verification suite |
-| **Total Solution** | **228** | **100% Green** | Zero warnings, zero errors |
+| HidGuard.Simulator.Tests | 33 | Passed | DuckyScript parser, token mapping, advanced attack profiles, 7-scenario end-to-end verification suite |
+| **Total Solution** | **233** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
