@@ -47,7 +47,7 @@
                     <DataGridTextColumn Header="HARDWARE IDENTIFIER" Binding="{Binding HardwareId}" Width="220"/>
                     <DataGridTextColumn Header="DEVICE PATH" Binding="{Binding DeviceId}" Width="*"/>
 
-                    <DataGridTemplateColumn Header="ACTIONS" Width="200">
+                    <DataGridTemplateColumn Header="ACTIONS" Width="280">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="2">
@@ -61,6 +61,12 @@
                                             Command="{Binding BlockCommand}"
                                             Style="{StaticResource DangerButtonStyle}"
                                             Padding="10,4"
+                                            Margin="0,0,4,0"
+                                            FontSize="11"/>
+                                    <Button Content="Re-enable"
+                                            Command="{Binding ReEnableCommand}"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Padding="8,4"
                                             Margin="0,0,4,0"
                                             FontSize="11"/>
                                     <Button Content="Reset"
