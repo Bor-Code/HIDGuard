@@ -1,0 +1,131 @@
+<Window x:Class="HidGuard.App.Views.DevicePromptDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="New Hardware Detected"
+        Width="500"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        ShowInTaskbar="True">
+    <Border Background="{StaticResource BackgroundBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="12"
+            Padding="24">
+        <StackPanel>
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="New USB Keyboard Detected"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                    <TextBlock Text="An unverified input hardware has been connected to this system."
+                               FontSize="12"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+                <Border Grid.Column="1"
+                        Background="#F59E0B"
+                        CornerRadius="12"
+                        Padding="8,4"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="Unknown"
+                               Foreground="#0B0F19"
+                               FontWeight="Bold"
+                               FontSize="11"/>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="HARDWARE ID:"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBlock x:Name="HardwareIdText"
+                                   Grid.Column="1"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource AccentEmeraldBrush}"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="DEVICE PATH:"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBlock x:Name="DevicePathText"
+                                   Grid.Column="1"
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   TextWrapping="Wrap"/>
+                    </Grid>
+
+                    <Grid x:Name="FriendlyNameRow" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="FRIENDLY NAME:"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBlock x:Name="DeviceFriendlyNameText"
+                                   Grid.Column="1"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="To protect against Keystroke Injection (BadUSB) attacks, unauthorized keyboards can be blocked and disabled at the hardware level. Trust this device only if you personally attached it."
+                       FontSize="12"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,20"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Decide Later"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Padding="14,8"
+                        Click="OnCancelClicked"/>
+
+                <Button Grid.Column="2"
+                        Content="Block Hardware"
+                        Style="{StaticResource DangerButtonStyle}"
+                        Padding="16,8"
+                        Margin="0,0,8,0"
+                        Click="OnBlockClicked"/>
+
+                <Button Grid.Column="3"
+                        Content="Trust Hardware"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Padding="16,8"
+                        Click="OnTrustClicked"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

@@ -373,4 +373,84 @@ public sealed class CountermeasureServiceTests
         eventLog.WrittenEvents[0].Severity.ShouldBe(SecurityEventSeverity.Warning);
         eventLog.WrittenEvents[0].Message.ShouldContain("anti-lockout");
     }
+
+    private sealed class FakeDevicePromptService : IDevicePromptService
+    {
+        public DeviceTrustLevel? DesiredResult { get; set; }
+        public DeviceIdentifier? PromptedDevice { get; private set; }
+
+        public Task<DeviceTrustLevel?> PromptDeviceTrustAsync(
+            DeviceIdentifier deviceId,
+            string? friendlyName = null,
+            CancellationToken cancellationToken = default)
+        {
+            PromptedDevice = deviceId;
+            return Task.FromResult(DesiredResult);
+        }
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncWhenActionIsPromptUserAndUserSelectsTrustedShouldTrustDeviceAndLogReEnabled()
+    {
+        var locker = new FakeWorkstationLocker();
+        var disabler = new FakeDeviceDisabler();
+        var interceptor = new FakeKeystrokeInterceptor();
+        using var store = new FakeTrustStore();
+        var eventLog = new FakeWindowsEventLogService();
+        var promptService = new FakeDevicePromptService { DesiredResult = DeviceTrustLevel.Trusted };
+        var service = new CountermeasureService(locker, disabler, interceptor, store, eventLog, promptService);
+
+        var decision = new PolicyDecision(PolicyAction.PromptUser, MaliciousKeyboard, DeviceTrustLevel.Unknown, "Unknown device plugged in");
+        var result = await service.ExecuteAsync(decision, totalKeyboardsAttached: 2);
+
+        result.Message.ShouldContain("Device trusted");
+        promptService.PromptedDevice.ShouldBe(MaliciousKeyboard);
+        (await store.GetTrustLevelAsync(MaliciousKeyboard)).ShouldBe(DeviceTrustLevel.Trusted);
+        disabler.DisabledDevice.ShouldBeNull();
+        eventLog.WrittenEvents.ShouldContain(e => e.EventId == SecurityEventIds.DeviceReEnabled);
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncWhenActionIsPromptUserAndUserSelectsBlockedShouldBlockAndDisableDevice()
+    {
+        var locker = new FakeWorkstationLocker();
+        var disabler = new FakeDeviceDisabler();
+        var interceptor = new FakeKeystrokeInterceptor();
+        using var store = new FakeTrustStore();
+        var eventLog = new FakeWindowsEventLogService();
+        var promptService = new FakeDevicePromptService { DesiredResult = DeviceTrustLevel.Blocked };
+        var service = new CountermeasureService(locker, disabler, interceptor, store, eventLog, promptService);
+
+        var decision = new PolicyDecision(PolicyAction.PromptUser, MaliciousKeyboard, DeviceTrustLevel.Unknown, "Unknown device plugged in");
+        var result = await service.ExecuteAsync(decision, totalKeyboardsAttached: 2);
+
+        result.Message.ShouldContain("Device blocked and disabled");
+        result.DeviceDisableAttempted.ShouldBeTrue();
+        result.DeviceDisableSucceeded.ShouldBeTrue();
+        promptService.PromptedDevice.ShouldBe(MaliciousKeyboard);
+        (await store.GetTrustLevelAsync(MaliciousKeyboard)).ShouldBe(DeviceTrustLevel.Blocked);
+        disabler.DisabledDevice.ShouldBe(MaliciousKeyboard);
+        eventLog.WrittenEvents.ShouldContain(e => e.EventId == SecurityEventIds.DeviceDisabled);
+    }
+
+    [Fact]
+    public async Task ExecuteAsyncWhenActionIsPromptUserAndUserCancelsShouldNotModifyTrustStore()
+    {
+        var locker = new FakeWorkstationLocker();
+        var disabler = new FakeDeviceDisabler();
+        var interceptor = new FakeKeystrokeInterceptor();
+        using var store = new FakeTrustStore();
+        var eventLog = new FakeWindowsEventLogService();
+        var promptService = new FakeDevicePromptService { DesiredResult = null };
+        var service = new CountermeasureService(locker, disabler, interceptor, store, eventLog, promptService);
+
+        var decision = new PolicyDecision(PolicyAction.PromptUser, MaliciousKeyboard, DeviceTrustLevel.Unknown, "Unknown device plugged in");
+        var result = await service.ExecuteAsync(decision, totalKeyboardsAttached: 2);
+
+        result.Message.ShouldContain("User prompt requested");
+        result.DeviceDisableAttempted.ShouldBeFalse();
+        (await store.GetTrustLevelAsync(MaliciousKeyboard)).ShouldBe(DeviceTrustLevel.Unknown);
+        disabler.DisabledDevice.ShouldBeNull();
+        eventLog.WrittenEvents.ShouldBeEmpty();
+    }
 }
