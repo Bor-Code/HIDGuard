@@ -42,6 +42,8 @@ public static class CommandLineParser
                     "jitter" => AttackProfileType.Jitter,
                     "human" => AttackProfileType.HumanTyping,
                     "ducky" => AttackProfileType.DuckyScript,
+                    "stealth" or "stealth-micro-burst" or "microburst" => AttackProfileType.StealthMicroBurst,
+                    "staged" or "staged-payload" or "multi-stage" => AttackProfileType.StagedPayload,
                     _ => null
                 };
             }
@@ -88,13 +90,13 @@ public static class CommandLineParser
             "HIDGuard Attack Simulator and End-to-End Verification Tool\n" +
             "Usage: HidGuard.Simulator [options]\n\n" +
             "Options:\n" +
-            "  --mode, -m <burst|jitter|human|ducky>  Select attack profile to execute\n" +
-            "  --verify, -v                           Run automated end-to-end verification suite\n" +
-            "  --dry-run, -d                          Execute simulated injection without Win32 SendInput\n" +
-            "  --file, -f <path>                      DuckyScript file path for ducky mode\n" +
-            "  --text, -t <string>                    Custom text payload for burst or human mode\n" +
-            "  --count, -c <number>                   Number of keystrokes to inject (default: 50)\n" +
-            "  --interval, -i <ms>                    Inter-keystroke interval in milliseconds (default: 4)\n" +
-            "  --help, -h                             Show this help message\n";
+            "  --mode, -m <burst|jitter|human|ducky|stealth|staged>  Select attack profile to execute\n" +
+            "  --verify, -v                                           Run automated end-to-end verification suite\n" +
+            "  --dry-run, -d                                          Execute simulated injection without Win32 SendInput\n" +
+            "  --file, -f <path>                                      DuckyScript file path for ducky mode\n" +
+            "  --text, -t <string>                                    Custom text payload for burst, human, stealth, or staged mode\n" +
+            "  --count, -c <number>                                   Number of keystrokes to inject (default: 50)\n" +
+            "  --interval, -i <ms>                                    Inter-keystroke interval in milliseconds (default: 4)\n" +
+            "  --help, -h                                             Show this help message\n";
     }
 }

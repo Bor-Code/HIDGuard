@@ -125,4 +125,67 @@ public sealed class AttackProfileTests
         var elapsed = injector.InjectedRecords[1].Timestamp - injector.InjectedRecords[0].Timestamp;
         elapsed.ShouldBe(TimeSpan.FromMilliseconds(50));
     }
+
+    [Fact]
+    public async Task StealthMicroBurstProfileShouldEmitDecoyAndBurstDelays()
+    {
+        var injector = new SimulatedKeystrokeInjector(executeRealDelays: false);
+        var delays = new List<TimeSpan>();
+        injector.Delayed += d => delays.Add(d);
+
+        var profile = new StealthMicroBurstProfile(
+            decoyText: "Test",
+            burstPayload: "Burst",
+            decoyInterval: TimeSpan.FromMilliseconds(120),
+            burstInterval: TimeSpan.FromMilliseconds(4));
+
+        await profile.ExecuteAsync(injector);
+
+        injector.InjectedRecords.Count.ShouldBeGreaterThan(15);
+        delays.Any(d => d.TotalMilliseconds >= 60.0).ShouldBeTrue();
+        delays.Any(d => d == TimeSpan.FromMilliseconds(4)).ShouldBeTrue();
+        profile.ProfileType.ShouldBe(AttackProfileType.StealthMicroBurst);
+    }
+
+    [Fact]
+    public async Task StagedPayloadProfileShouldEmitShortcutAndCommands()
+    {
+        var injector = new SimulatedKeystrokeInjector(executeRealDelays: false);
+        var delays = new List<TimeSpan>();
+        injector.Delayed += d => delays.Add(d);
+
+        var profile = new StagedPayloadProfile(
+            shortcutWaitDelay: TimeSpan.FromMilliseconds(200),
+            stageOneCommand: "cmd",
+            stageOneInterval: TimeSpan.FromMilliseconds(4),
+            interStageDelay: TimeSpan.FromMilliseconds(150),
+            stageTwoCommand: "exit",
+            stageTwoInterval: TimeSpan.FromMilliseconds(5));
+
+        await profile.ExecuteAsync(injector);
+
+        injector.InjectedRecords.Count.ShouldBeGreaterThan(10);
+        delays.ShouldContain(TimeSpan.FromMilliseconds(200));
+        delays.ShouldContain(TimeSpan.FromMilliseconds(150));
+        delays.ShouldContain(TimeSpan.FromMilliseconds(4));
+        delays.ShouldContain(TimeSpan.FromMilliseconds(5));
+        profile.ProfileType.ShouldBe(AttackProfileType.StagedPayload);
+    }
+
+    private static readonly string[] StealthCliArgs = ["--mode", "stealth"];
+    private static readonly string[] StagedCliArgs = ["-m", "staged"];
+
+    [Fact]
+    public void CommandLineParserShouldParseStealthAndStagedModes()
+    {
+        var stealthOptions = HidGuard.Simulator.Cli.CommandLineParser.Parse(StealthCliArgs);
+        stealthOptions.Mode.ShouldBe(AttackProfileType.StealthMicroBurst);
+
+        var stagedOptions = HidGuard.Simulator.Cli.CommandLineParser.Parse(StagedCliArgs);
+        stagedOptions.Mode.ShouldBe(AttackProfileType.StagedPayload);
+
+        var help = HidGuard.Simulator.Cli.CommandLineParser.GetHelpText();
+        help.ShouldContain("stealth");
+        help.ShouldContain("staged");
+    }
 }

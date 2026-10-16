@@ -5,5 +5,7 @@ public enum AttackProfileType
     Burst,
     Jitter,
     HumanTyping,
-    DuckyScript
+    DuckyScript,
+    StealthMicroBurst,
+    StagedPayload
 }

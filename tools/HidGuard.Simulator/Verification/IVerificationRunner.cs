@@ -7,5 +7,7 @@ public interface IVerificationRunner
     Task<VerificationScenarioResult> VerifyJitterAttackScenarioAsync(CancellationToken cancellationToken = default);
     Task<VerificationScenarioResult> VerifyHumanTypingScenarioAsync(CancellationToken cancellationToken = default);
     Task<VerificationScenarioResult> VerifyDuckyScriptMitigationScenarioAsync(CancellationToken cancellationToken = default);
+    Task<VerificationScenarioResult> VerifyStealthMicroBurstScenarioAsync(CancellationToken cancellationToken = default);
+    Task<VerificationScenarioResult> VerifyStagedPayloadScenarioAsync(CancellationToken cancellationToken = default);
     Task<VerificationScenarioResult> VerifyPrivacyInvariantScenarioAsync(CancellationToken cancellationToken = default);
 }

@@ -81,6 +81,14 @@ public static class Program
 
             AttackProfileType.DuckyScript => LoadDuckyProfile(options.ScriptFile),
 
+            AttackProfileType.StealthMicroBurst => new StealthMicroBurstProfile(
+                burstPayload: options.Text,
+                burstInterval: TimeSpan.FromMilliseconds(options.IntervalMs)),
+
+            AttackProfileType.StagedPayload => new StagedPayloadProfile(
+                stageOneCommand: options.Text,
+                stageOneInterval: TimeSpan.FromMilliseconds(options.IntervalMs)),
+
             _ => null
         };
     }
@@ -109,10 +117,12 @@ public static class Program
             Console.WriteLine("[2] Run Low-Jitter Microcontroller Loop Attack (Uniform interval)");
             Console.WriteLine("[3] Run Realistic Human Typing Emulation (Gaussian variance)");
             Console.WriteLine("[4] Execute DuckyScript Payload (Sample payload)");
-            Console.WriteLine("[5] Run Full Automated End-to-End Verification Suite");
+            Console.WriteLine("[5] Run Stealth Mixed-Cadence Micro-Burst Attack");
+            Console.WriteLine("[6] Run Multi-Stage Exploit Execution Profile");
+            Console.WriteLine("[7] Run Full Automated End-to-End Verification Suite");
             Console.WriteLine("[0] Exit");
             Console.WriteLine("--------------------------------------------------------------------------------");
-            Console.Write("Select an option [0-5]: ");
+            Console.Write("Select an option [0-7]: ");
 
             var input = Console.ReadLine()?.Trim();
             Console.WriteLine();
@@ -122,7 +132,7 @@ public static class Program
                 return 0;
             }
 
-            if (input == "5")
+            if (input == "7")
             {
                 var runner = new VerificationRunner();
                 var report = await runner.RunAllScenariosAsync().ConfigureAwait(false);
@@ -136,12 +146,14 @@ public static class Program
                 "2" => new JitterAttackProfile(keystrokeCount: 50, baseInterval: TimeSpan.FromMilliseconds(15), maxJitterMilliseconds: 0.2),
                 "3" => new HumanTypingProfile(),
                 "4" => LoadDuckyProfile(null),
+                "5" => new StealthMicroBurstProfile(),
+                "6" => new StagedPayloadProfile(),
                 _ => null
             };
 
             if (profile == null)
             {
-                Console.WriteLine("Invalid selection. Please choose an option between 0 and 5.");
+                Console.WriteLine("Invalid selection. Please choose an option between 0 and 7.");
                 continue;
             }
 
