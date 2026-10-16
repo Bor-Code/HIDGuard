@@ -1,6 +1,8 @@
 using Shouldly;
 using Xunit;
 using HidGuard.App.ViewModels;
+using HidGuard.Core.Audit;
+using HidGuard.Core.Countermeasures;
 using HidGuard.Core.Domain;
 using HidGuard.Core.Events;
 using HidGuard.Core.Trust;
@@ -46,6 +48,35 @@ public sealed class DevicesViewModelTests
         public void Dispose() { }
     }
 
+    private sealed class StubDeviceDisabler : IDeviceDisabler
+    {
+        public List<DeviceIdentifier> DisabledDevices { get; } = new();
+        public List<DeviceIdentifier> EnabledDevices { get; } = new();
+
+        public Task<bool> DisableDeviceAsync(DeviceIdentifier deviceId, CancellationToken cancellationToken = default)
+        {
+            DisabledDevices.Add(deviceId);
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> EnableDeviceAsync(DeviceIdentifier deviceId, CancellationToken cancellationToken = default)
+        {
+            EnabledDevices.Add(deviceId);
+            return Task.FromResult(true);
+        }
+    }
+
+    private sealed class StubEventLogService : IWindowsEventLogService
+    {
+        public List<(int EventId, SecurityEventSeverity Severity, string Message)> LoggedEntries { get; } = new();
+
+        public bool WriteSecurityEvent(int eventId, SecurityEventSeverity severity, string message)
+        {
+            LoggedEntries.Add((eventId, severity, message));
+            return true;
+        }
+    }
+
     [Fact]
     public async Task DevicesViewModelShouldLoadDevicesAndHandleTrustChange()
     {
@@ -82,5 +113,89 @@ public sealed class DevicesViewModelTests
         vm.Devices.Count.ShouldBe(1);
         vm.Devices[0].HardwareId.ShouldBe("VID_16C0&PID_05DF");
         vm.Devices[0].TrustLevel.ShouldBe(DeviceTrustLevel.Unknown);
+    }
+
+    [Fact]
+    public async Task DevicesViewModelShouldDisableDeviceAndLogWhenBlocked()
+    {
+        var store = new StubTrustStore();
+        var disabler = new StubDeviceDisabler();
+        var eventLog = new StubEventLogService();
+        var dev = new DeviceIdentifier("HID\\VID_046D&PID_C31C\\0", 0x046D, 0xC31C);
+        await store.SetTrustLevelAsync(dev, DeviceTrustLevel.Trusted, "Admin", "Logitech Keyboard");
+
+        var vm = new DevicesViewModel(store, disabler, eventLog);
+        await vm.RefreshDevicesAsync();
+
+        await vm.OnDeviceTrustChangedAsync(dev.Path, DeviceTrustLevel.Blocked);
+
+        disabler.DisabledDevices.ShouldContain(dev);
+        eventLog.LoggedEntries.ShouldContain(e => e.EventId == SecurityEventIds.DeviceDisabled && e.Severity == SecurityEventSeverity.Warning);
+    }
+
+    [Fact]
+    public async Task DevicesViewModelShouldEnableDeviceAndLogWhenTrusted()
+    {
+        var store = new StubTrustStore();
+        var disabler = new StubDeviceDisabler();
+        var eventLog = new StubEventLogService();
+        var dev = new DeviceIdentifier("HID\\VID_046D&PID_C31C\\0", 0x046D, 0xC31C);
+        await store.SetTrustLevelAsync(dev, DeviceTrustLevel.Blocked, "Admin", "Logitech Keyboard");
+
+        var vm = new DevicesViewModel(store, disabler, eventLog);
+        await vm.RefreshDevicesAsync();
+
+        await vm.OnDeviceTrustChangedAsync(dev.Path, DeviceTrustLevel.Trusted);
+
+        disabler.EnabledDevices.ShouldContain(dev);
+        eventLog.LoggedEntries.ShouldContain(e => e.EventId == SecurityEventIds.DeviceReEnabled && e.Severity == SecurityEventSeverity.Information);
+    }
+
+    [Fact]
+    public async Task DevicesViewModelShouldReEnableBlockedDeviceAndSetTrustToTrusted()
+    {
+        var store = new StubTrustStore();
+        var disabler = new StubDeviceDisabler();
+        var eventLog = new StubEventLogService();
+        var dev = new DeviceIdentifier("HID\\VID_046D&PID_C31C\\0", 0x046D, 0xC31C);
+        await store.SetTrustLevelAsync(dev, DeviceTrustLevel.Blocked, "Admin", "Logitech Keyboard");
+
+        var vm = new DevicesViewModel(store, disabler, eventLog);
+        await vm.RefreshDevicesAsync();
+
+        var item = vm.Devices[0];
+        item.TrustLevel.ShouldBe(DeviceTrustLevel.Blocked);
+
+        await vm.OnDeviceReEnableRequestedAsync(dev.Path);
+
+        disabler.EnabledDevices.ShouldContain(dev);
+        eventLog.LoggedEntries.ShouldContain(e => e.EventId == SecurityEventIds.DeviceReEnabled && e.Severity == SecurityEventSeverity.Information);
+        var record = (await store.GetAllRecordsAsync())[0];
+        record.TrustLevel.ShouldBe(DeviceTrustLevel.Trusted);
+        item.TrustLevel.ShouldBe(DeviceTrustLevel.Trusted);
+    }
+
+    [Fact]
+    public async Task DeviceItemViewModelReEnableCommandShouldInvokeReEnableCallback()
+    {
+        var reEnabledPath = string.Empty;
+        var item = new DeviceItemViewModel(
+            "HID\\VID_1234&PID_5678\\0",
+            "VID_1234&PID_5678",
+            "Test Device",
+            DeviceTrustLevel.Blocked,
+            DateTimeOffset.UtcNow,
+            DateTimeOffset.UtcNow,
+            null,
+            path =>
+            {
+                reEnabledPath = path;
+                return Task.CompletedTask;
+            });
+
+        item.ReEnableCommand.Execute(null);
+        await Task.Delay(50);
+
+        reEnabledPath.ShouldBe("HID\\VID_1234&PID_5678\\0");
     }
 }

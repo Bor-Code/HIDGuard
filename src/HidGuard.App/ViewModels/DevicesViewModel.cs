@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using HidGuard.App.Mvvm;
+using HidGuard.Core.Audit;
+using HidGuard.Core.Countermeasures;
 using HidGuard.Core.Domain;
 using HidGuard.Core.Events;
 using HidGuard.Core.Trust;
@@ -10,6 +12,8 @@ namespace HidGuard.App.ViewModels;
 public sealed class DevicesViewModel : ObservableObject
 {
     private readonly ITrustStore trustStore;
+    private readonly IDeviceDisabler? deviceDisabler;
+    private readonly IWindowsEventLogService? eventLogService;
     private DeviceItemViewModel? selectedDevice;
     private int totalDeviceCount;
 
@@ -29,9 +33,14 @@ public sealed class DevicesViewModel : ObservableObject
 
     public ICommand RefreshCommand { get; }
 
-    public DevicesViewModel(ITrustStore trustStore)
+    public DevicesViewModel(
+        ITrustStore trustStore,
+        IDeviceDisabler? deviceDisabler = null,
+        IWindowsEventLogService? eventLogService = null)
     {
         this.trustStore = trustStore ?? throw new ArgumentNullException(nameof(trustStore));
+        this.deviceDisabler = deviceDisabler;
+        this.eventLogService = eventLogService;
         RefreshCommand = new AsyncRelayCommand(RefreshDevicesAsync);
     }
 
@@ -51,7 +60,8 @@ public sealed class DevicesViewModel : ObservableObject
                     record.TrustLevel,
                     record.FirstSeenAt,
                     record.LastSeenAt,
-                    OnDeviceTrustChangedAsync);
+                    OnDeviceTrustChangedAsync,
+                    OnDeviceReEnableRequestedAsync);
 
                 Devices.Add(item);
             }
@@ -83,7 +93,8 @@ public sealed class DevicesViewModel : ObservableObject
                     DeviceTrustLevel.Unknown,
                     evt.Timestamp,
                     evt.Timestamp,
-                    OnDeviceTrustChangedAsync);
+                    OnDeviceTrustChangedAsync,
+                    OnDeviceReEnableRequestedAsync);
 
                 Devices.Add(newItem);
                 TotalDeviceCount = Devices.Count;
@@ -91,13 +102,77 @@ public sealed class DevicesViewModel : ObservableObject
         });
     }
 
-    private async Task OnDeviceTrustChangedAsync(string devicePath, DeviceTrustLevel newTrustLevel)
+    public async Task OnDeviceTrustChangedAsync(string devicePath, DeviceTrustLevel newTrustLevel)
     {
         var existing = Devices.FirstOrDefault(d => string.Equals(d.DeviceId, devicePath, StringComparison.OrdinalIgnoreCase));
         if (existing != null)
         {
             var deviceIdentifier = ParseDeviceIdentifier(existing.DeviceId);
             await trustStore.SetTrustLevelAsync(deviceIdentifier, newTrustLevel, "User_UI", existing.DisplayName).ConfigureAwait(false);
+
+            if (deviceDisabler != null)
+            {
+                try
+                {
+                    if (newTrustLevel == DeviceTrustLevel.Blocked)
+                    {
+                        var disabled = await deviceDisabler.DisableDeviceAsync(deviceIdentifier).ConfigureAwait(false);
+                        if (disabled)
+                        {
+                            eventLogService?.WriteSecurityEvent(
+                                SecurityEventIds.DeviceDisabled,
+                                SecurityEventSeverity.Warning,
+                                $"Hardware device disabled via administrative console: {deviceIdentifier.FormattedHardwareId} (Path: {deviceIdentifier.Path})");
+                        }
+                    }
+                    else
+                    {
+                        var enabled = await deviceDisabler.EnableDeviceAsync(deviceIdentifier).ConfigureAwait(false);
+                        if (enabled)
+                        {
+                            eventLogService?.WriteSecurityEvent(
+                                SecurityEventIds.DeviceReEnabled,
+                                SecurityEventSeverity.Information,
+                                $"Hardware device re-enabled via administrative console: {deviceIdentifier.FormattedHardwareId} (Path: {deviceIdentifier.Path})");
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+        }
+    }
+
+    public async Task OnDeviceReEnableRequestedAsync(string devicePath)
+    {
+        var existing = Devices.FirstOrDefault(d => string.Equals(d.DeviceId, devicePath, StringComparison.OrdinalIgnoreCase));
+        if (existing != null)
+        {
+            var deviceIdentifier = ParseDeviceIdentifier(existing.DeviceId);
+            if (deviceDisabler != null)
+            {
+                try
+                {
+                    var enabled = await deviceDisabler.EnableDeviceAsync(deviceIdentifier).ConfigureAwait(false);
+                    if (enabled)
+                    {
+                        eventLogService?.WriteSecurityEvent(
+                            SecurityEventIds.DeviceReEnabled,
+                            SecurityEventSeverity.Information,
+                            $"Hardware device re-enabled via administrative console: {deviceIdentifier.FormattedHardwareId} (Path: {deviceIdentifier.Path})");
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            if (existing.TrustLevel == DeviceTrustLevel.Blocked)
+            {
+                await trustStore.SetTrustLevelAsync(deviceIdentifier, DeviceTrustLevel.Trusted, "User_UI", existing.DisplayName).ConfigureAwait(false);
+                DispatchToUi(() => existing.TrustLevel = DeviceTrustLevel.Trusted);
+            }
         }
     }
 
