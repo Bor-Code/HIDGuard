@@ -8,6 +8,7 @@ namespace HidGuard.App.ViewModels;
 public sealed class SettingsViewModel : ObservableObject
 {
     private readonly IConfigurationManager configurationManager;
+    private readonly IStartupService? startupService;
 
     private int windowSize = 30;
     private double humanFeasibilityFloorMs = 25.0;
@@ -22,6 +23,7 @@ public sealed class SettingsViewModel : ObservableObject
     private bool keySuppressionEnabled = true;
     private int temporarySuppressionSeconds = 3;
 
+    private bool startWithWindows;
     private bool startMinimizedToTray = true;
     private bool notifyOnBlockedDevices = true;
     private bool notifyOnAllowedDevices;
@@ -103,6 +105,12 @@ public sealed class SettingsViewModel : ObservableObject
         set => SetProperty(ref temporarySuppressionSeconds, value);
     }
 
+    public bool StartWithWindows
+    {
+        get => startWithWindows;
+        set => SetProperty(ref startWithWindows, value);
+    }
+
     public bool StartMinimizedToTray
     {
         get => startMinimizedToTray;
@@ -178,14 +186,22 @@ public sealed class SettingsViewModel : ObservableObject
     public ICommand SaveSettingsCommand { get; }
     public ICommand ResetDefaultsCommand { get; }
 
-    public SettingsViewModel(IConfigurationManager configurationManager)
+    public SettingsViewModel(
+        IConfigurationManager configurationManager,
+        IStartupService? startupService = null)
     {
         this.configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
+        this.startupService = startupService;
 
         SaveSettingsCommand = new AsyncRelayCommand(SaveSettingsAsync);
         ResetDefaultsCommand = new RelayCommand(ResetDefaults);
 
         LoadFromConfiguration(this.configurationManager.CurrentConfiguration);
+
+        if (this.startupService != null)
+        {
+            StartWithWindows = this.startupService.IsStartWithWindowsEnabled();
+        }
     }
 
     public void LoadFromConfiguration(HidGuardConfiguration config)
@@ -205,6 +221,7 @@ public sealed class SettingsViewModel : ObservableObject
         KeySuppressionEnabled = config.Countermeasures.KeySuppressionEnabled;
         TemporarySuppressionSeconds = config.Countermeasures.TemporarySuppressionSeconds;
 
+        StartWithWindows = startupService?.IsStartWithWindowsEnabled() ?? config.Ui.StartWithWindows;
         StartMinimizedToTray = config.Ui.StartMinimizedToTray;
         NotifyOnBlockedDevices = config.Ui.NotifyOnBlockedDevices;
         NotifyOnAllowedDevices = config.Ui.NotifyOnAllowedDevices;
@@ -243,6 +260,7 @@ public sealed class SettingsViewModel : ObservableObject
                 },
                 Ui = new UiConfiguration
                 {
+                    StartWithWindows = StartWithWindows,
                     StartMinimizedToTray = StartMinimizedToTray,
                     NotifyOnBlockedDevices = NotifyOnBlockedDevices,
                     NotifyOnAllowedDevices = NotifyOnAllowedDevices,
@@ -262,6 +280,11 @@ public sealed class SettingsViewModel : ObservableObject
             newConfig.Validate();
             await configurationManager.SaveAsync(newConfig).ConfigureAwait(false);
 
+            if (startupService != null)
+            {
+                startupService.SetStartWithWindows(StartWithWindows);
+            }
+
             FeedbackMessage = "Settings saved successfully.";
             FeedbackColor = "#10B981";
         }
@@ -276,6 +299,7 @@ public sealed class SettingsViewModel : ObservableObject
     {
         var defaultConfig = new HidGuardConfiguration();
         LoadFromConfiguration(defaultConfig);
+        StartWithWindows = false;
         FeedbackMessage = "Settings reset to defaults. Click Save to apply.";
         FeedbackColor = "#F59E0B";
     }

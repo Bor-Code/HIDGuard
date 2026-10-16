@@ -55,6 +55,7 @@ public static class HidGuardWindowsPlatformServiceCollectionExtensions
         services.TryAddSingleton<IWorkstationLocker, WindowsWorkstationLocker>();
         services.TryAddSingleton<IDeviceDisabler, WindowsDeviceDisabler>();
         services.TryAddSingleton<IWindowsEventLogService, WindowsEventLogService>();
+        services.TryAddSingleton<IStartupService, WindowsStartupService>();
 
         return services;
     }
