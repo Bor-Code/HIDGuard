@@ -205,6 +205,11 @@
                 <StackPanel>
                     <TextBlock Text="Application &amp; System Tray Options" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
 
+                    <CheckBox Content="Start HIDGuard Automatically with Windows (User Logon)"
+                              IsChecked="{Binding StartWithWindows}"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              Margin="0,0,0,12"/>
+
                     <CheckBox Content="Start Minimized to System Tray on Launch"
                               IsChecked="{Binding StartMinimizedToTray}"
                               Style="{StaticResource ModernCheckBoxStyle}"

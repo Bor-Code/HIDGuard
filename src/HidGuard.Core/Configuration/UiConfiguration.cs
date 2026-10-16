@@ -7,6 +7,7 @@ public sealed record UiConfiguration
         "Dark", "Light", "System"
     };
 
+    public bool StartWithWindows { get; init; }
     public bool StartMinimizedToTray { get; init; } = true;
     public bool NotifyOnAllowedDevices { get; init; }
     public bool NotifyOnBlockedDevices { get; init; } = true;
