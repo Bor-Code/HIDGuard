@@ -7,6 +7,7 @@ using HidGuard.Core.Incidents;
 using HidGuard.Core.Input;
 using HidGuard.Core.Security;
 using HidGuard.Core.Trust;
+using HidGuard.Platform.Windows.Logging;
 using HidGuard.Platform.Windows.Security;
 using Microsoft.Extensions.Logging;
 
@@ -53,6 +54,7 @@ public static class HidGuardWindowsPlatformServiceCollectionExtensions
         services.TryAddSingleton<IKeystrokeInterceptor, WindowsLowLevelKeyboardHook>();
         services.TryAddSingleton<IWorkstationLocker, WindowsWorkstationLocker>();
         services.TryAddSingleton<IDeviceDisabler, WindowsDeviceDisabler>();
+        services.TryAddSingleton<IWindowsEventLogService, WindowsEventLogService>();
 
         return services;
     }

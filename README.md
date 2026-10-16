@@ -117,6 +117,7 @@ In accordance with transparent defensive engineering principles, HIDGuard docume
 - **Message-Only Window**: Registers an invisible message-only window (`HWND_MESSAGE`) receiving `WM_INPUT` messages globally across all desktop sessions (`RIDEV_INPUTSINK`).
 - **Hardware Identifier Resolution**: Resolves raw device handles (`HANDLE`) to hardware device paths (`\\?\HID#VID_xxxx&PID_xxxx...`) using `GetRawInputDeviceInfo`. Distinguishes software-injected synthetic input (`HANDLE.Zero`) from physical hardware controllers.
 - **Active Keystroke Suppression**: Deploys an unmanaged low-level keyboard hook (`SetWindowsHookExW` with `WH_KEYBOARD_LL`) that selectively returns non-zero (`LRESULT(1)`) during active countermeasure periods, discarding synthetic keystrokes before they reach user applications.
+- **Windows Event Log Integration**: Implements `WindowsEventLogService` publishing structured security events directly into the Windows Application Event Log under source `HIDGuard` (Event ID 1000 for lifecycle, 1001 for attack detected/workstation locked, 1002 for device disabled, 1003 for anti-lockout protection, 1004 for keystroke suppression, 1005 for device re-enabled).
 
 ### 4.2 Analysis and Policy Engine (`HidGuard.Core`)
 - **Sliding Window Timing Analyzer**: Evaluates inter-keystroke intervals within a configurable sliding window (default: 30 strokes). Computes real-time mean interval, standard deviation, coefficient of variation, and words-per-minute metrics using Welford's algorithm.
@@ -149,11 +150,11 @@ All components are covered by unit and integration test suites using xUnit and S
 
 | Project | Test Count | Status | Scope |
 | :--- | :--- | :--- | :--- |
-| HidGuard.Core.Tests | 130 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service |
-| HidGuard.Platform.Windows.Tests | 27 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection |
+| HidGuard.Core.Tests | 133 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service, event log orchestration |
+| HidGuard.Platform.Windows.Tests | 31 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection, Windows Event Log publisher |
 | HidGuard.App.Tests | 21 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, view navigation |
 | HidGuard.Simulator.Tests | 28 | Passed | DuckyScript parser, token mapping, attack profiles, 5-scenario end-to-end verification suite |
-| **Total Solution** | **206** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **213** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
