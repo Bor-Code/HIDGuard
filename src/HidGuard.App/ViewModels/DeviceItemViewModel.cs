@@ -7,6 +7,7 @@ namespace HidGuard.App.ViewModels;
 public sealed class DeviceItemViewModel : ObservableObject
 {
     private readonly Func<string, DeviceTrustLevel, Task>? onTrustChanged;
+    private readonly Func<string, Task>? onReEnableRequested;
     private DeviceTrustLevel trustLevel;
     private DateTimeOffset lastSeen;
 
@@ -58,6 +59,7 @@ public sealed class DeviceItemViewModel : ObservableObject
     public ICommand TrustCommand { get; }
     public ICommand BlockCommand { get; }
     public ICommand ResetTrustCommand { get; }
+    public ICommand ReEnableCommand { get; }
 
     public DeviceItemViewModel(
         string deviceId,
@@ -66,7 +68,8 @@ public sealed class DeviceItemViewModel : ObservableObject
         DeviceTrustLevel trustLevel,
         DateTimeOffset firstEnrolled,
         DateTimeOffset lastSeen,
-        Func<string, DeviceTrustLevel, Task>? onTrustChanged = null)
+        Func<string, DeviceTrustLevel, Task>? onTrustChanged = null,
+        Func<string, Task>? onReEnableRequested = null)
     {
         DeviceId = deviceId ?? string.Empty;
         HardwareId = hardwareId ?? string.Empty;
@@ -75,6 +78,7 @@ public sealed class DeviceItemViewModel : ObservableObject
         FirstEnrolled = firstEnrolled;
         this.lastSeen = lastSeen;
         this.onTrustChanged = onTrustChanged;
+        this.onReEnableRequested = onReEnableRequested;
 
         TrustCommand = new AsyncRelayCommand(
             () => ChangeTrustLevelAsync(DeviceTrustLevel.Trusted),
@@ -87,6 +91,9 @@ public sealed class DeviceItemViewModel : ObservableObject
         ResetTrustCommand = new AsyncRelayCommand(
             () => ChangeTrustLevelAsync(DeviceTrustLevel.Unknown),
             () => TrustLevel != DeviceTrustLevel.Unknown);
+
+        ReEnableCommand = new AsyncRelayCommand(
+            ReEnableAsync);
     }
 
     private async Task ChangeTrustLevelAsync(DeviceTrustLevel newLevel)
@@ -96,5 +103,13 @@ public sealed class DeviceItemViewModel : ObservableObject
             await onTrustChanged(DeviceId, newLevel).ConfigureAwait(false);
         }
         TrustLevel = newLevel;
+    }
+
+    private async Task ReEnableAsync()
+    {
+        if (onReEnableRequested != null)
+        {
+            await onReEnableRequested(DeviceId).ConfigureAwait(false);
+        }
     }
 }
