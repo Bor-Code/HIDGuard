@@ -254,13 +254,17 @@ Adli bilisim ve saldiri analizi icin gelistirilen olay depolama katmani en yukse
    - JitterAttackProfile: Mikrokontrolcu dongulerini modelleyen sabit aralikli ve sifira yakin varyansli (15ms +/- 0.1ms) esbicimli saldiri.
    - HumanTypingProfile: Box-Muller Gauss dagilimiyla insan biyomekanik parmak hareketlerini (ortalama 130ms, standart sapma 35ms, kelime arasi dogal duraklamalar) modelleyen insan klavye emulasyonu.
    - DuckyScriptAttackProfile: Cozumlenen DuckyScript talimatlarini gercek zamanli veya sanal saatle uygulayan profil.
+   - StealthMicroBurstProfile: Insan hizinda yem tus vuruslari arasina gizlenmis yuksek hizli mikro-patlama saldirisi.
+   - StagedPayloadProfile: Calistir penceresi cagrisi, bekleme gecikmeleri ve asamali komut yurutmeyi modelleyen cok asamali exploit profili.
 4. Uctan Uca Dogrulama Kosucusu (VerificationRunner):
-   - 5 kritik guvenlik senaryosunu canli boru hatti uzerinde otomatik olarak dogrular:
+   - 7 kritik guvenlik senaryosunu canli boru hatti uzerinde otomatik olarak dogrular:
      1. Burst Attack Tespiti ve Karsi Onlem (Anomali skoru yukselir, tuslar yutulur, aygit engellenir).
      2. Dusuk Jitter / Esbicimlilik Tespiti (Mikrokontrolcu dongusu standart sapma anomalisiyle yakalanir).
      3. Mesru Insan Yazimi Gecisi (Sifir yanlis alarm, sifir engelleme, kesintisiz gecis).
      4. DuckyScript Zararli Payload Notrlestirme (PowerShell / cmd calistirma girisimi basariyla yutulur).
-     5. Gizlilik Ilkesi Dogrulamasi (Denetim izi ve veri modellerinde asla sanal tus kodu veya metin saklanmaz).
+     5. Gizli Mikro-Patlama Atlama Girisimini Notrlestirme (Yem yazimina ragmen mikro patlama tespit edilir ve engellenir).
+     6. Cok Asamali Exploit Yurutmesini Notrlestirme (Asamali yukleyici ve komut enjeksiyonu basariyla yutulur).
+     7. Gizlilik Ilkesi Dogrulamasi (Denetim izi ve veri modellerinde asla sanal tus kodu veya metin saklanmaz).
 
 ---
 
@@ -273,8 +277,8 @@ Tum katmanlar xUnit ve Shouldly kutuphaneleriyle kapsamli sekilde test edilmisti
 | HidGuard.Core.Tests | 136 | Basarili | Zamanlama motoru, anomali puanlama, guven deposu, politika motoru, boru hatti, atomik konfigurasyon, sifreli olay deposu, ring buffer, bakim servisi, olay gunlugu yonetimi, kullanici guven istemi yonetimi |
 | HidGuard.Platform.Windows.Tests | 36 | Basarili | Raw Input cozumleyici, donanim kapatici, calisma istasyonu kilitleyici, dusuk seviyeli klavye kancasi, Serilog fabrikasi, DPAPI veri koruyucu, Windows Olay Gunlugu yayincisi, Windows baslangic kayit yoneticisi |
 | HidGuard.App.Tests | 28 | Basarili | MVVM komutlari, tekil ornek Mutex'i, aygit yonetimi, metrikler, ayarlar paneli, rapor disari aktarma, kurulum betigi dogrulamasi, ana pencere gezinmesi, donanim kurtarma, Windows ile baslatma anahtari, aygit guven istemi diyalogu |
-| HidGuard.Simulator.Tests | 28 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, burst/jitter/human profilleri, uctan uca 5 dogrulama senaryosu |
-| Toplam | 228 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
+| HidGuard.Simulator.Tests | 33 | Basarili | DuckyScript parser, token/kombinasyon cozumleme, gelismis saldiri profilleri, uctan uca 7 dogrulama senaryosu |
+| Toplam | 233 | %100 Yesil | Sifir uyari, sifir hata (TreatWarningsAsErrors) |
 
 ---
 

@@ -48,6 +48,26 @@ public sealed class VerificationRunnerTests
     }
 
     [Fact]
+    public async Task VerifyStealthMicroBurstScenarioShouldPass()
+    {
+        var result = await runner.VerifyStealthMicroBurstScenarioAsync();
+
+        result.Success.ShouldBeTrue(result.FailureReason);
+        result.Metrics["AttacksDetected"].ShouldNotBe("0");
+        result.Metrics["FinalDeviceTrust"].ShouldBe("Blocked");
+    }
+
+    [Fact]
+    public async Task VerifyStagedPayloadScenarioShouldPass()
+    {
+        var result = await runner.VerifyStagedPayloadScenarioAsync();
+
+        result.Success.ShouldBeTrue(result.FailureReason);
+        result.Metrics["AttacksDetected"].ShouldNotBe("0");
+        result.Metrics["FinalDeviceTrust"].ShouldBe("Blocked");
+    }
+
+    [Fact]
     public async Task VerifyPrivacyInvariantScenarioShouldPass()
     {
         var result = await runner.VerifyPrivacyInvariantScenarioAsync();
@@ -62,13 +82,13 @@ public sealed class VerificationRunnerTests
         var report = await runner.RunAllScenariosAsync();
 
         report.AllPassed.ShouldBeTrue();
-        report.TotalCount.ShouldBe(5);
-        report.PassedCount.ShouldBe(5);
+        report.TotalCount.ShouldBe(7);
+        report.PassedCount.ShouldBe(7);
         report.FailedCount.ShouldBe(0);
 
         var reportText = report.FormatReport();
         reportText.ShouldContain("HIDGUARD END-TO-END AUTOMATED VERIFICATION REPORT");
-        reportText.ShouldContain("5 / 5 Scenarios Passed");
+        reportText.ShouldContain("7 / 7 Scenarios Passed");
         reportText.ShouldContain("PASS");
         reportText.ShouldNotContain("FAIL");
     }

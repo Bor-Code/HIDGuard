@@ -34,6 +34,8 @@ public sealed class VerificationRunner : IVerificationRunner
             await VerifyJitterAttackScenarioAsync(cancellationToken).ConfigureAwait(false),
             await VerifyHumanTypingScenarioAsync(cancellationToken).ConfigureAwait(false),
             await VerifyDuckyScriptMitigationScenarioAsync(cancellationToken).ConfigureAwait(false),
+            await VerifyStealthMicroBurstScenarioAsync(cancellationToken).ConfigureAwait(false),
+            await VerifyStagedPayloadScenarioAsync(cancellationToken).ConfigureAwait(false),
             await VerifyPrivacyInvariantScenarioAsync(cancellationToken).ConfigureAwait(false)
         };
 
@@ -416,6 +418,213 @@ public sealed class VerificationRunner : IVerificationRunner
                 ScenarioName = "DuckyScript Malicious Payload Neutralization",
                 Success = false,
                 Description = "Executes rapid DuckyScript string injection and verifies pipeline suppression and trust revocation.",
+                Duration = stopwatch.Elapsed,
+                FailureReason = ex.Message,
+                Metrics = metrics
+            };
+        }
+    }
+
+    public async Task<VerificationScenarioResult> VerifyStealthMicroBurstScenarioAsync(CancellationToken cancellationToken = default)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var metrics = new Dictionary<string, string>();
+
+        try
+        {
+            var source = new VerificationKeystrokeSource();
+            source.SetConnectedKeyboards(new[] { HumanDevice, AttackDevice });
+
+            var locker = new VerificationWorkstationLocker();
+            var disabler = new VerificationDeviceDisabler();
+            var interceptor = new VerificationKeystrokeInterceptor();
+            using var trustStore = new VerificationTrustStore();
+            await trustStore.SetTrustLevelAsync(HumanDevice, DeviceTrustLevel.Trusted, "Test", cancellationToken: cancellationToken).ConfigureAwait(false);
+            await trustStore.SetTrustLevelAsync(AttackDevice, DeviceTrustLevel.Unknown, "Test", cancellationToken: cancellationToken).ConfigureAwait(false);
+
+            var eventAggregator = new PipelineEventAggregator();
+            var thresholds = new TimingThresholds();
+            var scorer = new AnomalyScorer();
+            var timingEngine = new TimingAnalysisEngine(thresholds, scorer);
+            var policyEngine = new PolicyEngine(trustStore, new PolicyOptions
+            {
+                DefaultAnomalyAction = AnomalyAction.BlockDevice,
+                EnforceMinimumOneActiveKeyboard = true
+            });
+            var countermeasureService = new CountermeasureService(locker, disabler, interceptor, trustStore);
+
+            await using var pipeline = new KeystrokePipeline(
+                source,
+                timingEngine,
+                policyEngine,
+                countermeasureService,
+                trustStore,
+                interceptor,
+                eventAggregator);
+
+            await pipeline.StartAsync(cancellationToken).ConfigureAwait(false);
+
+            var simulatedClock = DateTimeOffset.UtcNow;
+            var injector = new SimulatedKeystrokeInjector(executeRealDelays: false, initialTime: simulatedClock);
+            injector.KeyInjected += (vk, isKeyUp) =>
+            {
+                source.EmitKeystroke(new KeystrokeEvent(
+                    AttackDevice,
+                    simulatedClock,
+                    isKeyUp ? KeyTransitionState.KeyUp : KeyTransitionState.KeyDown,
+                    vk));
+            };
+            injector.Delayed += (duration) =>
+            {
+                simulatedClock = simulatedClock.Add(duration);
+            };
+
+            var profile = new StealthMicroBurstProfile(
+                decoyText: "Status check",
+                burstPayload: "powershell -NoP -w hidden -c Invoke-StealthCommand",
+                burstInterval: TimeSpan.FromMilliseconds(3));
+
+            await profile.ExecuteAsync(injector, cancellationToken).ConfigureAwait(false);
+
+            await WaitForPipelineProcessingAsync(pipeline, 40, cancellationToken).ConfigureAwait(false);
+
+            var stats = pipeline.GetStatistics();
+            var finalTrust = await trustStore.GetTrustLevelAsync(AttackDevice, cancellationToken).ConfigureAwait(false);
+
+            metrics["ProcessedKeystrokes"] = stats.TotalKeystrokesProcessed.ToString(CultureInfo.InvariantCulture);
+            metrics["AttacksDetected"] = stats.TotalAttacksDetected.ToString(CultureInfo.InvariantCulture);
+            metrics["SuppressionActive"] = interceptor.IsSuppressionActive.ToString();
+            metrics["FinalDeviceTrust"] = finalTrust.ToString();
+
+            var success = stats.TotalAttacksDetected > 0 &&
+                          interceptor.IsSuppressionActive &&
+                          finalTrust == DeviceTrustLevel.Blocked &&
+                          disabler.DisabledDevices.Contains(AttackDevice);
+
+            await pipeline.StopAsync(cancellationToken).ConfigureAwait(false);
+            stopwatch.Stop();
+
+            return new VerificationScenarioResult
+            {
+                ScenarioName = "Stealth Micro-Burst Attack Neutralization",
+                Success = success,
+                Description = "Simulates mixed human-rate decoy typing followed by rapid micro-burst injection and verifies evasion neutralization.",
+                Duration = stopwatch.Elapsed,
+                FailureReason = success ? null : "Stealth micro-burst attack was not detected or neutralized by the pipeline.",
+                Metrics = metrics
+            };
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return new VerificationScenarioResult
+            {
+                ScenarioName = "Stealth Micro-Burst Attack Neutralization",
+                Success = false,
+                Description = "Simulates mixed human-rate decoy typing followed by rapid micro-burst injection and verifies evasion neutralization.",
+                Duration = stopwatch.Elapsed,
+                FailureReason = ex.Message,
+                Metrics = metrics
+            };
+        }
+    }
+
+    public async Task<VerificationScenarioResult> VerifyStagedPayloadScenarioAsync(CancellationToken cancellationToken = default)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var metrics = new Dictionary<string, string>();
+
+        try
+        {
+            var source = new VerificationKeystrokeSource();
+            source.SetConnectedKeyboards(new[] { HumanDevice, AttackDevice });
+
+            var locker = new VerificationWorkstationLocker();
+            var disabler = new VerificationDeviceDisabler();
+            var interceptor = new VerificationKeystrokeInterceptor();
+            using var trustStore = new VerificationTrustStore();
+            await trustStore.SetTrustLevelAsync(HumanDevice, DeviceTrustLevel.Trusted, "Test", cancellationToken: cancellationToken).ConfigureAwait(false);
+            await trustStore.SetTrustLevelAsync(AttackDevice, DeviceTrustLevel.Unknown, "Test", cancellationToken: cancellationToken).ConfigureAwait(false);
+
+            var eventAggregator = new PipelineEventAggregator();
+            var thresholds = new TimingThresholds();
+            var scorer = new AnomalyScorer();
+            var timingEngine = new TimingAnalysisEngine(thresholds, scorer);
+            var policyEngine = new PolicyEngine(trustStore, new PolicyOptions
+            {
+                DefaultAnomalyAction = AnomalyAction.BlockDevice,
+                EnforceMinimumOneActiveKeyboard = true
+            });
+            var countermeasureService = new CountermeasureService(locker, disabler, interceptor, trustStore);
+
+            await using var pipeline = new KeystrokePipeline(
+                source,
+                timingEngine,
+                policyEngine,
+                countermeasureService,
+                trustStore,
+                interceptor,
+                eventAggregator);
+
+            await pipeline.StartAsync(cancellationToken).ConfigureAwait(false);
+
+            var simulatedClock = DateTimeOffset.UtcNow;
+            var injector = new SimulatedKeystrokeInjector(executeRealDelays: false, initialTime: simulatedClock);
+            injector.KeyInjected += (vk, isKeyUp) =>
+            {
+                source.EmitKeystroke(new KeystrokeEvent(
+                    AttackDevice,
+                    simulatedClock,
+                    isKeyUp ? KeyTransitionState.KeyUp : KeyTransitionState.KeyDown,
+                    vk));
+            };
+            injector.Delayed += (duration) =>
+            {
+                simulatedClock = simulatedClock.Add(duration);
+            };
+
+            var profile = new StagedPayloadProfile(
+                stageOneCommand: "powershell -NoP -w hidden -c Invoke-StagedExploit",
+                stageOneInterval: TimeSpan.FromMilliseconds(3));
+
+            await profile.ExecuteAsync(injector, cancellationToken).ConfigureAwait(false);
+
+            await WaitForPipelineProcessingAsync(pipeline, 35, cancellationToken).ConfigureAwait(false);
+
+            var stats = pipeline.GetStatistics();
+            var finalTrust = await trustStore.GetTrustLevelAsync(AttackDevice, cancellationToken).ConfigureAwait(false);
+
+            metrics["ProcessedKeystrokes"] = stats.TotalKeystrokesProcessed.ToString(CultureInfo.InvariantCulture);
+            metrics["AttacksDetected"] = stats.TotalAttacksDetected.ToString(CultureInfo.InvariantCulture);
+            metrics["SuppressionActive"] = interceptor.IsSuppressionActive.ToString();
+            metrics["FinalDeviceTrust"] = finalTrust.ToString();
+
+            var success = stats.TotalAttacksDetected > 0 &&
+                          interceptor.IsSuppressionActive &&
+                          finalTrust == DeviceTrustLevel.Blocked &&
+                          disabler.DisabledDevices.Contains(AttackDevice);
+
+            await pipeline.StopAsync(cancellationToken).ConfigureAwait(false);
+            stopwatch.Stop();
+
+            return new VerificationScenarioResult
+            {
+                ScenarioName = "Multi-Stage Exploit Execution Neutralization",
+                Success = success,
+                Description = "Simulates multi-stage Run-dialog invocation and rapid command payload injection with pipeline suppression.",
+                Duration = stopwatch.Elapsed,
+                FailureReason = success ? null : "Multi-stage exploit execution was not detected or neutralized by the pipeline.",
+                Metrics = metrics
+            };
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            return new VerificationScenarioResult
+            {
+                ScenarioName = "Multi-Stage Exploit Execution Neutralization",
+                Success = false,
+                Description = "Simulates multi-stage Run-dialog invocation and rapid command payload injection with pipeline suppression.",
                 Duration = stopwatch.Elapsed,
                 FailureReason = ex.Message,
                 Metrics = metrics
