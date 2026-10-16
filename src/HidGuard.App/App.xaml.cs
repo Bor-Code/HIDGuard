@@ -10,6 +10,7 @@ using HidGuard.Core.DependencyInjection;
 using HidGuard.Core.Events;
 using HidGuard.Core.Incidents;
 using HidGuard.Core.Pipeline;
+using HidGuard.Core.Trust;
 using HidGuard.Platform.Windows.DependencyInjection;
 
 namespace HidGuard.App;
@@ -107,6 +108,7 @@ public partial class App : System.Windows.Application
 
         services.AddSingleton<IUacElevationService, UacElevationService>();
         services.AddSingleton<ITrayIconService, TrayIconService>();
+        services.AddSingleton<IDevicePromptService, WpfDevicePromptService>();
 
         services.AddSingleton<OverviewViewModel>();
         services.AddSingleton<DevicesViewModel>();
