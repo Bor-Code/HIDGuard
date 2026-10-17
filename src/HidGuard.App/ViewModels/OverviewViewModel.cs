@@ -91,6 +91,8 @@ public sealed class OverviewViewModel : ObservableObject
 
     public ObservableCollection<AuditEventItemViewModel> RecentAlerts { get; } = new();
 
+    public bool HasRecentAlerts => RecentAlerts.Count > 0;
+
     public ICommand ToggleProtectionCommand { get; }
     public ICommand ClearStatsCommand { get; }
 
@@ -98,6 +100,8 @@ public sealed class OverviewViewModel : ObservableObject
     {
         this.pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
         this.auditTrail = auditTrail ?? throw new ArgumentNullException(nameof(auditTrail));
+
+        RecentAlerts.CollectionChanged += (_, _) => OnPropertyChanged(nameof(HasRecentAlerts));
 
         ToggleProtectionCommand = new RelayCommand(ToggleProtection);
         ClearStatsCommand = new RelayCommand(ClearStats);
@@ -167,6 +171,7 @@ public sealed class OverviewViewModel : ObservableObject
         ThreatsNeutralized = 0;
         LatestAnomalyScore = 0;
         CurrentWpm = 0;
+        RecentAlerts.Clear();
     }
 
     private void UpdateStatusText()

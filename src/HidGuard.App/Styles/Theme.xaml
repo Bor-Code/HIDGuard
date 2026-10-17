@@ -4,59 +4,66 @@
 
     <FontFamily x:Key="MonoFont">Consolas</FontFamily>
 
-    <SolidColorBrush x:Key="PageBrush" Color="#F4F5F7"/>
+    <SolidColorBrush x:Key="PageBrush" Color="#F8FAFC"/>
     <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#F7F8FA"/>
-    <SolidColorBrush x:Key="SurfaceHoverBrush" Color="#EEF0F3"/>
-    <SolidColorBrush x:Key="BorderBrush" Color="#DDE1E6"/>
-    <SolidColorBrush x:Key="BorderStrongBrush" Color="#C1C7CD"/>
-    <SolidColorBrush x:Key="TrackBrush" Color="#E5E7EB"/>
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#F1F5F9"/>
+    <SolidColorBrush x:Key="SurfaceHoverBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="BorderStrongBrush" Color="#CBD5E1"/>
+    <SolidColorBrush x:Key="TrackBrush" Color="#E2E8F0"/>
 
-    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1F2937"/>
-    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#4B5563"/>
-    <SolidColorBrush x:Key="TextMutedBrush" Color="#6B7280"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#0F172A"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#475569"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="#94A3B8"/>
 
-    <SolidColorBrush x:Key="AccentBrush" Color="#1F4E8C"/>
-    <SolidColorBrush x:Key="AccentHoverBrush" Color="#183F72"/>
-    <SolidColorBrush x:Key="AccentPressedBrush" Color="#12315A"/>
-    <SolidColorBrush x:Key="AccentSoftBrush" Color="#E8EEF7"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#1E40AF"/>
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#1E3A8A"/>
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="#172554"/>
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="#EFF6FF"/>
 
-    <SolidColorBrush x:Key="SuccessBrush" Color="#2E7D32"/>
-    <SolidColorBrush x:Key="WarningBrush" Color="#B26A00"/>
-    <SolidColorBrush x:Key="DangerBrush" Color="#C62828"/>
-    <SolidColorBrush x:Key="DangerSoftBrush" Color="#FDECEC"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#059669"/>
+    <SolidColorBrush x:Key="SuccessSoftBrush" Color="#ECFDF5"/>
+    <SolidColorBrush x:Key="SuccessBorderBrush" Color="#A7F3D0"/>
 
-    <SolidColorBrush x:Key="SidebarBrush" Color="#16243A"/>
-    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#1F3150"/>
-    <SolidColorBrush x:Key="SidebarActiveBrush" Color="#263C61"/>
-    <SolidColorBrush x:Key="SidebarDividerBrush" Color="#2A3B57"/>
-    <SolidColorBrush x:Key="SidebarTextBrush" Color="#C9D3E0"/>
-    <SolidColorBrush x:Key="SidebarMutedBrush" Color="#8392A8"/>
-    <SolidColorBrush x:Key="SidebarIndicatorBrush" Color="#6FA3E8"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#D97706"/>
+    <SolidColorBrush x:Key="WarningSoftBrush" Color="#FFFBEB"/>
+    <SolidColorBrush x:Key="WarningBorderBrush" Color="#FDE68A"/>
 
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#F4F5F7"/>
+    <SolidColorBrush x:Key="DangerBrush" Color="#DC2626"/>
+    <SolidColorBrush x:Key="DangerSoftBrush" Color="#FEF2F2"/>
+    <SolidColorBrush x:Key="DangerBorderBrush" Color="#FECACA"/>
+
+    <SolidColorBrush x:Key="SidebarBrush" Color="#0F172A"/>
+    <SolidColorBrush x:Key="SidebarHoverBrush" Color="#1E293B"/>
+    <SolidColorBrush x:Key="SidebarActiveBrush" Color="#1E293B"/>
+    <SolidColorBrush x:Key="SidebarDividerBrush" Color="#1E293B"/>
+    <SolidColorBrush x:Key="SidebarTextBrush" Color="#94A3B8"/>
+    <SolidColorBrush x:Key="SidebarMutedBrush" Color="#64748B"/>
+    <SolidColorBrush x:Key="SidebarIndicatorBrush" Color="#3B82F6"/>
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#F8FAFC"/>
     <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="CardHoverBrush" Color="#F7F8FA"/>
-    <SolidColorBrush x:Key="BorderLightBrush" Color="#E5E7EB"/>
-    <SolidColorBrush x:Key="AccentEmeraldBrush" Color="#2E7D32"/>
-    <SolidColorBrush x:Key="AccentCyanBrush" Color="#1F4E8C"/>
-    <SolidColorBrush x:Key="AccentRedBrush" Color="#C62828"/>
-    <SolidColorBrush x:Key="AccentAmberBrush" Color="#B26A00"/>
-    <SolidColorBrush x:Key="AccentBlueBrush" Color="#1F4E8C"/>
+    <SolidColorBrush x:Key="CardHoverBrush" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="BorderLightBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="AccentEmeraldBrush" Color="#059669"/>
+    <SolidColorBrush x:Key="AccentCyanBrush" Color="#1E40AF"/>
+    <SolidColorBrush x:Key="AccentRedBrush" Color="#DC2626"/>
+    <SolidColorBrush x:Key="AccentAmberBrush" Color="#D97706"/>
+    <SolidColorBrush x:Key="AccentBlueBrush" Color="#1E40AF"/>
 
-    <StreamGeometry x:Key="IconShield">M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z</StreamGeometry>
-    <StreamGeometry x:Key="IconShieldCheck">M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-2 16l-4-4 1.41-1.41L10 15.17l6.59-6.59L18 10l-8 8z</StreamGeometry>
-    <StreamGeometry x:Key="IconShieldAlert">M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z</StreamGeometry>
-    <StreamGeometry x:Key="IconKeyboard">M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm8 7H9v-2h6v2zm1-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z</StreamGeometry>
-    <StreamGeometry x:Key="IconActivity">M3 13h4.2l2.3-6.1c.3-.8 1.4-.8 1.7 0l3.6 9.6 1.8-4.3c.3-.7 1-1.2 1.8-1.2H21c.6 0 1-.4 1-1s-.4-1-1-1h-3.2l-2.6 6.2-3.6-9.6c-.3-.8-1.4-.8-1.7 0L7.6 11H3c-.6 0-1 .4-1 1s.4 1 1 1z</StreamGeometry>
+    <StreamGeometry x:Key="IconShield">M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z</StreamGeometry>
+    <StreamGeometry x:Key="IconShieldCheck">M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1.06 14.54L6.7 12.3a.75.75 0 0 1 1.06-1.06l2.18 2.18 5.3-5.3a.75.75 0 1 1 1.06 1.06l-5.83 5.83a.75.75 0 0 1-1.06 0z</StreamGeometry>
+    <StreamGeometry x:Key="IconShieldAlert">M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z</StreamGeometry>
+    <StreamGeometry x:Key="IconKeyboard">M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 12H4V7h16v10zm-15-3h2v2H5v-2zm0-3h2v2H5v-2zm0-3h2v2H5V8zm4 6h6v2H9v-2zm0-3h2v2H9v-2zm0-3h2v2H9V8zm4 3h2v2h-2v-2zm0-3h2v2h-2V8zm4 6h2v2h-2v-2zm0-3h2v2h-2v-2zm0-3h2v2h-2V8z</StreamGeometry>
+    <StreamGeometry x:Key="IconActivity">M4 9h3v10H4zM10.5 4h3v15h-3zM17 12h3v7h-3z</StreamGeometry>
     <StreamGeometry x:Key="IconTerminal">M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10zm-12.5-3.5l3.5-3.5-3.5-3.5 1.4-1.4 4.9 4.9-4.9 4.9-1.4-1.4zm5.5 0h6v2h-6v-2z</StreamGeometry>
-    <StreamGeometry x:Key="IconAudit">M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z</StreamGeometry>
+    <StreamGeometry x:Key="IconAudit">M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z</StreamGeometry>
     <StreamGeometry x:Key="IconSettings">M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z</StreamGeometry>
     <StreamGeometry x:Key="IconPlay">M8 5.14v13.72c0 .89 1.01 1.41 1.73.91l10.29-6.86c.67-.45.67-1.37 0-1.82L9.73 4.23c-.72-.5-1.73.02-1.73.91z</StreamGeometry>
     <StreamGeometry x:Key="IconStop">M8 6h8c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2z</StreamGeometry>
     <StreamGeometry x:Key="IconCheck">M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z</StreamGeometry>
     <StreamGeometry x:Key="IconClose">M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z</StreamGeometry>
-    <StreamGeometry x:Key="IconAlert">M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z</StreamGeometry>
+    <StreamGeometry x:Key="IconAlert">M12 2L1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V8h2v5z</StreamGeometry>
     <StreamGeometry x:Key="IconTrash">M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z</StreamGeometry>
     <StreamGeometry x:Key="IconLightning">M7 2v11h3v9l7-12h-4l4-8z</StreamGeometry>
     <StreamGeometry x:Key="IconLock">M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z</StreamGeometry>
@@ -80,42 +87,43 @@
     <conv:StringEqualsConverter x:Key="StringEqualsConverter"/>
     <conv:AuditEventTypeDisplayConverter x:Key="AuditEventTypeDisplayConverter"/>
     <conv:TurkishStatusConverter x:Key="TurkishStatusConverter"/>
+    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
     <Style x:Key="PageTitleText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
     </Style>
 
     <Style x:Key="PageSubtitleText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="Margin" Value="0,4,0,0"/>
+        <Setter Property="Margin" Value="0,3,0,0"/>
     </Style>
 
     <Style x:Key="SectionTitleText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
     </Style>
 
     <Style x:Key="SectionHintText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="11"/>
         <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="Margin" Value="0,2,0,0"/>
     </Style>
 
     <Style x:Key="FieldLabelText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
     </Style>
 
     <Style x:Key="FieldHintText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="11"/>
         <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="Margin" Value="0,2,0,0"/>
@@ -128,13 +136,13 @@
     </Style>
 
     <Style x:Key="MetricValueText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
     </Style>
 
     <Style x:Key="MetricUnitText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
         <Setter Property="Margin" Value="4,0,0,4"/>
@@ -151,7 +159,7 @@
         <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="CornerRadius" Value="8"/>
         <Setter Property="Padding" Value="18"/>
     </Style>
 
@@ -164,7 +172,8 @@
     </Style>
 
     <Style x:Key="ButtonBaseStyle" TargetType="Button">
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding" Value="14,7"/>
         <Setter Property="MinHeight" Value="32"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -177,7 +186,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4"
+                            CornerRadius="6"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
@@ -222,12 +231,14 @@
     </Style>
 
     <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonBaseStyle}">
-        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
+        <Setter Property="Background" Value="{StaticResource DangerSoftBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DangerBorderBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource DangerSoftBrush}"/>
+                <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -238,13 +249,48 @@
         <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
     </Style>
 
+    <Style x:Key="SidebarNavButtonStyle" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Padding" Value="14,10"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="BorderThickness" Value="3,0,0,0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0,6,6,0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderStrongBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="8,6"/>
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="CaretBrush" Value="{StaticResource TextPrimaryBrush}"/>
         <Setter Property="Template">
@@ -254,7 +300,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="4">
+                            CornerRadius="5">
                         <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -274,7 +320,7 @@
 
     <Style x:Key="FormCheckBoxStyle" TargetType="CheckBox">
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,0,0,10"/>
@@ -300,7 +346,7 @@
     <Style x:Key="TableColumnHeaderStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="{StaticResource SurfaceAltBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="11"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding" Value="12,10"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
@@ -352,7 +398,7 @@
         <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
         <Setter Property="CanUserDeleteRows" Value="False"/>
