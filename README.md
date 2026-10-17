@@ -68,6 +68,7 @@ To compile a standalone Release binary into `publish\`:
 ## Technical Documentation
 
 For in-depth mathematical timing models, Win32 raw input internals, and threat analysis:
+- [User Guide & Threat Overview (Turkish)](docs/KULLANIM_KILAVUZU.md)
 - [Deep Dive Architecture & Technical Specification](docs/architecture-and-deep-dive.md)
 - [Technical Architecture (Turkish)](docs/mimari-detaylar.tr.md)
 - [Configuration Reference](docs/configuration.md)
