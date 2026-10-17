@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="HIDGuard - Keystroke Injection Security"
-        Height="700" Width="1050"
-        MinHeight="550" MinWidth="850"
+        Title="HIDGuard - Defensive Keystroke Injection and BadUSB Mitigation"
+        Height="760" Width="1160"
+        MinHeight="600" MinWidth="950"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BackgroundBrush}">
 
@@ -20,7 +20,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="64"/>
+            <RowDefinition Height="68"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -32,28 +32,66 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Background="{StaticResource AccentEmeraldBrush}" CornerRadius="6" Width="28" Height="28" Margin="0,0,10,0">
-                        <TextBlock Text="H" Foreground="#0B0F19" FontWeight="Black" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                    <Border Background="#1E293B" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Width="38" Height="38" Margin="0,0,12,0">
+                        <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentEmeraldBrush}" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
-                    <TextBlock Text="HIDGUARD" FontSize="16" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Black" VerticalAlignment="Center" Margin="0,0,24,0"/>
-
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Overview" Command="{Binding NavigateCommand}" CommandParameter="Overview" Style="{StaticResource NavButtonStyle}"/>
-                        <Button Content="Devices" Command="{Binding NavigateCommand}" CommandParameter="Devices" Style="{StaticResource NavButtonStyle}"/>
-                        <Button Content="Live Metrics" Command="{Binding NavigateCommand}" CommandParameter="Metrics" Style="{StaticResource NavButtonStyle}"/>
-                        <Button Content="Attack Simulator" Command="{Binding NavigateCommand}" CommandParameter="Simulator" Style="{StaticResource NavButtonStyle}"/>
-                        <Button Content="Audit Trail" Command="{Binding NavigateCommand}" CommandParameter="AuditLog" Style="{StaticResource NavButtonStyle}"/>
-                        <Button Content="Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButtonStyle}"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="HIDGUARD" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Black" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <Border Background="#064E3B" CornerRadius="4" Padding="5,1" VerticalAlignment="Center">
+                                <TextBlock Text="v1.0.0" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentEmeraldBrush}"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="Hardware Keystroke Defense" FontSize="10" Foreground="{StaticResource TextMutedBrush}" FontWeight="SemiBold"/>
                     </StackPanel>
                 </StackPanel>
 
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Overview" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconShield}" Fill="{StaticResource AccentEmeraldBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Overview" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Devices" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconKeyboard}" Fill="{StaticResource AccentCyanBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Devices" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Metrics" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconActivity}" Fill="{StaticResource AccentBlueBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Live Metrics" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Simulator" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentAmberBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Attack Simulator" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="AuditLog" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconAudit}" Fill="#A78BFA" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Audit Trail" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButtonStyle}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconSettings}" Fill="{StaticResource TextSecondaryBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Settings" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border CornerRadius="12" Padding="10,4" Margin="0,0,12,0" Background="{StaticResource CardBrush}">
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="8" Height="8" Margin="0,0,6,0" VerticalAlignment="Center">
-                                <Ellipse.Style>
-                                    <Style TargetType="Ellipse">
+                    <Border CornerRadius="8" Padding="10,6" Margin="0,0,12,0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconShield}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center">
+                                <Path.Style>
+                                    <Style TargetType="Path">
                                         <Setter Property="Fill" Value="{StaticResource AccentEmeraldBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsElevated}" Value="False">
@@ -61,9 +99,9 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Ellipse.Style>
-                            </Ellipse>
-                            <TextBlock FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}">
+                                </Path.Style>
+                            </Path>
+                            <TextBlock FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Text" Value="ELEVATED ADMIN"/>
@@ -78,9 +116,12 @@
                         </StackPanel>
                     </Border>
 
-                    <Button Content="Toggle Protection"
-                            Command="{Binding ToggleProtectionCommand}"
-                            Style="{StaticResource PrimaryButtonStyle}"/>
+                    <Button Command="{Binding ToggleProtectionCommand}" Style="{StaticResource PrimaryButtonStyle}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconLock}" Fill="#0B0F19" Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Toggle Protection" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>

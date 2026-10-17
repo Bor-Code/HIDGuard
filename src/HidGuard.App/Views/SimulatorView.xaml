@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="850" d:DesignWidth="1000">
+             d:DesignHeight="850" d:DesignWidth="1050">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -16,18 +16,23 @@
             <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Attack Simulator and Research Studio" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                    <Border Background="#1E293B" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Width="44" Height="44" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentAmberBrush}" Width="22" Height="22" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Attack Simulator and Security Research Studio" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
                         <TextBlock Text="Simulate BadUSB keystroke injection attacks, benchmark human variance, and verify active defense mitigations."
                                    FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border CornerRadius="8" Padding="12,6" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border CornerRadius="8" Padding="14,8" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Ellipse Width="10" Height="10" Fill="{Binding StatusColor}" Margin="0,0,8,0"/>
                                 <TextBlock Text="{Binding StatusText}" FontSize="12" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
@@ -40,25 +45,31 @@
             <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel VerticalAlignment="Center">
+                    <Border Background="#064E3B" CornerRadius="6" Width="32" Height="32" Margin="0,0,14,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentEmeraldBrush}" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="INJECTION SAFETY CONTROLS" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
                         <TextBlock Text="Safe Dry-Run simulates timing loops and calculates metrics without dispatching real keystrokes to Windows."
                                    FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,0"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                         <CheckBox Content="Safe Dry-Run Mode (Recommended)"
                                   IsChecked="{Binding IsDryRun}"
                                   Style="{StaticResource ModernCheckBoxStyle}"
                                   FontWeight="Bold"
                                   VerticalAlignment="Center"
-                                  Margin="0,0,16,0"/>
+                                  Margin="0,0,20,0"/>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconRefresh}" Fill="{StaticResource TextSecondaryBrush}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Countdown:" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <TextBox Text="{Binding CountdownSeconds, UpdateSourceTrigger=PropertyChanged}"
                                      Width="45"
@@ -72,7 +83,7 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="420"/>
+                    <ColumnDefinition Width="440"/>
                     <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -81,7 +92,10 @@
 
                     <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
                         <StackPanel>
-                            <TextBlock Text="ATTACK PROFILES" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconCrosshair}" Fill="{StaticResource AccentAmberBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="ATTACK PROFILES" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
 
                             <ListBox ItemsSource="{Binding AvailableProfiles}"
                                      SelectedItem="{Binding SelectedProfile}"
@@ -128,16 +142,49 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                                            <Border Grid.Row="0" Grid.Column="1" CornerRadius="4" Padding="6,2" Background="#111827">
+                                            <Path Grid.Row="0" Grid.Column="0" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,10,0">
+                                                <Path.Style>
+                                                    <Style TargetType="Path">
+                                                        <Setter Property="Fill" Value="{Binding BadgeColor}"/>
+                                                        <Setter Property="Data" Value="{StaticResource IconTerminal}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Id}" Value="burst">
+                                                                <Setter Property="Data" Value="{StaticResource IconLightning}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Id}" Value="jitter">
+                                                                <Setter Property="Data" Value="{StaticResource IconCpu}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Id}" Value="human">
+                                                                <Setter Property="Data" Value="{StaticResource IconUser}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Id}" Value="stealth">
+                                                                <Setter Property="Data" Value="{StaticResource IconAlert}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Id}" Value="staged">
+                                                                <Setter Property="Data" Value="{StaticResource IconLayers}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Id}" Value="ducky">
+                                                                <Setter Property="Data" Value="{StaticResource IconCode}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Id}" Value="verify">
+                                                                <Setter Property="Data" Value="{StaticResource IconShieldCheck}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Path.Style>
+                                            </Path>
+
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                            <Border Grid.Row="0" Grid.Column="2" CornerRadius="4" Padding="6,2" Background="#111827" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding Category}" FontSize="10" FontWeight="Bold" Foreground="{Binding BadgeColor}"/>
                                             </Border>
 
-                                            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Description}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Description}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -147,7 +194,10 @@
 
                     <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
                         <StackPanel>
-                            <TextBlock Text="PROFILE PARAMETERS" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconSettings}" Fill="{StaticResource AccentCyanBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="PROFILE PARAMETERS" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
 
                             <StackPanel Visibility="{Binding IsStandardProfileSelected, Converter={StaticResource BoolToVis}}">
                                 <Grid Margin="0,0,0,10">
@@ -172,10 +222,30 @@
                             <StackPanel Visibility="{Binding IsDuckyScriptSelected, Converter={StaticResource BoolToVis}}">
                                 <TextBlock Text="Quick Presets:" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
                                 <WrapPanel Margin="0,0,0,10">
-                                    <Button Content="Hello" Command="{Binding LoadPresetCommand}" CommandParameter="Hello" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4" FontSize="11"/>
-                                    <Button Content="Run CMD" Command="{Binding LoadPresetCommand}" CommandParameter="RunCmd" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4" FontSize="11"/>
-                                    <Button Content="PowerShell" Command="{Binding LoadPresetCommand}" CommandParameter="PowerShell" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4" FontSize="11"/>
-                                    <Button Content="Recon" Command="{Binding LoadPresetCommand}" CommandParameter="Recon" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4" FontSize="11"/>
+                                    <Button Command="{Binding LoadPresetCommand}" CommandParameter="Hello" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="10,5">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource IconCode}" Fill="{StaticResource TextSecondaryBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Hello" FontSize="11" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding LoadPresetCommand}" CommandParameter="RunCmd" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="10,5">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentAmberBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Run CMD" FontSize="11" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding LoadPresetCommand}" CommandParameter="PowerShell" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="10,5">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource IconLightning}" Fill="{StaticResource AccentCyanBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="PowerShell" FontSize="11" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding LoadPresetCommand}" CommandParameter="Recon" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="10,5">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource IconCrosshair}" Fill="#A78BFA" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Recon" FontSize="11" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
                                 </WrapPanel>
 
                                 <TextBlock Text="Payload Script:" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
@@ -203,18 +273,24 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Grid.Column="0"
-                                Content="Execute Attack"
                                 Command="{Binding ExecuteCommand}"
                                 Style="{StaticResource PrimaryButtonStyle}"
-                                Height="42"
-                                FontSize="13"/>
+                                Height="44">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconPlay}" Fill="#0B0F19" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Execute Attack" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
 
                         <Button Grid.Column="2"
-                                Content="Cancel"
                                 Command="{Binding CancelCommand}"
                                 Style="{StaticResource DangerButtonStyle}"
-                                Height="42"
-                                FontSize="13"/>
+                                Height="44">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconStop}" Fill="#F9FAFB" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Cancel" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </Grid>
                 </StackPanel>
 
@@ -233,13 +309,22 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="EXECUTION CONSOLE OUTPUT" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                                <Button Grid.Column="1" Content="Clear Console" Command="{Binding ClearConsoleCommand}" Style="{StaticResource SecondaryButtonStyle}" Padding="8,4" FontSize="11"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentEmeraldBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="EXECUTION CONSOLE OUTPUT" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <Button Grid.Column="1" Command="{Binding ClearConsoleCommand}" Style="{StaticResource SecondaryButtonStyle}" Padding="10,5">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Path Data="{StaticResource IconTrash}" Fill="{StaticResource TextSecondaryBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Clear Console" FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                             </Grid>
 
                             <TextBox Grid.Row="1"
                                      Text="{Binding OutputConsole, Mode=OneWay}"
-                                     Height="240"
+                                     Height="250"
                                      IsReadOnly="True"
                                      VerticalScrollBarVisibility="Auto"
                                      HorizontalScrollBarVisibility="Auto"
@@ -256,14 +341,18 @@
                     <Border Style="{StaticResource CardBorderStyle}"
                             Visibility="{Binding HasVerificationResults, Converter={StaticResource BoolToVis}}">
                         <StackPanel>
-                            <TextBlock Text="AUTOMATED VERIFICATION TEST RESULTS" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,0,12"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentCyanBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="AUTOMATED VERIFICATION TEST RESULTS" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
 
                             <ItemsControl ItemsSource="{Binding VerificationScenarios}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,8">
+                                        <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12,10" Margin="0,0,0,8">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                     <ColumnDefinition Width="10"/>
@@ -274,14 +363,31 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="12" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Duration}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                <Path Grid.Row="0" Grid.Column="0" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,10,0">
+                                                    <Path.Style>
+                                                        <Style TargetType="Path">
+                                                            <Setter Property="Fill" Value="{Binding StatusColor}"/>
+                                                            <Setter Property="Data" Value="{StaticResource IconRefresh}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Status}" Value="PASS">
+                                                                    <Setter Property="Data" Value="{StaticResource IconCheck}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Status}" Value="FAIL">
+                                                                    <Setter Property="Data" Value="{StaticResource IconClose}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Path.Style>
+                                                </Path>
 
-                                                <Border Grid.Row="0" Grid.Column="3" CornerRadius="4" Padding="8,2" Background="#111827">
+                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name}" FontSize="12" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Duration}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+
+                                                <Border Grid.Row="0" Grid.Column="4" CornerRadius="4" Padding="8,2" Background="#111827" VerticalAlignment="Center">
                                                     <TextBlock Text="{Binding Status}" FontSize="11" FontWeight="Black" Foreground="{Binding StatusColor}"/>
                                                 </Border>
 
-                                                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Text="{Binding Details}" FontSize="10" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Details}" FontSize="10" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
