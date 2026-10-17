@@ -113,6 +113,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<OverviewViewModel>();
         services.AddSingleton<DevicesViewModel>();
         services.AddSingleton<MetricsViewModel>();
+        services.AddSingleton<SimulatorViewModel>();
         services.AddSingleton<AuditLogViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<MainViewModel>();

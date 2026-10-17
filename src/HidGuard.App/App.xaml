@@ -1,11 +1,32 @@
 <Application x:Class="HidGuard.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:HidGuard.App.ViewModels"
+             xmlns:views="clr-namespace:HidGuard.App.Views">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type vm:OverviewViewModel}">
+                <views:OverviewView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:DevicesViewModel}">
+                <views:DevicesView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:MetricsViewModel}">
+                <views:MetricsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:AuditLogViewModel}">
+                <views:AuditLogView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                <views:SettingsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SimulatorViewModel}">
+                <views:SimulatorView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

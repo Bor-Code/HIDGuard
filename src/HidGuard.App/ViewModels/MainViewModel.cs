@@ -21,6 +21,7 @@ public sealed class MainViewModel : ObservableObject
     public OverviewViewModel Overview { get; }
     public DevicesViewModel Devices { get; }
     public MetricsViewModel Metrics { get; }
+    public SimulatorViewModel Simulator { get; }
     public AuditLogViewModel AuditLog { get; }
     public SettingsViewModel Settings { get; }
 
@@ -57,6 +58,7 @@ public sealed class MainViewModel : ObservableObject
         OverviewViewModel overview,
         DevicesViewModel devices,
         MetricsViewModel metrics,
+        SimulatorViewModel simulator,
         AuditLogViewModel auditLog,
         SettingsViewModel settings,
         IUacElevationService uacElevationService,
@@ -67,6 +69,7 @@ public sealed class MainViewModel : ObservableObject
         Overview = overview ?? throw new ArgumentNullException(nameof(overview));
         Devices = devices ?? throw new ArgumentNullException(nameof(devices));
         Metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
+        Simulator = simulator ?? throw new ArgumentNullException(nameof(simulator));
         AuditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         Settings = settings ?? throw new ArgumentNullException(nameof(settings));
         this.uacElevationService = uacElevationService ?? throw new ArgumentNullException(nameof(uacElevationService));
@@ -95,6 +98,10 @@ public sealed class MainViewModel : ObservableObject
             case "Metrics":
                 CurrentView = Metrics;
                 CurrentTabName = "Metrics";
+                break;
+            case "Simulator":
+                CurrentView = Simulator;
+                CurrentTabName = "Simulator";
                 break;
             case "AuditLog":
                 CurrentView = AuditLog;
