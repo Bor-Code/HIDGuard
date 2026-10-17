@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="850" d:DesignWidth="950">
+             d:DesignHeight="950" d:DesignWidth="950">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="24">
 
@@ -16,19 +16,19 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Width="40" Height="40" CornerRadius="6" Background="{StaticResource AccentSoftBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconSettings}" Fill="{StaticResource AccentBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Width="40" Height="40" CornerRadius="6" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconSettings}" Fill="{DynamicResource AccentBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
                             <TextBlock Text="GÜVENLİK MOTORU YAPILANDIRMASI" Style="{StaticResource MetricLabelText}" Margin="0,0,8,0"/>
-                            <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1" VerticalAlignment="Center">
-                                <TextBlock Text="KALICI YAPILANDIRMA" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}"/>
+                            <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1" VerticalAlignment="Center">
+                                <TextBlock Text="KALICI YAPILANDIRMA" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource SuccessBrush}"/>
                             </Border>
                         </StackPanel>
                         <TextBlock Text="Güvenlik Yapılandırması ve Motor Ayarları" Style="{StaticResource PageTitleText}"/>
-                        <TextBlock Text="Zamanlama analizi hassasiyeti, otomatik savunma eylemleri ve sistem tepsisi entegrasyonunu yapılandırın."
+                        <TextBlock Text="Zamanlama analizi hassasiyeti, renk teması, otomatik savunma eylemleri ve sistem tepsisi entegrasyonunu yapılandırın."
                                    Style="{StaticResource PageSubtitleText}"/>
                     </StackPanel>
 
@@ -38,7 +38,7 @@
                                 Padding="12,6"
                                 Margin="0,0,10,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconUndo}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <Path Data="{StaticResource IconUndo}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
                                 <TextBlock Text="Varsayılanlara Sıfırla" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -64,7 +64,104 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconSliders}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Görünüm ve Renk Teması" Style="{StaticResource SectionTitleText}"/>
+                        </StackPanel>
+                        <TextBlock Text="3 Farklı Karanlık Siber Güvenlik Teması" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <Grid Margin="0,4,0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="14,12">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Theme}" Value="RedBlack">
+                                            <Setter Property="BorderBrush" Value="#DC2626"/>
+                                            <Setter Property="Background" Value="#2A1316"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <RadioButton GroupName="AppThemeSettingsGroup"
+                                         IsChecked="{Binding Theme, Converter={StaticResource StringEqualsConverter}, ConverterParameter=RedBlack}"
+                                         Cursor="Hand">
+                                <StackPanel Margin="6,0,0,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Kırmızı - Siyah" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <Border Background="#450A0A" CornerRadius="3" Padding="4,1" Margin="6,0,0,0">
+                                            <TextBlock Text="Varsayılan" FontSize="9" FontWeight="Bold" Foreground="#FCA5A5"/>
+                                        </Border>
+                                    </StackPanel>
+                                    <TextBlock Text="Koyu obsidyen zemin ve kızıl siber savunma vurguları." FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </Border>
+
+                        <Border Grid.Column="2" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="14,12">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Theme}" Value="GreenBlack">
+                                            <Setter Property="BorderBrush" Value="#10B981"/>
+                                            <Setter Property="Background" Value="#0D2B1E"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <RadioButton GroupName="AppThemeSettingsGroup"
+                                         IsChecked="{Binding Theme, Converter={StaticResource StringEqualsConverter}, ConverterParameter=GreenBlack}"
+                                         Cursor="Hand">
+                                <StackPanel Margin="6,0,0,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="10" Height="10" Fill="#10B981" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Yeşil - Siyah" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Koyu terminal zemin ve zümrüt Matrix uç birim vurguları." FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </Border>
+
+                        <Border Grid.Column="4" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="14,12">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Theme}" Value="BlueBlack">
+                                            <Setter Property="BorderBrush" Value="#3B82F6"/>
+                                            <Setter Property="Background" Value="#0F2042"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <RadioButton GroupName="AppThemeSettingsGroup"
+                                         IsChecked="{Binding Theme, Converter={StaticResource StringEqualsConverter}, ConverterParameter=BlueBlack}"
+                                         Cursor="Hand">
+                                <StackPanel Margin="6,0,0,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="10" Height="10" Fill="#3B82F6" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Mavi - Siyah" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Koyu uzay zemin ve kobalt siber istihbarat vurguları." FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconSliders}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Zamanlama Algılama Eşikleri" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
                         <TextBlock Text="Ritim ve İstatistiki Sınırlar" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -136,7 +233,7 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconShieldCheck}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Aktif Savunma ve Karşı Önlemler" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
                         <TextBlock Text="Anında Müdahale ve Engelleme Eylemleri" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -175,7 +272,7 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconDatabase}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconDatabase}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Şifreli Olay Deposu ve Adli Delil" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
                         <TextBlock Text="Windows DPAPI ile Korunan Yerel Olay Kaydı" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -252,7 +349,7 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconBell}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconBell}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Uygulama ve Sistem Tepsisi Seçenekleri" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
                         <TextBlock Text="Windows Entegrasyonu" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>

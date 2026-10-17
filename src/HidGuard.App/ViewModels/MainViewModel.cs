@@ -18,6 +18,8 @@ public sealed class MainViewModel : ObservableObject
     private object currentView;
     private string currentTabName = "Overview";
 
+    private readonly IThemeService themeService;
+
     public OverviewViewModel Overview { get; }
     public DevicesViewModel Devices { get; }
     public MetricsViewModel Metrics { get; }
@@ -37,6 +39,8 @@ public sealed class MainViewModel : ObservableObject
         set => SetProperty(ref currentTabName, value);
     }
 
+    public string CurrentTheme => themeService.CurrentThemeName;
+
     public bool IsElevated => uacElevationService.IsProcessElevated;
 
     public bool IsProtectionActive
@@ -53,6 +57,7 @@ public sealed class MainViewModel : ObservableObject
     public ICommand NavigateCommand { get; }
     public ICommand ToggleProtectionCommand { get; }
     public ICommand RestartElevatedCommand { get; }
+    public ICommand ChangeThemeCommand { get; }
 
     public MainViewModel(
         OverviewViewModel overview,
@@ -64,7 +69,8 @@ public sealed class MainViewModel : ObservableObject
         IUacElevationService uacElevationService,
         ITrayIconService trayIconService,
         IPipelineEventAggregator eventAggregator,
-        IAuditTrailService auditTrailService)
+        IAuditTrailService auditTrailService,
+        IThemeService? themeService = null)
     {
         Overview = overview ?? throw new ArgumentNullException(nameof(overview));
         Devices = devices ?? throw new ArgumentNullException(nameof(devices));
@@ -76,14 +82,29 @@ public sealed class MainViewModel : ObservableObject
         this.trayIconService = trayIconService ?? throw new ArgumentNullException(nameof(trayIconService));
         this.eventAggregator = eventAggregator ?? throw new ArgumentNullException(nameof(eventAggregator));
         this.auditTrailService = auditTrailService ?? throw new ArgumentNullException(nameof(auditTrailService));
+        this.themeService = themeService ?? new ThemeService();
+        this.themeService.ThemeChanged += (_, _) => OnPropertyChanged(nameof(CurrentTheme));
 
         currentView = Overview;
 
         NavigateCommand = new RelayCommand<string>(NavigateTo);
         ToggleProtectionCommand = new RelayCommand(ToggleProtection);
         RestartElevatedCommand = new RelayCommand(RestartElevated);
+        ChangeThemeCommand = new RelayCommand<string>(ChangeTheme);
 
         SubscribeToEvents();
+    }
+
+    private void ChangeTheme(string? themeName)
+    {
+        if (string.IsNullOrWhiteSpace(themeName))
+        {
+            return;
+        }
+
+        themeService.ApplyTheme(themeName);
+        Settings.Theme = themeName;
+        OnPropertyChanged(nameof(CurrentTheme));
     }
 
     public void NavigateTo(string? target)

@@ -9,7 +9,7 @@
         Height="780" Width="1200"
         MinHeight="650" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource PageBrush}">
+        Background="{DynamicResource PageBrush}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -25,7 +25,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+        <Border Grid.Column="0" Background="{DynamicResource SidebarBrush}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -35,16 +35,16 @@
 
                 <StackPanel Grid.Row="0" Margin="18,20,18,16">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Background="{StaticResource AccentBrush}" CornerRadius="6" Width="32" Height="32" Margin="0,0,10,0">
+                        <Border Background="{DynamicResource AccentBrush}" CornerRadius="6" Width="32" Height="32" Margin="0,0,10,0">
                             <Path Data="{StaticResource IconShieldCheck}" Fill="White" Width="17" Height="17" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="HIDGUARD" FontSize="15" FontWeight="Bold" Foreground="White"/>
-                            <TextBlock Text="v1.0.0 Kurumsal" FontSize="10" Foreground="{StaticResource SidebarMutedBrush}"/>
+                            <TextBlock Text="v1.0.0 Kurumsal" FontSize="10" Foreground="{DynamicResource SidebarMutedBrush}"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock Text="Donanım Güvenlik Merkezi" FontSize="11" Foreground="{StaticResource SidebarMutedBrush}" Margin="0,8,0,0"/>
-                    <Border Height="1" Background="{StaticResource SidebarDividerBrush}" Margin="0,14,0,0"/>
+                    <TextBlock Text="Donanım Güvenlik Merkezi" FontSize="11" Foreground="{DynamicResource SidebarMutedBrush}" Margin="0,8,0,0"/>
+                    <Border Height="1" Background="{DynamicResource SidebarDividerBrush}" Margin="0,14,0,0"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="8,0">
@@ -53,8 +53,8 @@
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarNavButtonStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentTabName}" Value="Overview">
-                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource SidebarIndicatorBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SidebarActiveBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SidebarIndicatorBrush}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -72,8 +72,8 @@
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarNavButtonStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentTabName}" Value="Devices">
-                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource SidebarIndicatorBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SidebarActiveBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SidebarIndicatorBrush}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -91,8 +91,8 @@
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarNavButtonStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentTabName}" Value="Metrics">
-                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource SidebarIndicatorBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SidebarActiveBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SidebarIndicatorBrush}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -110,8 +110,8 @@
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarNavButtonStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentTabName}" Value="Simulator">
-                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource SidebarIndicatorBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SidebarActiveBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SidebarIndicatorBrush}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -129,8 +129,8 @@
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarNavButtonStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentTabName}" Value="AuditLog">
-                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource SidebarIndicatorBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SidebarActiveBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SidebarIndicatorBrush}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -148,8 +148,8 @@
                             <Style TargetType="Button" BasedOn="{StaticResource SidebarNavButtonStyle}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding CurrentTabName}" Value="Settings">
-                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
-                                        <Setter Property="BorderBrush" Value="{StaticResource SidebarIndicatorBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SidebarActiveBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SidebarIndicatorBrush}"/>
                                         <Setter Property="Foreground" Value="White"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                     </DataTrigger>
@@ -164,8 +164,8 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Margin="14,0,14,16">
-                    <Border Height="1" Background="{StaticResource SidebarDividerBrush}" Margin="0,0,0,12"/>
-                    <Border CornerRadius="6" Padding="12,8" Background="#16243A" BorderBrush="{StaticResource SidebarDividerBrush}" BorderThickness="1">
+                    <Border Height="1" Background="{DynamicResource SidebarDividerBrush}" Margin="0,0,0,12"/>
+                    <Border CornerRadius="6" Padding="12,8" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -174,10 +174,10 @@
                             <Border Width="8" Height="8" CornerRadius="4" Margin="0,0,10,0" VerticalAlignment="Center">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+                                        <Setter Property="Background" Value="{DynamicResource SuccessBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsElevated}" Value="False">
-                                                <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+                                                <Setter Property="Background" Value="{DynamicResource WarningBrush}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -196,7 +196,7 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <TextBlock FontSize="10" Foreground="{StaticResource SidebarMutedBrush}" Margin="0,1,0,0">
+                                <TextBlock FontSize="10" Foreground="{DynamicResource SidebarMutedBrush}" Margin="0,1,0,0">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Text" Value="Tam Koruma Devrede"/>
@@ -221,7 +221,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="28,0">
+            <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="28,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -229,7 +229,7 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}">
+                        <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Text" Value="Genel Bakış"/>
@@ -256,15 +256,103 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="15" Padding="3" Margin="0,0,14,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Command="{Binding ChangeThemeCommand}" CommandParameter="RedBlack" FocusVisualStyle="{x:Null}" Cursor="Hand" Margin="2,0" Padding="8,4" BorderThickness="1">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentTheme}" Value="RedBlack">
+                                                    <Setter Property="Background" Value="#2A1316"/>
+                                                    <Setter Property="BorderBrush" Value="#DC2626"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="8" Height="8" Fill="#EF4444" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Kırmızı" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Command="{Binding ChangeThemeCommand}" CommandParameter="GreenBlack" FocusVisualStyle="{x:Null}" Cursor="Hand" Margin="2,0" Padding="8,4" BorderThickness="1">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentTheme}" Value="GreenBlack">
+                                                    <Setter Property="Background" Value="#0D2B1E"/>
+                                                    <Setter Property="BorderBrush" Value="#10B981"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Yeşil" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Command="{Binding ChangeThemeCommand}" CommandParameter="BlueBlack" FocusVisualStyle="{x:Null}" Cursor="Hand" Margin="2,0" Padding="8,4" BorderThickness="1">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentTheme}" Value="BlueBlack">
+                                                    <Setter Property="Background" Value="#0F2042"/>
+                                                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse Width="8" Height="8" Fill="#3B82F6" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Mavi" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
                         <Border CornerRadius="14" Padding="12,5" Margin="0,0,12,0" BorderThickness="1">
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="Background" Value="{StaticResource SuccessSoftBrush}"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource SuccessBorderBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource SuccessSoftBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SuccessBorderBrush}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
-                                            <Setter Property="Background" Value="{StaticResource WarningSoftBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource WarningBorderBrush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource WarningSoftBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource WarningBorderBrush}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -273,10 +361,10 @@
                                 <Ellipse Width="7" Height="7" Margin="0,0,8,0" VerticalAlignment="Center">
                                     <Ellipse.Style>
                                         <Style TargetType="Ellipse">
-                                            <Setter Property="Fill" Value="{StaticResource SuccessBrush}"/>
+                                            <Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
-                                                    <Setter Property="Fill" Value="{StaticResource WarningBrush}"/>
+                                                    <Setter Property="Fill" Value="{DynamicResource WarningBrush}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -286,11 +374,11 @@
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Text" Value="KORUMA AKTİF"/>
-                                            <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
                                                     <Setter Property="Text" Value="KORUMA DURAKLATILDI"/>
-                                                    <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -306,8 +394,8 @@
                                     <Setter Property="Content" Value="Korumayı Duraklat"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
-                                            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
-                                            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                                             <Setter Property="Foreground" Value="White"/>
                                             <Setter Property="Content" Value="Korumayı Etkinleştir"/>
                                         </DataTrigger>

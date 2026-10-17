@@ -17,8 +17,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Background="{StaticResource AccentSoftBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Width="40" Height="40" Margin="0,0,16,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentBrush}" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Width="40" Height="40" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource AccentBrush}" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -27,10 +27,10 @@
                                    Style="{StaticResource PageSubtitleText}"/>
                     </StackPanel>
 
-                    <Border Grid.Column="2" CornerRadius="4" Padding="12,6" Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
+                    <Border Grid.Column="2" CornerRadius="4" Padding="12,6" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Ellipse Width="8" Height="8" Fill="{Binding StatusColor}" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding StatusText, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding StatusText, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -44,8 +44,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="4" Width="32" Height="32" Margin="0,0,12,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentBrush}" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Background="{DynamicResource AccentSoftBrush}" CornerRadius="4" Width="32" Height="32" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconShieldCheck}" Fill="{DynamicResource AccentBrush}" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -63,12 +63,12 @@
                                   Margin="0,0,24,0"/>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Geri Sayım:" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Geri Sayım:" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <TextBox Text="{Binding CountdownSeconds, UpdateSourceTrigger=PropertyChanged}"
                                      Width="48"
                                      HorizontalContentAlignment="Center"
                                      Style="{StaticResource InputTextBoxStyle}"/>
-                            <TextBlock Text="sn" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                            <TextBlock Text="sn" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -84,7 +84,7 @@
                 <Border Grid.Column="0" Style="{StaticResource CardStyle}" VerticalAlignment="Top">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconCrosshair}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconCrosshair}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="SALDIRI PROFİLLERİ" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
 
@@ -95,7 +95,7 @@
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
-                                    <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
                                     <Setter Property="Margin" Value="0,0,0,6"/>
                                     <Setter Property="Padding" Value="10,8"/>
                                     <Setter Property="Cursor" Value="Hand"/>
@@ -104,7 +104,7 @@
                                             <ControlTemplate TargetType="ListBoxItem">
                                                 <Border x:Name="border"
                                                         Background="{TemplateBinding Background}"
-                                                        BorderBrush="{StaticResource BorderBrush}"
+                                                        BorderBrush="{DynamicResource BorderBrush}"
                                                         BorderThickness="1"
                                                         CornerRadius="4"
                                                         Padding="{TemplateBinding Padding}">
@@ -112,12 +112,12 @@
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BorderStrongBrush}"/>
-                                                        <Setter TargetName="border" Property="Background" Value="{StaticResource SurfaceHoverBrush}"/>
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}"/>
+                                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource SurfaceHoverBrush}"/>
                                                     </Trigger>
                                                     <Trigger Property="IsSelected" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
-                                                        <Setter TargetName="border" Property="Background" Value="{StaticResource AccentSoftBrush}"/>
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -141,7 +141,7 @@
                                         <Path Grid.Row="0" Grid.Column="0" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,8,0">
                                             <Path.Style>
                                                 <Style TargetType="Path">
-                                                    <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
+                                                    <Setter Property="Fill" Value="{DynamicResource AccentBrush}"/>
                                                     <Setter Property="Data" Value="{StaticResource IconTerminal}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Id}" Value="burst">
@@ -170,12 +170,12 @@
                                             </Path.Style>
                                         </Path>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-                                        <Border Grid.Row="0" Grid.Column="2" CornerRadius="3" Padding="6,1" Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Category, Converter={StaticResource TurkishStatusConverter}}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <Border Grid.Row="0" Grid.Column="2" CornerRadius="3" Padding="6,1" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Category, Converter={StaticResource TurkishStatusConverter}}" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                                         </Border>
 
-                                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Description, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,3,0,0" TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Description, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,3,0,0" TextWrapping="Wrap"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -189,11 +189,11 @@
                         <StackPanel>
                             <Grid Margin="0,0,0,12">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <Path Data="{StaticResource IconSliders}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="SEÇİLİ PROFİL VE PARAMETRELER" Style="{StaticResource SectionTitleText}"/>
                                 </StackPanel>
                                 <TextBlock Text="{Binding SelectedProfile.Title, Converter={StaticResource TurkishStatusConverter}}"
-                                           FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"
+                                           FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"
                                            HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
@@ -218,35 +218,35 @@
                             </StackPanel>
 
                             <StackPanel Visibility="{Binding IsDuckyScriptSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
-                                <TextBlock Text="Hazır Şablonlar:" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                                <TextBlock Text="Hazır Şablonlar:" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
                                 <WrapPanel Margin="0,0,0,10">
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="Hello" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Path Data="{StaticResource IconCode}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <Path Data="{StaticResource IconCode}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="Selam" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="RunCmd" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="CMD Çalıştır" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="PowerShell" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Path Data="{StaticResource IconLightning}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <Path Data="{StaticResource IconLightning}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="PowerShell" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="Recon" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Path Data="{StaticResource IconCrosshair}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                                            <Path Data="{StaticResource IconCrosshair}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="Keşif" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                 </WrapPanel>
 
-                                <TextBlock Text="Yük Betiği (DuckyScript):" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Yük Betiği (DuckyScript):" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,4"/>
                                 <TextBox Text="{Binding DuckyScriptText, UpdateSourceTrigger=PropertyChanged}"
                                          Height="110"
                                          AcceptsReturn="True"
@@ -258,7 +258,7 @@
 
                             <StackPanel Visibility="{Binding IsVerificationSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
                                 <TextBlock Text="Yalıtılmış sentetik girdi hattı üzerinde 7 otomatik güvenlik senaryosunu çalıştırarak seri saldırı engelleme, düşük sapmalı düzenlilik tespiti, insan yazımı geçişi ve gizlilik ilkelerini denetler."
-                                           FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
+                                           FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
                             </StackPanel>
 
                             <Grid Margin="0,4,0,0">
@@ -283,7 +283,7 @@
                                         Style="{StaticResource DangerButtonStyle}"
                                         Height="36">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Path Data="{StaticResource IconStop}" Fill="{StaticResource DangerBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <Path Data="{StaticResource IconStop}" Fill="{DynamicResource DangerBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="Durdur" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
@@ -305,13 +305,13 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="KONSOL ÇIKTISI" Style="{StaticResource SectionTitleText}"/>
                                 </StackPanel>
 
                                 <Button Grid.Column="1" Command="{Binding ClearConsoleCommand}" Style="{StaticResource SecondaryButtonStyle}" Padding="10,5">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Path Data="{StaticResource IconTrash}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <Path Data="{StaticResource IconTrash}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
                                         <TextBlock Text="Konsolu Temizle" FontSize="11" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
@@ -325,9 +325,9 @@
                                      HorizontalScrollBarVisibility="Auto"
                                      FontFamily="Consolas"
                                      FontSize="11"
-                                     Background="#16243A"
-                                     Foreground="#E2E8F0"
-                                     BorderBrush="{StaticResource BorderBrush}"
+                                     Background="{DynamicResource SurfaceBrush}"
+                                     Foreground="{DynamicResource TextPrimaryBrush}"
+                                     BorderBrush="{DynamicResource BorderBrush}"
                                      BorderThickness="1"
                                      Padding="12"/>
                         </Grid>
@@ -337,14 +337,14 @@
                             Visibility="{Binding HasVerificationResults, Converter={StaticResource BoolToVisibilityConverter}}">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <Path Data="{StaticResource IconShieldCheck}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                 <TextBlock Text="OTOMATİK DOĞRULAMA TEST SONUÇLARI" Style="{StaticResource SectionTitleText}"/>
                             </StackPanel>
 
                             <ItemsControl ItemsSource="{Binding VerificationScenarios}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,10" Margin="0,0,0,6">
+                                        <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,10" Margin="0,0,0,6">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
@@ -375,14 +375,14 @@
                                                     </Path.Style>
                                                 </Path>
 
-                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-                                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Duration}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Duration}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
 
-                                                <Border Grid.Row="0" Grid.Column="4" CornerRadius="3" Padding="8,2" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
+                                                <Border Grid.Row="0" Grid.Column="4" CornerRadius="3" Padding="8,2" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
                                                     <TextBlock Text="{Binding Status, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" FontWeight="Bold" Foreground="{Binding StatusColor}"/>
                                                 </Border>
 
-                                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Details}" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Details}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

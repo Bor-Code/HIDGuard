@@ -153,4 +153,32 @@ public sealed class MainViewModelTests
 
         vm.IsElevated.ShouldBeTrue();
     }
+
+    [Fact]
+    public void MainViewModelChangeThemeCommandShouldUpdateCurrentTheme()
+    {
+        var pipeline = new StubKeystrokePipeline();
+        var audit = new StubAuditTrailService();
+        var trust = new StubTrustStore();
+        var config = new StubConfigurationManager();
+        var eventAggregator = new PipelineEventAggregator();
+
+        var vm = new MainViewModel(
+            new OverviewViewModel(pipeline, audit),
+            new DevicesViewModel(trust),
+            new MetricsViewModel(),
+            new SimulatorViewModel(),
+            new AuditLogViewModel(audit),
+            new SettingsViewModel(config),
+            new StubUacElevationService(),
+            new StubTrayIconService(),
+            eventAggregator,
+            audit);
+
+        vm.CurrentTheme.ShouldBe("RedBlack");
+        vm.ChangeThemeCommand.Execute("GreenBlack");
+        vm.CurrentTheme.ShouldBe("GreenBlack");
+        vm.ChangeThemeCommand.Execute("BlueBlack");
+        vm.CurrentTheme.ShouldBe("BlueBlack");
+    }
 }

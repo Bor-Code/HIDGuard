@@ -99,7 +99,7 @@ public sealed class ConfigurationTests
             var loaded = await manager.LoadAsync();
 
             loaded.ShouldNotBeNull();
-            loaded.Ui.Theme.ShouldBe("Dark");
+            loaded.Ui.Theme.ShouldBe("RedBlack");
             loaded.Timing.WindowSize.ShouldBe(30);
         }
         finally

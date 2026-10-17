@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using HidGuard.App.Mvvm;
+using HidGuard.App.Services;
 using HidGuard.Core.Configuration;
 using HidGuard.Core.Timing;
 
@@ -27,7 +28,8 @@ public sealed class SettingsViewModel : ObservableObject
     private bool startMinimizedToTray = true;
     private bool notifyOnBlockedDevices = true;
     private bool notifyOnAllowedDevices;
-    private string theme = "Dark";
+    private string theme = "RedBlack";
+    private readonly IThemeService? themeService;
 
     private bool enableOptInPayloadCapture;
     private int captureWindowKeystrokes = 64;
@@ -132,7 +134,13 @@ public sealed class SettingsViewModel : ObservableObject
     public string Theme
     {
         get => theme;
-        set => SetProperty(ref theme, value);
+        set
+        {
+            if (SetProperty(ref theme, value))
+            {
+                themeService?.ApplyTheme(value);
+            }
+        }
     }
 
     public bool EnableOptInPayloadCapture
@@ -188,10 +196,12 @@ public sealed class SettingsViewModel : ObservableObject
 
     public SettingsViewModel(
         IConfigurationManager configurationManager,
-        IStartupService? startupService = null)
+        IStartupService? startupService = null,
+        IThemeService? themeService = null)
     {
         this.configurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
         this.startupService = startupService;
+        this.themeService = themeService;
 
         SaveSettingsCommand = new AsyncRelayCommand(SaveSettingsAsync);
         ResetDefaultsCommand = new RelayCommand(ResetDefaults);
@@ -225,7 +235,7 @@ public sealed class SettingsViewModel : ObservableObject
         StartMinimizedToTray = config.Ui.StartMinimizedToTray;
         NotifyOnBlockedDevices = config.Ui.NotifyOnBlockedDevices;
         NotifyOnAllowedDevices = config.Ui.NotifyOnAllowedDevices;
-        Theme = config.Ui.Theme;
+        Theme = string.IsNullOrWhiteSpace(config.Ui.Theme) ? "RedBlack" : config.Ui.Theme;
 
         EnableOptInPayloadCapture = config.Incidents.EnableOptInPayloadCapture;
         CaptureWindowKeystrokes = config.Incidents.CaptureWindowKeystrokes;

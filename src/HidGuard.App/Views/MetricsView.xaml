@@ -17,8 +17,8 @@
 
                     <StackPanel VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
-                            <TextBlock Text="ZAMANLAMA ANALİZİ" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,8,0"/>
-                            <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1">
+                            <TextBlock Text="ZAMANLAMA ANALİZİ" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                            <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1">
                                 <TextBlock Text="{Binding ThreatLevelText, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" FontWeight="Bold" Foreground="{Binding ThreatLevelColor}"/>
                             </Border>
                         </StackPanel>
@@ -27,22 +27,22 @@
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,8" Margin="0,0,10,0">
+                        <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,8" Margin="0,0,10,0">
                             <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="İNSAN GÜVEN SKORU" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="İNSAN GÜVEN SKORU" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                    <TextBlock Text="{Binding HumanConfidenceScore}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}"/>
-                                    <TextBlock Text="%" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                    <TextBlock Text="{Binding HumanConfidenceScore}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}"/>
+                                    <TextBlock Text="%" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
 
-                        <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,8">
+                        <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,8">
                             <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="ANOMALİ SKORU" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="ANOMALİ SKORU" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
                                     <TextBlock Text="{Binding AnomalyScore}" FontSize="18" FontWeight="Bold" Foreground="{Binding ThreatLevelColor}"/>
-                                    <TextBlock Text="/100" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                    <TextBlock Text="/100" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -84,12 +84,12 @@
                     <StackPanel>
                         <TextBlock Text="DEĞİŞKENLİK (CV)" Style="{StaticResource MetricLabelText}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <TextBlock Text="{Binding CoefficientOfVariation}" Style="{StaticResource MetricValueText}" Foreground="{StaticResource WarningBrush}"/>
+                            <TextBlock Text="{Binding CoefficientOfVariation}" Style="{StaticResource MetricValueText}" Foreground="{DynamicResource WarningBrush}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                            <TextBlock Text="Std Sapma: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Text="{Binding CurrentStdDevIntervalMs}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock Text=" ms" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Std Sapma: " FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding CurrentStdDevIntervalMs}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock Text=" ms" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -98,13 +98,13 @@
                     <StackPanel>
                         <TextBlock Text="İNSAN-ALTI ORAN" Style="{StaticResource MetricLabelText}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <TextBlock Text="{Binding SubHumanRatioPercent}" Style="{StaticResource MetricValueText}" Foreground="{StaticResource DangerBrush}"/>
+                            <TextBlock Text="{Binding SubHumanRatioPercent}" Style="{StaticResource MetricValueText}" Foreground="{DynamicResource DangerBrush}"/>
                             <TextBlock Text="%" Style="{StaticResource MetricUnitText}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                            <TextBlock Text="Min Aralık: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Text="{Binding MinimumIntervalMs}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock Text=" ms" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Min Aralık: " FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding MinimumIntervalMs}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock Text=" ms" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -114,7 +114,7 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,16">
                         <TextBlock Text="Zamanlama Dağılım Histogramı" Style="{StaticResource SectionTitleText}"/>
-                        <TextBlock Text="Milisaniye dilimlerine göre yoğunluk" FontSize="12" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Milisaniye dilimlerine göre yoğunluk" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
                     <ItemsControl ItemsSource="{Binding HistogramBuckets}">
@@ -133,12 +133,12 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Row="0" Text="{Binding Percentage, StringFormat='{}{0}%'}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                                    <TextBlock Grid.Row="0" Text="{Binding Percentage, StringFormat='{}{0}%'}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,6"/>
 
                                     <Border Grid.Row="1" Width="36" Height="{Binding BarHeight}" Background="{Binding ColorBrush}" CornerRadius="3" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
-                                    <TextBlock Grid.Row="2" Text="{Binding Label}" FontSize="11" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,6,0,2"/>
-                                    <TextBlock Grid.Row="3" Text="{Binding Count, StringFormat='{}{0} tuş'}" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Row="2" Text="{Binding Label}" FontSize="11" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,6,0,2"/>
+                                    <TextBlock Grid.Row="3" Text="{Binding Count, StringFormat='{}{0} tuş'}" FontSize="10" Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -150,10 +150,10 @@
                 <StackPanel>
                     <Grid Margin="0,0,0,16">
                         <TextBlock Text="Gerçek Zamanlı Tuş Aralığı Akış Şeridi" Style="{StaticResource SectionTitleText}"/>
-                        <TextBlock Text="Son 30 tuş vuruşunun süreleri" FontSize="12" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Son 30 tuş vuruşunun süreleri" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <Border Background="{StaticResource SurfaceAltBrush}" CornerRadius="4" Padding="12,14" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="4" Padding="12,14" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
                         <ItemsControl ItemsSource="{Binding RecentSamples}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -180,18 +180,18 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="OTURUM TANILAMA BİLGİLERİ" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <TextBlock Text="OTURUM TANILAMA BİLGİLERİ" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                            <TextBlock Text="Aktif Donanım Kimliği: " FontSize="13" Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Text="{Binding ActiveDeviceId}" FontSize="13" FontFamily="{StaticResource MonoFont}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Aktif Donanım Kimliği: " FontSize="13" Foreground="{DynamicResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding ActiveDeviceId}" FontSize="13" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                            <TextBlock Text="Toplam Değerlendirme: " FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Text="{Binding TotalEvaluations}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" | Tespit Edilen Anomali: " FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="8,0,0,0"/>
-                            <TextBlock Text="{Binding AnomalyCount}" FontSize="12" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" | Dizi Uzunluğu: " FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="8,0,0,0"/>
-                            <TextBlock Text="{Binding BurstLength}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
+                            <TextBlock Text="Toplam Değerlendirme: " FontSize="12" Foreground="{DynamicResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding TotalEvaluations}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold"/>
+                            <TextBlock Text=" | Tespit Edilen Anomali: " FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="8,0,0,0"/>
+                            <TextBlock Text="{Binding AnomalyCount}" FontSize="12" Foreground="{DynamicResource DangerBrush}" FontWeight="Bold"/>
+                            <TextBlock Text=" | Dizi Uzunluğu: " FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="8,0,0,0"/>
+                            <TextBlock Text="{Binding BurstLength}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Bold"/>
                         </StackPanel>
                     </StackPanel>
 
