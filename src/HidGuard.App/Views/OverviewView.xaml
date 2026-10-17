@@ -4,27 +4,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="950">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Margin="24">
-            
-            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+        <StackPanel Margin="28,24">
+
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,18" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Ellipse Width="16" Height="16" Fill="{Binding StatusColor}" Margin="0,0,16,0" VerticalAlignment="Center"/>
+
+                    <Border Width="48" Height="48" CornerRadius="12" Background="#162235" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,18,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconShieldCheck}" Fill="{Binding StatusColor}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="System Protection Status" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="SemiBold"/>
-                        <TextBlock Text="{Binding StatusText}" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,2,0,0"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
+                            <TextBlock Text="HARDWARE INTERCEPTION SHIELD" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,8,0"/>
+                            <Border Background="#1E293B" CornerRadius="4" Padding="6,1" VerticalAlignment="Center">
+                                <TextBlock Text="REAL-TIME" FontSize="10" FontWeight="Bold" Foreground="{Binding StatusColor}"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="{Binding StatusText}" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                        <TextBlock Text="Continuous low-level keystroke telemetry active. Microsecond cadence analysis and BadUSB hardware isolation enabled." FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,3,0,0"/>
                     </StackPanel>
+
                     <Button Grid.Column="2"
-                            Content="Toggle Protection"
                             Command="{Binding ToggleProtectionCommand}"
                             Style="{StaticResource PrimaryButtonStyle}"
-                            VerticalAlignment="Center"/>
+                            Padding="16,10"
+                            VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconLock}" Fill="#0B0F19" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Toggle Protection" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
             </Border>
 
@@ -36,36 +52,76 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,8,0">
-                    <StackPanel>
-                        <TextBlock Text="TOTAL KEYSTROKES" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding TotalKeystrokes}" FontSize="24" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,8,0,0"/>
-                        <TextBlock Text="Ingested and analyzed" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0"/>
-                    </StackPanel>
+                <Border Grid.Column="0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="0,0,10,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <TextBlock Text="INGESTED KEYS" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Border HorizontalAlignment="Right" Background="#162E3B" CornerRadius="8" Width="30" Height="30">
+                                <Path Data="{StaticResource IconKeyboard}" Fill="{StaticResource AccentCyanBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Grid.Row="1" Text="{Binding TotalKeystrokes}" FontSize="26" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,8,0,2"/>
+                        <TextBlock Grid.Row="2" Text="Verified manual cadence" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Margin="8,0,8,0">
-                    <StackPanel>
-                        <TextBlock Text="KEYS SUPPRESSED" FontSize="11" Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding SuppressedKeystrokes}" FontSize="24" Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold" Margin="0,8,0,0"/>
-                        <TextBlock Text="Intercepted by hook" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0"/>
-                    </StackPanel>
+                <Border Grid.Column="1" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="5,0,5,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <TextBlock Text="KEYS SUPPRESSED" FontSize="11" Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Border HorizontalAlignment="Right" Background="#382E1E" CornerRadius="8" Width="30" Height="30">
+                                <Path Data="{StaticResource IconBan}" Fill="{StaticResource AccentAmberBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Grid.Row="1" Text="{Binding SuppressedKeystrokes}" FontSize="26" Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold" Margin="0,8,0,2"/>
+                        <TextBlock Grid.Row="2" Text="Low-level hook dropped" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}" Margin="8,0,8,0">
-                    <StackPanel>
-                        <TextBlock Text="ATTACKS DETECTED" FontSize="11" Foreground="{StaticResource AccentRedBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding AttacksDetected}" FontSize="24" Foreground="{StaticResource AccentRedBrush}" FontWeight="Bold" Margin="0,8,0,0"/>
-                        <TextBlock Text="Timing anomalies identified" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0"/>
-                    </StackPanel>
+                <Border Grid.Column="2" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="5,0,5,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <TextBlock Text="ATTACKS DETECTED" FontSize="11" Foreground="{StaticResource AccentRedBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Border HorizontalAlignment="Right" Background="#3B1C1F" CornerRadius="8" Width="30" Height="30">
+                                <Path Data="{StaticResource IconCrosshair}" Fill="{StaticResource AccentRedBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Grid.Row="1" Text="{Binding AttacksDetected}" FontSize="26" Foreground="{StaticResource AccentRedBrush}" FontWeight="Bold" Margin="0,8,0,2"/>
+                        <TextBlock Grid.Row="2" Text="Timing anomalies identified" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    </Grid>
                 </Border>
 
-                <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}" Margin="8,0,0,0">
-                    <StackPanel>
-                        <TextBlock Text="NEUTRALIZED THREATS" FontSize="11" Foreground="{StaticResource AccentEmeraldBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding ThreatsNeutralized}" FontSize="24" Foreground="{StaticResource AccentEmeraldBrush}" FontWeight="Bold" Margin="0,8,0,0"/>
-                        <TextBlock Text="Countermeasures executed" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0"/>
-                    </StackPanel>
+                <Border Grid.Column="3" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="10,0,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <TextBlock Text="NEUTRALIZED" FontSize="11" Foreground="{StaticResource AccentEmeraldBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Border HorizontalAlignment="Right" Background="#16382E" CornerRadius="8" Width="30" Height="30">
+                                <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentEmeraldBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <TextBlock Grid.Row="1" Text="{Binding ThreatsNeutralized}" FontSize="26" Foreground="{StaticResource AccentEmeraldBrush}" FontWeight="Bold" Margin="0,8,0,2"/>
+                        <TextBlock Grid.Row="2" Text="Countermeasures enforced" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                    </Grid>
                 </Border>
             </Grid>
 
@@ -75,48 +131,70 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
+                <Border Grid.Column="0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,10,0">
                     <StackPanel>
-                        <TextBlock Text="LIVE TYPING SPEED" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Center">
+                        <Grid Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconGauge}" Fill="{StaticResource AccentCyanBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="LIVE TYPING CADENCE" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock HorizontalAlignment="Right" Text="Window: 30 Keys" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,10" VerticalAlignment="Center">
                             <TextBlock Text="{Binding CurrentWpm}" FontSize="32" Foreground="{StaticResource AccentCyanBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" WPM" FontSize="16" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,6"/>
+                            <TextBlock Text=" WPM" FontSize="15" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,6"/>
                         </StackPanel>
-                        <TextBlock Text="Calculated over active evaluation window" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,6,0,0"/>
+                        <ProgressBar Value="{Binding CurrentWpm}" Maximum="220" Height="6" Foreground="{StaticResource AccentCyanBrush}" Background="{StaticResource SurfaceBrush}" BorderThickness="0" Margin="0,0,0,8"/>
+                        <TextBlock Text="Physiological human typing ceiling is ~160 WPM. BadUSB emulators typically exceed 1,000 WPM." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}" Margin="10,0,0,0">
+                <Border Grid.Column="1" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18" Margin="10,0,0,0">
                     <StackPanel>
-                        <TextBlock Text="CURRENT ANOMALY SCORE" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Center">
+                        <Grid Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconActivity}" Fill="{StaticResource AccentAmberBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="CURRENT ANOMALY SCORE" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock HorizontalAlignment="Right" Text="Threshold: 65%" FontSize="11" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,10" VerticalAlignment="Center">
                             <TextBlock Text="{Binding LatestAnomalyScore}" FontSize="32" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" %" FontSize="16" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,6"/>
+                            <TextBlock Text=" %" FontSize="15" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,6"/>
                         </StackPanel>
-                        <ProgressBar Value="{Binding LatestAnomalyScore}" Maximum="100" Height="8" Margin="0,8,0,0" Foreground="{StaticResource AccentRedBrush}" Background="{StaticResource SurfaceBrush}" BorderThickness="0"/>
+                        <ProgressBar Value="{Binding LatestAnomalyScore}" Maximum="100" Height="6" Foreground="{StaticResource AccentRedBrush}" Background="{StaticResource SurfaceBrush}" BorderThickness="0" Margin="0,0,0,8"/>
+                        <TextBlock Text="Evaluates sub-human interval ratio, coefficient of variation, and cadence regularity." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
                     </StackPanel>
                 </Border>
             </Grid>
 
-            <Border Style="{StaticResource CardBorderStyle}">
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18">
                 <StackPanel>
-                    <Grid Margin="0,0,0,12">
-                        <TextBlock Text="Recent Security Events" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <Button Content="Reset Statistics" Command="{Binding ClearStatsCommand}" Style="{StaticResource NavButtonStyle}" HorizontalAlignment="Right" Padding="8,4" FontSize="12"/>
+                    <Grid Margin="0,0,0,14">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconAudit}" Fill="#A78BFA" Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Recent Security Events" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Command="{Binding ClearStatsCommand}" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" Padding="10,4" FontSize="11">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconRefresh}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Reset Statistics" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </Grid>
 
                     <ItemsControl ItemsSource="{Binding RecentAlerts}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="6" Padding="12,10" Margin="0,0,0,6">
+                                <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,6">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Width="8" Height="8" CornerRadius="4" Background="{Binding BadgeColor}" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                        <StackPanel Grid.Column="1">
+                                        <Border Width="10" Height="10" CornerRadius="5" Background="{Binding BadgeColor}" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding EventTypeName}" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
                                             <TextBlock Text="{Binding Details}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>

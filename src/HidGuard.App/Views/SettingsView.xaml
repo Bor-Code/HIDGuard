@@ -4,23 +4,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="750" d:DesignWidth="800">
+             d:DesignHeight="850" d:DesignWidth="950">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Margin="24">
+        <StackPanel Margin="28,24">
 
-            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,18" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Security Configuration" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="Configure timing analysis sensitivity, countermeasure behaviors, and tray integration." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+
+                    <Border Width="48" Height="48" CornerRadius="12" Background="#1E293B" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,18,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconSettings}" Fill="{StaticResource TextPrimaryBrush}" Width="22" Height="22" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
+                            <TextBlock Text="SECURITY ENGINE PREFERENCES" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,8,0"/>
+                            <Border Background="#1E293B" CornerRadius="4" Padding="6,1" VerticalAlignment="Center">
+                                <TextBlock Text="PERSISTENT CONFIG" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentEmeraldBrush}"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="Security Configuration &amp; Engine Tuning" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
+                        <TextBlock Text="Configure timing analysis sensitivity, automated countermeasure actions, and system tray integration." FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,3,0,0"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Button Content="Reset Defaults" Command="{Binding ResetDefaultsCommand}" Style="{StaticResource NavButtonStyle}" Margin="0,0,8,0"/>
-                        <Button Content="Save Settings" Command="{Binding SaveSettingsCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Command="{Binding ResetDefaultsCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Padding="14,10"
+                                Margin="0,0,10,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconUndo}" Fill="{StaticResource TextSecondaryBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Reset Defaults" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding SaveSettingsCommand}"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Padding="16,10">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconCheck}" Fill="#0B0F19" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Save Settings" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -31,9 +59,15 @@
                        FontWeight="SemiBold"
                        Margin="4,0,0,16"/>
 
-            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
                 <StackPanel>
-                    <TextBlock Text="Timing Detection Thresholds" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentAmberBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Timing Detection Thresholds" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Cadence &amp; Statistical Bounds" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
 
                     <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
@@ -97,9 +131,15 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
                 <StackPanel>
-                    <TextBlock Text="Active Defense &amp; Countermeasures" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentEmeraldBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Active Defense &amp; Countermeasures" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Immediate Neutralization Actions" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
 
                     <CheckBox Content="Lock Windows Workstation upon Attack Detection"
                               IsChecked="{Binding LockWorkstationEnabled}"
@@ -130,9 +170,15 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,20">
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
                 <StackPanel>
-                    <TextBlock Text="Encrypted Incident Store &amp; Attack Forensics" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconDatabase}" Fill="{StaticResource AccentCyanBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Encrypted Incident Store &amp; Attack Forensics" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="DPAPI-Protected Storage" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
 
                     <CheckBox Content="Capture Triggering Keystrokes on Attack Detection (Encrypted via DPAPI)"
                               IsChecked="{Binding EnableOptInPayloadCapture}"
@@ -201,9 +247,15 @@
                 </StackPanel>
             </Border>
 
-            <Border Style="{StaticResource CardBorderStyle}">
+            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20">
                 <StackPanel>
-                    <TextBlock Text="Application &amp; System Tray Options" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" Margin="0,0,0,16"/>
+                    <Grid Margin="0,0,0,16">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconBell}" Fill="{StaticResource AccentBlueBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Application &amp; System Tray Options" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Windows Integration" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
 
                     <CheckBox Content="Start HIDGuard Automatically with Windows (User Logon)"
                               IsChecked="{Binding StartWithWindows}"
