@@ -62,6 +62,9 @@ Copy-Item -Path "$rootPath/README.md" -Destination "$stagingPath/README.md"
 Copy-Item -Path "$rootPath/README.tr.md" -Destination "$stagingPath/README.tr.md"
 Copy-Item -Path "$rootPath/LICENSE" -Destination "$stagingPath/LICENSE"
 Copy-Item -Path "$rootPath/SECURITY.md" -Destination "$stagingPath/SECURITY.md"
+if (Test-Path "$rootPath/CHANGELOG.md") {
+    Copy-Item -Path "$rootPath/CHANGELOG.md" -Destination "$stagingPath/CHANGELOG.md"
+}
 
 $zipName = "HIDGuard-v$Version-win-x64.zip"
 $zipPath = Join-Path $resolvedOutputDir $zipName

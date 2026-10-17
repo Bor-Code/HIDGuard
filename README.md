@@ -155,9 +155,9 @@ All components are covered by unit and integration test suites using xUnit and S
 | :--- | :--- | :--- | :--- |
 | HidGuard.Core.Tests | 169 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service, event log orchestration, interactive device prompt integration, CEF and RFC 5424 SIEM forwarder service |
 | HidGuard.Platform.Windows.Tests | 36 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection, Windows Event Log publisher, startup registration service |
-| HidGuard.App.Tests | 32 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, view navigation, hardware recovery, runtime start with Windows toggle, device trust prompt dialog, hardware timing distribution histogram, live interval stream visualizer, session telemetry diagnostics |
+| HidGuard.App.Tests | 37 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, release packaging validation, CI/CD pipeline readiness, view navigation, hardware recovery, runtime start with Windows toggle, device trust prompt dialog, hardware timing distribution histogram, live interval stream visualizer, session telemetry diagnostics |
 | HidGuard.Simulator.Tests | 33 | Passed | DuckyScript parser, token mapping, advanced attack profiles, 7-scenario end-to-end verification suite |
-| **Total Solution** | **270** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **275** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
@@ -222,6 +222,7 @@ HIDGuard stores settings in `%LocalAppData%\HIDGuard\config.json`. The applicati
 - [Win32 Raw Input and SendInput Interoperability](docs/raw-input-and-sendinput-interop.md): Empirical verification of Windows input reporting across physical hardware versus synthetic APIs.
 - [Configuration Reference](docs/configuration.md): Complete specification of all `config.json` parameters, validation ranges, and operational impacts.
 - [Inno Setup Installer Script](installer/HIDGuard.iss): Inno Setup configuration for Windows desktop shortcuts, startup registration, and uninstaller.
+- [Changelog](CHANGELOG.md): Historical record of all version releases, architectural additions, and security enhancements.
 - [Contributing Guidelines](.github/CONTRIBUTING.md): Branching model, conventional commits, zero-comment and zero-emoji standards.
 - [Security Policy](SECURITY.md): Threat model, privacy guarantees, vulnerability disclosure.
 - [License](LICENSE): MIT License.

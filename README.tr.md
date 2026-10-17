@@ -358,6 +358,7 @@ HIDGuard, ayarlarini `%LocalAppData%\HIDGuard\config.json` dosyasinda saklar. Uy
 - [Win32 Raw Input ve SendInput Birlikte Calisabilirlik Analizi](docs/raw-input-and-sendinput-interop.md): Windows isletim sisteminin donanimsal ve yazilimsal tus vuruslarini raporlama farkliliklarina iliskin deneysel bulgular.
 - [Yapilandirma Referansi](docs/configuration.md): config.json dosyasindaki tum alanlarin tipleri, varsayilanlari ve gecerlilik araliklari.
 - [Inno Setup Kurulum Betigi](installer/HIDGuard.iss): Windows kurulum paketi, masaustu kisayollari, baslangic kayitlari ve kaldirici yapilandirmasi.
+- [Surum Degisiklik Gunlugu (Changelog)](CHANGELOG.md): Tum surumlerin, mimari yeniliklerin ve guvenlik iyilestirmelerinin kaydi.
 - [Katki Rehberi](.github/CONTRIBUTING.md): Dal adlandirma, Conventional Commits ve sifir-yorum/sifir-emoji kurallari.
 - [Guvenlik Politikasi](SECURITY.md): Guvenlik acigi bildirim surecleri ve gizlilik garantileri.
 - [Lisans](LICENSE): MIT Lisansi.
