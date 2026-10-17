@@ -6,7 +6,12 @@
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>HidGuard.App</RootNamespace>
     <AssemblyName>HidGuard.App</AssemblyName>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+    <Resource Include="Assets\app.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HidGuard.Core\HidGuard.Core.csproj" />
     <ProjectReference Include="..\HidGuard.Platform.Windows\HidGuard.Platform.Windows.csproj" />

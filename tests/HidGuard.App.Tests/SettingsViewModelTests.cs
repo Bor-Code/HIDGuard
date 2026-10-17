@@ -144,4 +144,33 @@ public sealed class SettingsViewModelTests
             }
         }
     }
+
+    [Fact]
+    public async Task SettingsViewModelShouldSaveTheme()
+    {
+        var tempFile = Path.Combine(Path.GetTempPath(), "HIDGuard_ConfigTheme_" + Guid.NewGuid().ToString("N") + ".json");
+
+        try
+        {
+            using var configManager = new FileConfigurationManager(tempFile);
+            await configManager.LoadAsync();
+
+            var viewModel = new SettingsViewModel(configManager);
+            viewModel.Theme.ShouldBe("RedBlack");
+
+            viewModel.Theme = "GreenBlack";
+            viewModel.SaveSettingsCommand.Execute(null);
+
+            await Task.Delay(100);
+
+            configManager.CurrentConfiguration.Ui.Theme.ShouldBe("GreenBlack");
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
+    }
 }

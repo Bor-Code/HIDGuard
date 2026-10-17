@@ -46,6 +46,9 @@ public partial class App : System.Windows.Application
         var configManager = serviceProvider.GetRequiredService<IConfigurationManager>();
         var initialConfig = await configManager.LoadAsync(shutdownCts.Token).ConfigureAwait(true);
 
+        var themeService = serviceProvider.GetRequiredService<IThemeService>();
+        themeService.ApplyTheme(initialConfig.Ui.Theme);
+
         pipeline = serviceProvider.GetRequiredService<IKeystrokePipeline>();
         await pipeline.StartAsync(shutdownCts.Token).ConfigureAwait(true);
 
@@ -109,6 +112,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<IUacElevationService, UacElevationService>();
         services.AddSingleton<ITrayIconService, TrayIconService>();
         services.AddSingleton<IDevicePromptService, WpfDevicePromptService>();
+        services.AddSingleton<IThemeService, ThemeService>();
 
         services.AddSingleton<OverviewViewModel>();
         services.AddSingleton<DevicesViewModel>();
