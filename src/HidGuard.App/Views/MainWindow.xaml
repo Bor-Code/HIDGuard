@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="HIDGuard - Donanım Düzeyi Klavye ve BadUSB Savunma Sistemi"
+        Icon="pack://application:,,,/Assets/app.ico"
         Height="780" Width="1200"
         MinHeight="650" MinWidth="1000"
         WindowStartupLocation="CenterScreen"

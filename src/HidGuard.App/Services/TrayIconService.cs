@@ -42,9 +42,20 @@ public sealed class TrayIconService : ITrayIconService
         contextMenu.Items.Add(new ToolStripSeparator());
         contextMenu.Items.Add(exitItem);
 
+        Icon appIcon;
+        try
+        {
+            var stream = System.Windows.Application.GetResourceStream(new Uri("pack://application:,,,/Assets/app.ico"))?.Stream;
+            appIcon = stream != null ? new Icon(stream) : SystemIcons.Shield;
+        }
+        catch
+        {
+            appIcon = SystemIcons.Shield;
+        }
+
         notifyIcon = new NotifyIcon
         {
-            Icon = SystemIcons.Shield,
+            Icon = appIcon,
             Text = "HIDGuard - Donanım Güvenliği ve Tuş Enjeksiyonu Koruması",
             ContextMenuStrip = contextMenu,
             Visible = true

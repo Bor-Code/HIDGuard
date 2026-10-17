@@ -18,7 +18,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Border Background="{StaticResource AccentSoftBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="6" Width="40" Height="40" Margin="0,0,16,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentBrush}" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -76,143 +76,148 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="420"/>
+                    <ColumnDefinition Width="380"/>
                     <ColumnDefinition Width="16"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0">
-
-                    <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconCrosshair}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="SALDIRI PROFİLLERİ" Style="{StaticResource SectionTitleText}"/>
-                            </StackPanel>
-
-                            <ListBox ItemsSource="{Binding AvailableProfiles}"
-                                     SelectedItem="{Binding SelectedProfile}"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
-                                        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
-                                        <Setter Property="Margin" Value="0,0,0,6"/>
-                                        <Setter Property="Padding" Value="12,10"/>
-                                        <Setter Property="Cursor" Value="Hand"/>
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ListBoxItem">
-                                                    <Border x:Name="border"
-                                                            Background="{TemplateBinding Background}"
-                                                            BorderBrush="{StaticResource BorderBrush}"
-                                                            BorderThickness="1"
-                                                            CornerRadius="4"
-                                                            Padding="{TemplateBinding Padding}">
-                                                        <ContentPresenter/>
-                                                    </Border>
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BorderStrongBrush}"/>
-                                                            <Setter TargetName="border" Property="Background" Value="{StaticResource SurfaceHoverBrush}"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsSelected" Value="True">
-                                                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
-                                                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentSoftBrush}"/>
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <Path Grid.Row="0" Grid.Column="0" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,10,0">
-                                                <Path.Style>
-                                                    <Style TargetType="Path">
-                                                        <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
-                                                        <Setter Property="Data" Value="{StaticResource IconTerminal}"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Id}" Value="burst">
-                                                                <Setter Property="Data" Value="{StaticResource IconLightning}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Id}" Value="jitter">
-                                                                <Setter Property="Data" Value="{StaticResource IconCpu}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Id}" Value="human">
-                                                                <Setter Property="Data" Value="{StaticResource IconUser}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Id}" Value="stealth">
-                                                                <Setter Property="Data" Value="{StaticResource IconAlert}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Id}" Value="staged">
-                                                                <Setter Property="Data" Value="{StaticResource IconLayers}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Id}" Value="ducky">
-                                                                <Setter Property="Data" Value="{StaticResource IconCode}"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Id}" Value="verify">
-                                                                <Setter Property="Data" Value="{StaticResource IconShieldCheck}"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Path.Style>
-                                            </Path>
-
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title, Converter={StaticResource TurkishStatusConverter}}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
-                                            <Border Grid.Row="0" Grid.Column="2" CornerRadius="3" Padding="6,2" Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Category, Converter={StaticResource TurkishStatusConverter}}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                            </Border>
-
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Description, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,4,0,0" TextWrapping="Wrap"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" VerticalAlignment="Top">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconCrosshair}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="SALDIRI PROFİLLERİ" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
-                    </Border>
+
+                        <ListBox ItemsSource="{Binding AvailableProfiles}"
+                                 SelectedItem="{Binding SelectedProfile}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+                                    <Setter Property="Margin" Value="0,0,0,6"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{StaticResource BorderBrush}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="4"
+                                                        Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource BorderStrongBrush}"/>
+                                                        <Setter TargetName="border" Property="Background" Value="{StaticResource SurfaceHoverBrush}"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                                        <Setter TargetName="border" Property="Background" Value="{StaticResource AccentSoftBrush}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Path Grid.Row="0" Grid.Column="0" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,8,0">
+                                            <Path.Style>
+                                                <Style TargetType="Path">
+                                                    <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
+                                                    <Setter Property="Data" Value="{StaticResource IconTerminal}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Id}" Value="burst">
+                                                            <Setter Property="Data" Value="{StaticResource IconLightning}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Id}" Value="jitter">
+                                                            <Setter Property="Data" Value="{StaticResource IconCpu}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Id}" Value="human">
+                                                            <Setter Property="Data" Value="{StaticResource IconUser}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Id}" Value="stealth">
+                                                            <Setter Property="Data" Value="{StaticResource IconAlert}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Id}" Value="staged">
+                                                            <Setter Property="Data" Value="{StaticResource IconLayers}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Id}" Value="ducky">
+                                                            <Setter Property="Data" Value="{StaticResource IconCode}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Id}" Value="verify">
+                                                            <Setter Property="Data" Value="{StaticResource IconShieldCheck}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Path.Style>
+                                        </Path>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title, Converter={StaticResource TurkishStatusConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <Border Grid.Row="0" Grid.Column="2" CornerRadius="3" Padding="6,1" Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Category, Converter={StaticResource TurkishStatusConverter}}" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </Border>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Description, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,3,0,0" TextWrapping="Wrap"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Grid.Column="2">
 
                     <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
                         <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="PROFİL PARAMETRELERİ" Style="{StaticResource SectionTitleText}"/>
-                            </StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="SEÇİLİ PROFİL VE PARAMETRELER" Style="{StaticResource SectionTitleText}"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding SelectedProfile.Title, Converter={StaticResource TurkishStatusConverter}}"
+                                           FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
 
-                            <StackPanel Visibility="{Binding IsStandardProfileSelected, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <Grid Margin="0,0,0,10">
+                            <StackPanel Visibility="{Binding IsStandardProfileSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
+                                <Grid Margin="0,0,0,8">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Tuş Vuruşu Adedi:" Style="{StaticResource FieldLabelText}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding KeystrokeCount, UpdateSourceTrigger=PropertyChanged}" Width="70" HorizontalContentAlignment="Center" Style="{StaticResource InputTextBoxStyle}"/>
+                                    <TextBox Grid.Column="1" Text="{Binding KeystrokeCount, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" Style="{StaticResource InputTextBoxStyle}"/>
                                 </Grid>
 
-                                <Grid Margin="0,0,0,4">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Vuruş Aralığı (ms):" Style="{StaticResource FieldLabelText}" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Column="1" Text="{Binding IntervalMs, UpdateSourceTrigger=PropertyChanged}" Width="70" HorizontalContentAlignment="Center" Style="{StaticResource InputTextBoxStyle}"/>
+                                    <TextBox Grid.Column="1" Text="{Binding IntervalMs, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" Style="{StaticResource InputTextBoxStyle}"/>
                                 </Grid>
                             </StackPanel>
 
-                            <StackPanel Visibility="{Binding IsDuckyScriptSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <StackPanel Visibility="{Binding IsDuckyScriptSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
                                 <TextBlock Text="Hazır Şablonlar:" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
                                 <WrapPanel Margin="0,0,0,10">
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="Hello" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
@@ -243,51 +248,48 @@
 
                                 <TextBlock Text="Yük Betiği (DuckyScript):" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
                                 <TextBox Text="{Binding DuckyScriptText, UpdateSourceTrigger=PropertyChanged}"
-                                         Height="140"
+                                         Height="110"
                                          AcceptsReturn="True"
                                          VerticalScrollBarVisibility="Auto"
                                          FontFamily="Consolas"
-                                         FontSize="12"
+                                         FontSize="11"
                                          Style="{StaticResource InputTextBoxStyle}"/>
                             </StackPanel>
 
-                            <StackPanel Visibility="{Binding IsVerificationSelected, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <StackPanel Visibility="{Binding IsVerificationSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
                                 <TextBlock Text="Yalıtılmış sentetik girdi hattı üzerinde 7 otomatik güvenlik senaryosunu çalıştırarak seri saldırı engelleme, düşük sapmalı düzenlilik tespiti, insan yazımı geçişi ve gizlilik ilkelerini denetler."
                                            FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap"/>
                             </StackPanel>
+
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Command="{Binding ExecuteCommand}"
+                                        Style="{StaticResource PrimaryButtonStyle}"
+                                        Height="36">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Path Data="{StaticResource IconPlay}" Fill="White" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Saldırıyı Başlat" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button Grid.Column="2"
+                                        Command="{Binding CancelCommand}"
+                                        Style="{StaticResource DangerButtonStyle}"
+                                        Height="36">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Path Data="{StaticResource IconStop}" Fill="{StaticResource DangerBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Durdur" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                         </StackPanel>
                     </Border>
-
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="0"
-                                Command="{Binding ExecuteCommand}"
-                                Style="{StaticResource PrimaryButtonStyle}"
-                                Height="38">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconPlay}" Fill="White" Width="11" Height="11" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Saldırıyı Başlat" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button Grid.Column="2"
-                                Command="{Binding CancelCommand}"
-                                Style="{StaticResource DangerButtonStyle}"
-                                Height="38">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconStop}" Fill="{StaticResource DangerBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Durdur" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </StackPanel>
-
-                <StackPanel Grid.Column="2">
 
                     <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
                         <Grid>
@@ -317,7 +319,7 @@
 
                             <TextBox Grid.Row="1"
                                      Text="{Binding OutputConsole, Mode=OneWay}"
-                                     Height="270"
+                                     Height="220"
                                      IsReadOnly="True"
                                      VerticalScrollBarVisibility="Auto"
                                      HorizontalScrollBarVisibility="Auto"
