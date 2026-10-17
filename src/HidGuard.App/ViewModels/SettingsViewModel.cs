@@ -212,6 +212,24 @@ public sealed class SettingsViewModel : ObservableObject
         {
             StartWithWindows = this.startupService.IsStartWithWindowsEnabled();
         }
+
+        if (this.themeService != null)
+        {
+            this.themeService.ThemeChanged += (_, newTheme) =>
+            {
+                var name = newTheme switch
+                {
+                    AppTheme.GreenBlack => "GreenBlack",
+                    AppTheme.BlueBlack => "BlueBlack",
+                    _ => "RedBlack"
+                };
+                if (theme != name)
+                {
+                    theme = name;
+                    OnPropertyChanged(nameof(Theme));
+                }
+            };
+        }
     }
 
     public void LoadFromConfiguration(HidGuardConfiguration config)

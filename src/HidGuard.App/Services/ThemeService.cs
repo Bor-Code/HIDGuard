@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using WpfApplication = System.Windows.Application;
@@ -57,140 +58,182 @@ public sealed class ThemeService : IThemeService
 
     private static void ApplyThemeInternal(AppTheme theme)
     {
-        var res = WpfApplication.Current.Resources;
-
-        switch (theme)
+        var app = WpfApplication.Current;
+        if (app == null)
         {
-            case AppTheme.GreenBlack:
-                SetBrush(res, "PageBrush", "#070F0B");
-                SetBrush(res, "SurfaceBrush", "#0F1A14");
-                SetBrush(res, "SurfaceAltBrush", "#15261E");
-                SetBrush(res, "SurfaceHoverBrush", "#1C3328");
-                SetBrush(res, "BorderBrush", "#1F382B");
-                SetBrush(res, "BorderStrongBrush", "#2E5240");
-                SetBrush(res, "TrackBrush", "#15261E");
-                SetBrush(res, "TextPrimaryBrush", "#F0FDF4");
-                SetBrush(res, "TextSecondaryBrush", "#86EFAC");
-                SetBrush(res, "TextMutedBrush", "#52796F");
-                SetBrush(res, "AccentBrush", "#10B981");
-                SetBrush(res, "AccentHoverBrush", "#34D399");
-                SetBrush(res, "AccentPressedBrush", "#059669");
-                SetBrush(res, "AccentSoftBrush", "#0D2B1E");
-                SetBrush(res, "SuccessBrush", "#10B981");
-                SetBrush(res, "SuccessSoftBrush", "#0D2B1E");
-                SetBrush(res, "SuccessBorderBrush", "#059669");
-                SetBrush(res, "WarningBrush", "#F59E0B");
-                SetBrush(res, "WarningSoftBrush", "#291E0C");
-                SetBrush(res, "WarningBorderBrush", "#D97706");
-                SetBrush(res, "DangerBrush", "#EF4444");
-                SetBrush(res, "DangerSoftBrush", "#2A1316");
-                SetBrush(res, "DangerBorderBrush", "#DC2626");
-                SetBrush(res, "SidebarBrush", "#040906");
-                SetBrush(res, "SidebarHoverBrush", "#0F1A14");
-                SetBrush(res, "SidebarActiveBrush", "#15261E");
-                SetBrush(res, "SidebarDividerBrush", "#15261E");
-                SetBrush(res, "SidebarTextBrush", "#86EFAC");
-                SetBrush(res, "SidebarMutedBrush", "#52796F");
-                SetBrush(res, "SidebarIndicatorBrush", "#10B981");
-                SetBrush(res, "BackgroundBrush", "#070F0B");
-                SetBrush(res, "CardBrush", "#0F1A14");
-                SetBrush(res, "CardHoverBrush", "#15261E");
-                SetBrush(res, "BorderLightBrush", "#1F382B");
-                SetBrush(res, "AccentCyanBrush", "#10B981");
-                SetBrush(res, "AccentRedBrush", "#EF4444");
-                SetBrush(res, "AccentAmberBrush", "#F59E0B");
-                SetBrush(res, "AccentBlueBrush", "#10B981");
-                break;
+            return;
+        }
 
-            case AppTheme.BlueBlack:
-                SetBrush(res, "PageBrush", "#080C14");
-                SetBrush(res, "SurfaceBrush", "#0F1726");
-                SetBrush(res, "SurfaceAltBrush", "#162238");
-                SetBrush(res, "SurfaceHoverBrush", "#1E2D4A");
-                SetBrush(res, "BorderBrush", "#22324F");
-                SetBrush(res, "BorderStrongBrush", "#334B75");
-                SetBrush(res, "TrackBrush", "#162238");
-                SetBrush(res, "TextPrimaryBrush", "#F8FAFC");
-                SetBrush(res, "TextSecondaryBrush", "#93C5FD");
-                SetBrush(res, "TextMutedBrush", "#64748B");
-                SetBrush(res, "AccentBrush", "#2563EB");
-                SetBrush(res, "AccentHoverBrush", "#3B82F6");
-                SetBrush(res, "AccentPressedBrush", "#1D4ED8");
-                SetBrush(res, "AccentSoftBrush", "#0F2042");
-                SetBrush(res, "SuccessBrush", "#10B981");
-                SetBrush(res, "SuccessSoftBrush", "#0E261B");
-                SetBrush(res, "SuccessBorderBrush", "#059669");
-                SetBrush(res, "WarningBrush", "#F59E0B");
-                SetBrush(res, "WarningSoftBrush", "#291E0C");
-                SetBrush(res, "WarningBorderBrush", "#D97706");
-                SetBrush(res, "DangerBrush", "#EF4444");
-                SetBrush(res, "DangerSoftBrush", "#2A1316");
-                SetBrush(res, "DangerBorderBrush", "#DC2626");
-                SetBrush(res, "SidebarBrush", "#05080E");
-                SetBrush(res, "SidebarHoverBrush", "#0F1726");
-                SetBrush(res, "SidebarActiveBrush", "#162238");
-                SetBrush(res, "SidebarDividerBrush", "#162238");
-                SetBrush(res, "SidebarTextBrush", "#94A3B8");
-                SetBrush(res, "SidebarMutedBrush", "#64748B");
-                SetBrush(res, "SidebarIndicatorBrush", "#3B82F6");
-                SetBrush(res, "BackgroundBrush", "#080C14");
-                SetBrush(res, "CardBrush", "#0F1726");
-                SetBrush(res, "CardHoverBrush", "#162238");
-                SetBrush(res, "BorderLightBrush", "#22324F");
-                SetBrush(res, "AccentCyanBrush", "#2563EB");
-                SetBrush(res, "AccentRedBrush", "#EF4444");
-                SetBrush(res, "AccentAmberBrush", "#F59E0B");
-                SetBrush(res, "AccentBlueBrush", "#3B82F6");
-                break;
+        var palette = GetPalette(theme);
 
-            default:
-                SetBrush(res, "PageBrush", "#0A0D14");
-                SetBrush(res, "SurfaceBrush", "#121722");
-                SetBrush(res, "SurfaceAltBrush", "#19202E");
-                SetBrush(res, "SurfaceHoverBrush", "#222B3D");
-                SetBrush(res, "BorderBrush", "#253043");
-                SetBrush(res, "BorderStrongBrush", "#374660");
-                SetBrush(res, "TrackBrush", "#19202E");
-                SetBrush(res, "TextPrimaryBrush", "#F8FAFC");
-                SetBrush(res, "TextSecondaryBrush", "#94A3B8");
-                SetBrush(res, "TextMutedBrush", "#64748B");
-                SetBrush(res, "AccentBrush", "#DC2626");
-                SetBrush(res, "AccentHoverBrush", "#EF4444");
-                SetBrush(res, "AccentPressedBrush", "#B91C1C");
-                SetBrush(res, "AccentSoftBrush", "#2A1316");
-                SetBrush(res, "SuccessBrush", "#10B981");
-                SetBrush(res, "SuccessSoftBrush", "#0E261B");
-                SetBrush(res, "SuccessBorderBrush", "#059669");
-                SetBrush(res, "WarningBrush", "#F59E0B");
-                SetBrush(res, "WarningSoftBrush", "#291E0C");
-                SetBrush(res, "WarningBorderBrush", "#D97706");
-                SetBrush(res, "DangerBrush", "#EF4444");
-                SetBrush(res, "DangerSoftBrush", "#2A1316");
-                SetBrush(res, "DangerBorderBrush", "#DC2626");
-                SetBrush(res, "SidebarBrush", "#06080E");
-                SetBrush(res, "SidebarHoverBrush", "#121722");
-                SetBrush(res, "SidebarActiveBrush", "#19202E");
-                SetBrush(res, "SidebarDividerBrush", "#19202E");
-                SetBrush(res, "SidebarTextBrush", "#94A3B8");
-                SetBrush(res, "SidebarMutedBrush", "#64748B");
-                SetBrush(res, "SidebarIndicatorBrush", "#EF4444");
-                SetBrush(res, "BackgroundBrush", "#0A0D14");
-                SetBrush(res, "CardBrush", "#121722");
-                SetBrush(res, "CardHoverBrush", "#19202E");
-                SetBrush(res, "BorderLightBrush", "#253043");
-                SetBrush(res, "AccentCyanBrush", "#DC2626");
-                SetBrush(res, "AccentRedBrush", "#EF4444");
-                SetBrush(res, "AccentAmberBrush", "#F59E0B");
-                SetBrush(res, "AccentBlueBrush", "#DC2626");
-                break;
+        ApplyPaletteToDictionary(app.Resources, palette);
+
+        foreach (Window window in app.Windows)
+        {
+            ApplyPaletteToDictionary(window.Resources, palette);
+            window.InvalidateVisual();
         }
     }
 
-    private static void SetBrush(ResourceDictionary res, string key, string hexColor)
+    private static void ApplyPaletteToDictionary(ResourceDictionary res, Dictionary<string, string> palette)
     {
-        var color = (WpfColor)WpfColorConverter.ConvertFromString(hexColor);
-        var brush = new SolidColorBrush(color);
-        brush.Freeze();
-        res[key] = brush;
+        if (res == null)
+        {
+            return;
+        }
+
+        foreach (var pair in palette)
+        {
+            var key = pair.Key;
+            var hex = pair.Value;
+            var color = (WpfColor)WpfColorConverter.ConvertFromString(hex);
+
+            if (res.Contains(key) && res[key] is SolidColorBrush existing && !existing.IsFrozen)
+            {
+                existing.Color = color;
+            }
+            else
+            {
+                res[key] = new SolidColorBrush(color);
+            }
+        }
+
+        if (res.MergedDictionaries != null)
+        {
+            foreach (var md in res.MergedDictionaries)
+            {
+                ApplyPaletteToDictionary(md, palette);
+            }
+        }
     }
+
+    private static Dictionary<string, string> GetPalette(AppTheme theme) => theme switch
+    {
+        AppTheme.GreenBlack => new Dictionary<string, string>
+        {
+            ["PageBrush"] = "#070F0B",
+            ["SurfaceBrush"] = "#0F1A14",
+            ["SurfaceAltBrush"] = "#15261E",
+            ["SurfaceHoverBrush"] = "#1C3328",
+            ["BorderBrush"] = "#1F382B",
+            ["BorderStrongBrush"] = "#2E5240",
+            ["TrackBrush"] = "#15261E",
+            ["TextPrimaryBrush"] = "#F0FDF4",
+            ["TextSecondaryBrush"] = "#86EFAC",
+            ["TextMutedBrush"] = "#52796F",
+            ["AccentBrush"] = "#10B981",
+            ["AccentHoverBrush"] = "#34D399",
+            ["AccentPressedBrush"] = "#059669",
+            ["AccentSoftBrush"] = "#0D2B1E",
+            ["SuccessBrush"] = "#10B981",
+            ["SuccessSoftBrush"] = "#0D2B1E",
+            ["SuccessBorderBrush"] = "#059669",
+            ["WarningBrush"] = "#F59E0B",
+            ["WarningSoftBrush"] = "#291E0C",
+            ["WarningBorderBrush"] = "#D97706",
+            ["DangerBrush"] = "#EF4444",
+            ["DangerSoftBrush"] = "#2A1316",
+            ["DangerBorderBrush"] = "#DC2626",
+            ["SidebarBrush"] = "#040906",
+            ["SidebarHoverBrush"] = "#0F1A14",
+            ["SidebarActiveBrush"] = "#15261E",
+            ["SidebarDividerBrush"] = "#15261E",
+            ["SidebarTextBrush"] = "#86EFAC",
+            ["SidebarMutedBrush"] = "#52796F",
+            ["SidebarIndicatorBrush"] = "#10B981",
+            ["BackgroundBrush"] = "#070F0B",
+            ["CardBrush"] = "#0F1A14",
+            ["CardHoverBrush"] = "#15261E",
+            ["BorderLightBrush"] = "#1F382B",
+            ["AccentEmeraldBrush"] = "#10B981",
+            ["AccentCyanBrush"] = "#10B981",
+            ["AccentRedBrush"] = "#EF4444",
+            ["AccentAmberBrush"] = "#F59E0B",
+            ["AccentBlueBrush"] = "#10B981"
+        },
+        AppTheme.BlueBlack => new Dictionary<string, string>
+        {
+            ["PageBrush"] = "#080C14",
+            ["SurfaceBrush"] = "#0F1726",
+            ["SurfaceAltBrush"] = "#162238",
+            ["SurfaceHoverBrush"] = "#1E2D4A",
+            ["BorderBrush"] = "#22324F",
+            ["BorderStrongBrush"] = "#334B75",
+            ["TrackBrush"] = "#162238",
+            ["TextPrimaryBrush"] = "#F8FAFC",
+            ["TextSecondaryBrush"] = "#93C5FD",
+            ["TextMutedBrush"] = "#64748B",
+            ["AccentBrush"] = "#2563EB",
+            ["AccentHoverBrush"] = "#3B82F6",
+            ["AccentPressedBrush"] = "#1D4ED8",
+            ["AccentSoftBrush"] = "#0F2042",
+            ["SuccessBrush"] = "#10B981",
+            ["SuccessSoftBrush"] = "#0E261B",
+            ["SuccessBorderBrush"] = "#059669",
+            ["WarningBrush"] = "#F59E0B",
+            ["WarningSoftBrush"] = "#291E0C",
+            ["WarningBorderBrush"] = "#D97706",
+            ["DangerBrush"] = "#EF4444",
+            ["DangerSoftBrush"] = "#2A1316",
+            ["DangerBorderBrush"] = "#DC2626",
+            ["SidebarBrush"] = "#05080E",
+            ["SidebarHoverBrush"] = "#0F1726",
+            ["SidebarActiveBrush"] = "#162238",
+            ["SidebarDividerBrush"] = "#162238",
+            ["SidebarTextBrush"] = "#94A3B8",
+            ["SidebarMutedBrush"] = "#64748B",
+            ["SidebarIndicatorBrush"] = "#3B82F6",
+            ["BackgroundBrush"] = "#080C14",
+            ["CardBrush"] = "#0F1726",
+            ["CardHoverBrush"] = "#162238",
+            ["BorderLightBrush"] = "#22324F",
+            ["AccentEmeraldBrush"] = "#10B981",
+            ["AccentCyanBrush"] = "#2563EB",
+            ["AccentRedBrush"] = "#EF4444",
+            ["AccentAmberBrush"] = "#F59E0B",
+            ["AccentBlueBrush"] = "#3B82F6"
+        },
+        _ => new Dictionary<string, string>
+        {
+            ["PageBrush"] = "#0A0D14",
+            ["SurfaceBrush"] = "#121722",
+            ["SurfaceAltBrush"] = "#19202E",
+            ["SurfaceHoverBrush"] = "#222B3D",
+            ["BorderBrush"] = "#253043",
+            ["BorderStrongBrush"] = "#374660",
+            ["TrackBrush"] = "#19202E",
+            ["TextPrimaryBrush"] = "#F8FAFC",
+            ["TextSecondaryBrush"] = "#94A3B8",
+            ["TextMutedBrush"] = "#64748B",
+            ["AccentBrush"] = "#DC2626",
+            ["AccentHoverBrush"] = "#EF4444",
+            ["AccentPressedBrush"] = "#B91C1C",
+            ["AccentSoftBrush"] = "#2A1316",
+            ["SuccessBrush"] = "#10B981",
+            ["SuccessSoftBrush"] = "#0E261B",
+            ["SuccessBorderBrush"] = "#059669",
+            ["WarningBrush"] = "#F59E0B",
+            ["WarningSoftBrush"] = "#291E0C",
+            ["WarningBorderBrush"] = "#D97706",
+            ["DangerBrush"] = "#EF4444",
+            ["DangerSoftBrush"] = "#2A1316",
+            ["DangerBorderBrush"] = "#DC2626",
+            ["SidebarBrush"] = "#06080E",
+            ["SidebarHoverBrush"] = "#121722",
+            ["SidebarActiveBrush"] = "#19202E",
+            ["SidebarDividerBrush"] = "#19202E",
+            ["SidebarTextBrush"] = "#94A3B8",
+            ["SidebarMutedBrush"] = "#64748B",
+            ["SidebarIndicatorBrush"] = "#EF4444",
+            ["BackgroundBrush"] = "#0A0D14",
+            ["CardBrush"] = "#121722",
+            ["CardHoverBrush"] = "#19202E",
+            ["BorderLightBrush"] = "#253043",
+            ["AccentEmeraldBrush"] = "#10B981",
+            ["AccentCyanBrush"] = "#DC2626",
+            ["AccentRedBrush"] = "#EF4444",
+            ["AccentAmberBrush"] = "#F59E0B",
+            ["AccentBlueBrush"] = "#DC2626"
+        }
+    };
 }

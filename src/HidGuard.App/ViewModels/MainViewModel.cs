@@ -104,6 +104,7 @@ public sealed class MainViewModel : ObservableObject
 
         themeService.ApplyTheme(themeName);
         Settings.Theme = themeName;
+        Settings.SaveSettingsCommand.Execute(null);
         OnPropertyChanged(nameof(CurrentTheme));
     }
 
