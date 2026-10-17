@@ -150,8 +150,8 @@ public sealed class MainViewModel : ObservableObject
         if (isAttack)
         {
             trayIconService.ShowNotification(
-                "Keystroke Injection Detected",
-                $"Attack candidate mitigated from device {e.Keystroke.DeviceId.FormattedHardwareId}. Threat actions deployed.",
+                "Tuş Enjeksiyon Saldırısı Tespit Edildi",
+                $"{e.Keystroke.DeviceId.FormattedHardwareId} donanımından gelen saldırı engellendi. Savunma eylemleri uygulandı.",
                 ToolTipIcon.Warning);
         }
     }

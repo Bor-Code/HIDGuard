@@ -6,9 +6,9 @@
              mc:Ignorable="d"
              d:DesignHeight="850" d:DesignWidth="950">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <StackPanel Margin="28,24">
+        <StackPanel Margin="24">
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,18" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -16,57 +16,58 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Width="48" Height="48" CornerRadius="12" Background="#1E293B" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,18,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconSettings}" Fill="{StaticResource TextPrimaryBrush}" Width="22" Height="22" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Width="40" Height="40" CornerRadius="6" Background="{StaticResource AccentSoftBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconSettings}" Fill="{StaticResource AccentBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
-                            <TextBlock Text="SECURITY ENGINE PREFERENCES" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,8,0"/>
-                            <Border Background="#1E293B" CornerRadius="4" Padding="6,1" VerticalAlignment="Center">
-                                <TextBlock Text="PERSISTENT CONFIG" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentEmeraldBrush}"/>
+                            <TextBlock Text="GÜVENLİK MOTORU YAPILANDIRMASI" Style="{StaticResource MetricLabelText}" Margin="0,0,8,0"/>
+                            <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1" VerticalAlignment="Center">
+                                <TextBlock Text="KALICI YAPILANDIRMA" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}"/>
                             </Border>
                         </StackPanel>
-                        <TextBlock Text="Security Configuration &amp; Engine Tuning" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="Configure timing analysis sensitivity, automated countermeasure actions, and system tray integration." FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,3,0,0"/>
+                        <TextBlock Text="Güvenlik Yapılandırması ve Motor Ayarları" Style="{StaticResource PageTitleText}"/>
+                        <TextBlock Text="Zamanlama analizi hassasiyeti, otomatik savunma eylemleri ve sistem tepsisi entegrasyonunu yapılandırın."
+                                   Style="{StaticResource PageSubtitleText}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Command="{Binding ResetDefaultsCommand}"
                                 Style="{StaticResource SecondaryButtonStyle}"
-                                Padding="14,10"
+                                Padding="12,6"
                                 Margin="0,0,10,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconUndo}" Fill="{StaticResource TextSecondaryBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Reset Defaults" VerticalAlignment="Center"/>
+                                <Path Data="{StaticResource IconUndo}" Fill="{StaticResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Varsayılanlara Sıfırla" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Command="{Binding SaveSettingsCommand}"
                                 Style="{StaticResource PrimaryButtonStyle}"
-                                Padding="16,10">
+                                Padding="14,6">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconCheck}" Fill="#0B0F19" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Save Settings" VerticalAlignment="Center"/>
+                                <Path Data="{StaticResource IconCheck}" Fill="White" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Ayarları Kaydet" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <TextBlock Text="{Binding FeedbackMessage}"
+            <TextBlock Text="{Binding FeedbackMessage, Converter={StaticResource TurkishStatusConverter}}"
                        Foreground="{Binding FeedbackColor}"
                        FontSize="13"
                        FontWeight="SemiBold"
-                       Margin="4,0,0,16"/>
+                       Margin="4,0,0,14"/>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
                 <StackPanel>
-                    <Grid Margin="0,0,0,16">
+                    <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentAmberBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Timing Detection Thresholds" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Zamanlama Algılama Eşikleri" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
-                        <TextBlock Text="Cadence &amp; Statistical Bounds" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Ritim ve İstatistiki Sınırlar" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
                     <Grid Margin="0,0,0,12">
@@ -75,10 +76,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Rolling Window Size" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Number of consecutive intervals evaluated for dynamics." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Hareketli Pencere Boyutu" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Dinamik analiz için değerlendirilen ardışık tuş aralıkları adedi." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding WindowSize, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding WindowSize, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
                     <Grid Margin="0,0,0,12">
@@ -87,10 +88,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Human Feasibility Floor (ms)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Minimum physiologically possible interval for manual typing." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="İnsan Fizyolojik Alt Sınırı (ms)" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Manuel klavye yazımı için fizyolojik olarak mümkün olan asgari süre." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding HumanFeasibilityFloorMs, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding HumanFeasibilityFloorMs, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
                     <Grid Margin="0,0,0,12">
@@ -99,10 +100,10 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Sub-Human Ratio Threshold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Proportion of impossibly fast intervals that triggers alert (0.0 to 1.0)." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="İnsan-Altı Hız Oranı Eşiği" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Alarm üretecek imkansız hızdaki aralıkların oranı (0.0 - 1.0)." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding SubHumanRatioThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding SubHumanRatioThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
                     <Grid Margin="0,0,0,12">
@@ -111,170 +112,171 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Coefficient of Variation Threshold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Variation ratio below which robotic keystrokes are flagged." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Varyasyon Katsayısı Eşiği" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Mekanik ve robotik tuşlamaları işaretleyen düzenlilik oranı eşiği." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding CoefficientOfVariationThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding CoefficientOfVariationThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Suspicion Score Threshold" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Overall anomaly confidence score threshold triggering action." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Şüphe Skoru Alarm Eşiği" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Müdahale tetikleyen toplam anomali güven skoru eşiği (0 - 100)." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding SuspicionScoreThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding SuspicionScoreThreshold, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
                 <StackPanel>
-                    <Grid Margin="0,0,0,16">
+                    <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentEmeraldBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Active Defense &amp; Countermeasures" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Aktif Savunma ve Karşı Önlemler" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
-                        <TextBlock Text="Immediate Neutralization Actions" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Anında Müdahale ve Engelleme Eylemleri" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <CheckBox Content="Lock Windows Workstation upon Attack Detection"
+                    <CheckBox Content="Saldırı tespit edildiğinde Windows oturumunu anında kilitle"
                               IsChecked="{Binding LockWorkstationEnabled}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <CheckBox Content="Disable Malicious USB Hardware via PnP Device Node"
+                    <CheckBox Content="Zararlı USB donanımını PnP aygıt düğümünden devre dışı bırak"
                               IsChecked="{Binding DeviceDisableEnabled}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <CheckBox Content="Suppress Injected Keystrokes via Low-Level Keyboard Hook"
+                    <CheckBox Content="Enjekte edilen tuşları klavye kancasıyla (hook) yut ve engelle"
                               IsChecked="{Binding KeySuppressionEnabled}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <Grid Margin="0,8,0,0">
+                    <Grid Margin="0,4,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Temporary Key Suppression Duration (Seconds)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Duration of active keystroke swallowing while alert is active." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Geçici Tuş Yutma Süresi (Saniye)" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Alarm esnasında tuşların işletim sistemine iletilmeden yutulacağı süre." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding TemporarySuppressionSeconds, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding TemporarySuppressionSeconds, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
                 <StackPanel>
-                    <Grid Margin="0,0,0,16">
+                    <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconDatabase}" Fill="{StaticResource AccentCyanBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Encrypted Incident Store &amp; Attack Forensics" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconDatabase}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Şifreli Olay Deposu ve Adli Delil" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
-                        <TextBlock Text="DPAPI-Protected Storage" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Windows DPAPI ile Korunan Yerel Olay Kaydı" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <CheckBox Content="Capture Triggering Keystrokes on Attack Detection (Encrypted via DPAPI)"
+                    <CheckBox Content="Saldırı anında tetikleyici tuşları şifreleyerek adli delil olarak sakla (DPAPI)"
                               IsChecked="{Binding EnableOptInPayloadCapture}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Capture Keystroke Window Size" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Number of preceding keystrokes preserved in encrypted incident evidence (1 - 1024)." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Kayıt Tuş Pencere Boyutu" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Şifreli delil kaydında saklanan önceki tuş vuruşu adedi (1 - 1024)." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding CaptureWindowKeystrokes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding CaptureWindowKeystrokes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Maximum Incidents Retained" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Maximum number of historical incident records stored before rolling eviction." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Azami Saklanan Olay Sayısı" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Eski kayıtlar silinmeden önce tutulan maksimum olay sayısı." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding MaxIncidentCount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding MaxIncidentCount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Incident Retention Period (Days)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Number of days before expired incident records are automatically purged." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Olay Saklama Süresi (Gün)" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Süresi dolan olay kayıtlarının otomatik temizlenme periyodu." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding RetentionDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding RetentionDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Maximum Payload Size (Bytes)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Hard upper limit for encrypted payload evidence per incident." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Maksimum Veri Boyutu (Bayt)" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Olay başına saklanabilecek azami şifreli yük boyutu." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding MaxPayloadBytes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding MaxPayloadBytes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
 
-                    <Grid Margin="0,0,0,12">
+                    <Grid Margin="0,0,0,4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Maintenance Purge Interval (Minutes)" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
-                            <TextBlock Text="Frequency of background cleanup runs for expired incident records." FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Periyodik Temizlik Aralığı (Dakika)" Style="{StaticResource FieldLabelText}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Süresi dolan kayıtların arka planda temizlenme sıklığı." Style="{StaticResource FieldHintText}"/>
                         </StackPanel>
-                        <TextBox Grid.Column="1" Text="{Binding PurgeIntervalMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBox Grid.Column="1" Text="{Binding PurgeIntervalMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBoxStyle}"/>
                     </Grid>
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20">
+            <Border Style="{StaticResource CardStyle}">
                 <StackPanel>
-                    <Grid Margin="0,0,0,16">
+                    <Grid Margin="0,0,0,14">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconBell}" Fill="{StaticResource AccentBlueBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Application &amp; System Tray Options" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconBell}" Fill="{StaticResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Uygulama ve Sistem Tepsisi Seçenekleri" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
-                        <TextBlock Text="Windows Integration" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Windows Entegrasyonu" Style="{StaticResource SectionHintText}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <CheckBox Content="Start HIDGuard Automatically with Windows (User Logon)"
+                    <CheckBox Content="HIDGuard'ı Windows başlangıcında otomatik çalıştır (Kullanıcı Girişi)"
                               IsChecked="{Binding StartWithWindows}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <CheckBox Content="Start Minimized to System Tray on Launch"
+                    <CheckBox Content="Başlatıldığında sistem tepsisine küçültülmüş olarak aç"
                               IsChecked="{Binding StartMinimizedToTray}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <CheckBox Content="Display Windows Notifications when Devices are Blocked"
+                    <CheckBox Content="Donanım engellendiğinde Windows bildirimi göster"
                               IsChecked="{Binding NotifyOnBlockedDevices}"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              Margin="0,0,0,12"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,10"/>
 
-                    <CheckBox Content="Display Windows Notifications when Known Devices are Allowed"
+                    <CheckBox Content="Güvenilen donanım bağlandığında Windows bildirimi göster"
                               IsChecked="{Binding NotifyOnAllowedDevices}"
-                              Style="{StaticResource ModernCheckBoxStyle}"/>
+                              Style="{StaticResource FormCheckBoxStyle}"
+                              Margin="0,0,0,0"/>
                 </StackPanel>
             </Border>
 

@@ -8,46 +8,41 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="28,24">
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,18" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Width="48" Height="48" CornerRadius="12" Background="#162235" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,18,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconActivity}" Fill="{Binding ThreatLevelColor}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
-                            <TextBlock Text="KEYSTROKE DYNAMICS EVALUATION" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" Margin="0,0,8,0"/>
-                            <Border Background="#1E293B" CornerRadius="4" Padding="6,1" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding ThreatLevelText}" FontSize="10" FontWeight="Bold" Foreground="{Binding ThreatLevelColor}"/>
+                            <TextBlock Text="ZAMANLAMA ANALİZİ" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                            <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1">
+                                <TextBlock Text="{Binding ThreatLevelText, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" FontWeight="Bold" Foreground="{Binding ThreatLevelColor}"/>
                             </Border>
                         </StackPanel>
-                        <TextBlock Text="Real-Time Input Timing Analysis" FontSize="18" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
-                        <TextBlock Text="Statistical modeling of inter-keystroke cadence to distinguish human typing from automated microcontrollers." FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="0,3,0,0"/>
+                        <TextBlock Text="Tuş Vuruşu Zamanlama Dinamikleri" Style="{StaticResource PageTitleText}"/>
+                        <TextBlock Text="İnter-keystroke zamanlama analizi ile insan yazımı ile yapay mikrodenetleyici enjeksiyonları ayırt edilir." Style="{StaticResource PageSubtitleText}"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="14,8" Margin="0,0,12,0">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,8" Margin="0,0,10,0">
                             <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="HUMAN CONFIDENCE" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="İNSAN GÜVEN SKORU" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                    <TextBlock Text="{Binding HumanConfidenceScore}" FontSize="20" Foreground="{StaticResource AccentEmeraldBrush}" FontWeight="Bold"/>
-                                    <TextBlock Text="%" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                    <TextBlock Text="{Binding HumanConfidenceScore}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}"/>
+                                    <TextBlock Text="%" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
 
-                        <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="14,8">
+                        <Border Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12,8">
                             <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="ANOMALY SCORE" FontSize="10" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="ANOMALİ SKORU" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
-                                    <TextBlock Text="{Binding AnomalyScore}" FontSize="20" Foreground="{Binding ThreatLevelColor}" FontWeight="Bold"/>
-                                    <TextBlock Text="/100" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
+                                    <TextBlock Text="{Binding AnomalyScore}" FontSize="18" FontWeight="Bold" Foreground="{Binding ThreatLevelColor}"/>
+                                    <TextBlock Text="/100" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="2,0,0,2"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -63,112 +58,69 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="0,0,10,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="ESTIMATED SPEED" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <Border HorizontalAlignment="Right" Background="#162E3B" CornerRadius="8" Width="30" Height="30">
-                                <Path Data="{StaticResource IconGauge}" Fill="{StaticResource AccentCyanBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,2">
-                            <TextBlock Text="{Binding CurrentWpm}" FontSize="26" Foreground="{StaticResource AccentCyanBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" WPM" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="TAHMİNİ HIZ" Style="{StaticResource MetricLabelText}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{Binding CurrentWpm}" Style="{StaticResource MetricValueText}"/>
+                            <TextBlock Text="WPM" Style="{StaticResource MetricUnitText}"/>
                         </StackPanel>
-                        <TextBlock Grid.Row="2" Text="Threshold: > 180 WPM alert" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                    </Grid>
+                        <TextBlock Text="Eşik: > 180 WPM uyarı" Style="{StaticResource MetricNoteText}"/>
+                    </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="5,0,5,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="MEAN INTERVAL" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <Border HorizontalAlignment="Right" Background="#162235" CornerRadius="8" Width="30" Height="30">
-                                <Path Data="{StaticResource IconActivity}" Fill="{StaticResource AccentBlueBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,2">
-                            <TextBlock Text="{Binding CurrentMeanIntervalMs}" FontSize="26" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" ms" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="4,0,4,0">
+                    <StackPanel>
+                        <TextBlock Text="ORTALAMA ARALIK" Style="{StaticResource MetricLabelText}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{Binding CurrentMeanIntervalMs}" Style="{StaticResource MetricValueText}"/>
+                            <TextBlock Text="ms" Style="{StaticResource MetricUnitText}"/>
                         </StackPanel>
-                        <TextBlock Grid.Row="2" Text="Physical floor: 25 ms" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
-                    </Grid>
+                        <TextBlock Text="Fiziksel taban: 25 ms" Style="{StaticResource MetricNoteText}"/>
+                    </StackPanel>
                 </Border>
 
-                <Border Grid.Column="2" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="5,0,5,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="VARIABILITY (CV)" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <Border HorizontalAlignment="Right" Background="#382E1E" CornerRadius="8" Width="30" Height="30">
-                                <Path Data="{StaticResource IconSliders}" Fill="{StaticResource AccentAmberBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,2">
-                            <TextBlock Text="{Binding CoefficientOfVariation}" FontSize="26" Foreground="{StaticResource AccentAmberBrush}" FontWeight="Bold"/>
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}" Margin="4,0,4,0">
+                    <StackPanel>
+                        <TextBlock Text="DEĞİŞKENLİK (CV)" Style="{StaticResource MetricLabelText}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{Binding CoefficientOfVariation}" Style="{StaticResource MetricValueText}" Foreground="{StaticResource WarningBrush}"/>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <TextBlock Text="Std Dev: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="Std Sapma: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
                             <TextBlock Text="{Binding CurrentStdDevIntervalMs}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
                             <TextBlock Text=" ms" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
                 </Border>
 
-                <Border Grid.Column="3" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,14" Margin="10,0,0,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <TextBlock Text="SUB-HUMAN RATIO" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                            <Border HorizontalAlignment="Right" Background="#3B1C1F" CornerRadius="8" Width="30" Height="30">
-                                <Path Data="{StaticResource IconAlert}" Fill="{StaticResource AccentRedBrush}" Width="14" Height="14" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,2">
-                            <TextBlock Text="{Binding SubHumanRatioPercent}" FontSize="26" Foreground="{StaticResource AccentRedBrush}" FontWeight="Bold"/>
-                            <TextBlock Text="%" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,4"/>
+                <Border Grid.Column="3" Style="{StaticResource CardStyle}" Margin="8,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="İNSAN-ALTI ORAN" Style="{StaticResource MetricLabelText}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="{Binding SubHumanRatioPercent}" Style="{StaticResource MetricValueText}" Foreground="{StaticResource DangerBrush}"/>
+                            <TextBlock Text="%" Style="{StaticResource MetricUnitText}"/>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <TextBlock Text="Min: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="Min Aralık: " FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
                             <TextBlock Text="{Binding MinimumIntervalMs}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"/>
                             <TextBlock Text=" ms" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
                 </Border>
             </Grid>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="18" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
                 <StackPanel>
                     <Grid Margin="0,0,0,16">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconLayers}" Fill="{StaticResource AccentCyanBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Hardware Timing Distribution Histogram" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TextBlock Text="Interval Density Across Keystroke Windows" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Zamanlama Dağılım Histogramı" Style="{StaticResource SectionTitleText}"/>
+                        <TextBlock Text="Milisaniye dilimlerine göre yoğunluk" FontSize="12" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
                     <ItemsControl ItemsSource="{Binding HistogramBuckets}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Rows="1" Columns="6" Height="140"/>
+                                <UniformGrid Rows="1" Columns="6" Height="130"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -183,10 +135,10 @@
 
                                     <TextBlock Grid.Row="0" Text="{Binding Percentage, StringFormat='{}{0}%'}" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,0,0,6"/>
 
-                                    <Border Grid.Row="1" Width="36" Height="{Binding BarHeight}" Background="{Binding ColorBrush}" CornerRadius="4" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                    <Border Grid.Row="1" Width="36" Height="{Binding BarHeight}" Background="{Binding ColorBrush}" CornerRadius="3" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
-                                    <TextBlock Grid.Row="2" Text="{Binding Label}" FontSize="11" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,8,0,2"/>
-                                    <TextBlock Grid.Row="3" Text="{Binding Count, StringFormat='{}{0} keys'}" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Row="2" Text="{Binding Label}" FontSize="11" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,6,0,2"/>
+                                    <TextBlock Grid.Row="3" Text="{Binding Count, StringFormat='{}{0} tuş'}" FontSize="10" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Center"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -194,27 +146,24 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="18" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
                 <StackPanel>
                     <Grid Margin="0,0,0,16">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconLightning}" Fill="{StaticResource AccentAmberBrush}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Real-Time Keystroke Interval Stream Strip" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TextBlock Text="Last 30 Inter-Keystroke Durations" FontSize="11" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Gerçek Zamanlı Tuş Aralığı Akış Şeridi" Style="{StaticResource SectionTitleText}"/>
+                        <TextBlock Text="Son 30 tuş vuruşunun süreleri" FontSize="12" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     </Grid>
 
-                    <Border Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="12,16" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <Border Background="{StaticResource SurfaceAltBrush}" CornerRadius="4" Padding="12,14" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
                         <ItemsControl ItemsSource="{Binding RecentSamples}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" Height="100" VerticalAlignment="Bottom"/>
+                                    <StackPanel Orientation="Horizontal" Height="90" VerticalAlignment="Bottom"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid VerticalAlignment="Bottom" Margin="3,0" ToolTip="{Binding IntervalMs, StringFormat='{}{0} ms'}">
-                                        <Border Width="16" Height="{Binding BarHeight}" Background="{Binding Color}" CornerRadius="3" VerticalAlignment="Bottom"/>
+                                        <Border Width="16" Height="{Binding BarHeight}" Background="{Binding Color}" CornerRadius="2" VerticalAlignment="Bottom"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -223,44 +172,35 @@
                 </StackPanel>
             </Border>
 
-            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="12" Padding="18">
+            <Border Style="{StaticResource CardStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border Width="40" Height="40" CornerRadius="10" Background="#162E3B" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Center">
-                        <Path Data="{StaticResource IconCpu}" Fill="{StaticResource AccentCyanBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-
-                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="DIAGNOSTIC SESSION TELEMETRY" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="OTURUM TANILAMA BİLGİLERİ" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                            <TextBlock Text="Active Hardware ID: " FontSize="13" Foreground="{StaticResource TextMutedBrush}"/>
-                            <TextBlock Text="{Binding ActiveDeviceId}" FontSize="13" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                            <TextBlock Text="Aktif Donanım Kimliği: " FontSize="13" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="{Binding ActiveDeviceId}" FontSize="13" FontFamily="{StaticResource MonoFont}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                            <TextBlock Text="Total Evaluated: " FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock Text="Toplam Değerlendirme: " FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
                             <TextBlock Text="{Binding TotalEvaluations}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" | Anomalies Flagged: " FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="8,0,0,0"/>
-                            <TextBlock Text="{Binding AnomalyCount}" FontSize="12" Foreground="{StaticResource AccentRedBrush}" FontWeight="Bold"/>
-                            <TextBlock Text=" | Continuous Burst: " FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="8,0,0,0"/>
+                            <TextBlock Text=" | Tespit Edilen Anomali: " FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="8,0,0,0"/>
+                            <TextBlock Text="{Binding AnomalyCount}" FontSize="12" Foreground="{StaticResource DangerBrush}" FontWeight="Bold"/>
+                            <TextBlock Text=" | Dizi Uzunluğu: " FontSize="12" Foreground="{StaticResource TextMutedBrush}" Margin="8,0,0,0"/>
                             <TextBlock Text="{Binding BurstLength}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold"/>
                         </StackPanel>
                     </StackPanel>
 
-                    <Button Grid.Column="2"
+                    <Button Grid.Column="1"
+                            Content="Tanılamayı Sıfırla"
                             Command="{Binding ResetMetricsCommand}"
                             Style="{StaticResource SecondaryButtonStyle}"
                             VerticalAlignment="Center"
-                            Padding="16,8">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconRefresh}" Fill="{StaticResource TextPrimaryBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Reset Diagnostics" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
+                            Padding="14,6"/>
                 </Grid>
             </Border>
 

@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="HIDGuard - Defensive Keystroke Injection and BadUSB Mitigation"
-        Height="760" Width="1160"
-        MinHeight="600" MinWidth="950"
+        Title="HIDGuard - Donanım Düzeyi Klavye ve BadUSB Savunma Sistemi"
+        Height="780" Width="1200"
+        MinHeight="650" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BackgroundBrush}">
+        Background="{StaticResource PageBrush}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -19,95 +19,262 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="68"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="20,0">
+        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
-                    <Border Background="#1E293B" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Width="38" Height="38" Margin="0,0,12,0">
-                        <Path Data="{StaticResource IconShieldCheck}" Fill="{StaticResource AccentEmeraldBrush}" Width="20" Height="20" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <StackPanel VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="HIDGUARD" FontSize="15" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Black" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <Border Background="#064E3B" CornerRadius="4" Padding="5,1" VerticalAlignment="Center">
-                                <TextBlock Text="v1.0.0" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentEmeraldBrush}"/>
-                            </Border>
+                <StackPanel Grid.Row="0" Margin="20,22,20,16">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Background="{StaticResource AccentBrush}" CornerRadius="4" Width="28" Height="28" Margin="0,0,10,0">
+                            <Path Data="{StaticResource IconShieldCheck}" Fill="White" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="HIDGUARD" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="v1.0.0 Kurumsal" FontSize="10" Foreground="{StaticResource SidebarMutedBrush}"/>
                         </StackPanel>
-                        <TextBlock Text="Hardware Keystroke Defense" FontSize="10" Foreground="{StaticResource TextMutedBrush}" FontWeight="SemiBold"/>
                     </StackPanel>
+                    <TextBlock Text="Donanım Güvenlik Merkezi" FontSize="11" Foreground="{StaticResource SidebarMutedBrush}" Margin="0,8,0,0"/>
+                    <Border Height="1" Background="{StaticResource SidebarDividerBrush}" Margin="0,14,0,0"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Command="{Binding NavigateCommand}" CommandParameter="Overview" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+                <StackPanel Grid.Row="1" Margin="10,0">
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Overview" HorizontalContentAlignment="Left" Cursor="Hand" Margin="0,2" Padding="12,10" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTabName}" Value="Overview">
+                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconShield}" Fill="{StaticResource AccentEmeraldBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Overview" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconShield}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Genel Bakış" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding NavigateCommand}" CommandParameter="Devices" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Devices" HorizontalContentAlignment="Left" Cursor="Hand" Margin="0,2" Padding="12,10" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTabName}" Value="Devices">
+                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconKeyboard}" Fill="{StaticResource AccentCyanBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Devices" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconKeyboard}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Bağlı Donanımlar" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding NavigateCommand}" CommandParameter="Metrics" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Metrics" HorizontalContentAlignment="Left" Cursor="Hand" Margin="0,2" Padding="12,10" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTabName}" Value="Metrics">
+                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconActivity}" Fill="{StaticResource AccentBlueBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Live Metrics" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconActivity}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Canlı Metrikler" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding NavigateCommand}" CommandParameter="Simulator" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Simulator" HorizontalContentAlignment="Left" Cursor="Hand" Margin="0,2" Padding="12,10" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTabName}" Value="Simulator">
+                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconTerminal}" Fill="{StaticResource AccentAmberBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Attack Simulator" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconTerminal}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Saldırı Simülatörü" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding NavigateCommand}" CommandParameter="AuditLog" Style="{StaticResource NavButtonStyle}" Margin="0,0,4,0">
+
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="AuditLog" HorizontalContentAlignment="Left" Cursor="Hand" Margin="0,2" Padding="12,10" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTabName}" Value="AuditLog">
+                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconAudit}" Fill="#A78BFA" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Audit Trail" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconAudit}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Denetim Günlüğü" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButtonStyle}">
+
+                    <Button Command="{Binding NavigateCommand}" CommandParameter="Settings" HorizontalContentAlignment="Left" Cursor="Hand" Margin="0,2" Padding="12,10" BorderThickness="0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource SidebarTextBrush}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTabName}" Value="Settings">
+                                        <Setter Property="Background" Value="{StaticResource SidebarActiveBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconSettings}" Fill="{StaticResource TextSecondaryBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Settings" VerticalAlignment="Center"/>
+                            <Path Data="{StaticResource IconSettings}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Yapılandırma" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border CornerRadius="8" Padding="10,6" Margin="0,0,12,0" Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                <StackPanel Grid.Row="2" Margin="16,0,16,18">
+                    <Border Height="1" Background="{StaticResource SidebarDividerBrush}" Margin="0,0,0,14"/>
+                    <Border CornerRadius="4" Padding="10,6" Background="#1C2E4A">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconShield}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center">
-                                <Path.Style>
-                                    <Style TargetType="Path">
-                                        <Setter Property="Fill" Value="{StaticResource AccentEmeraldBrush}"/>
+                            <Border Width="6" Height="6" CornerRadius="3" Background="{StaticResource SuccessBrush}" Margin="0,0,8,0" VerticalAlignment="Center">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsElevated}" Value="False">
-                                                <Setter Property="Fill" Value="{StaticResource AccentAmberBrush}"/>
+                                                <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Path.Style>
-                            </Path>
-                            <TextBlock FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center">
+                                </Border.Style>
+                            </Border>
+                            <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource SidebarTextBrush}" VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Text" Value="ELEVATED ADMIN"/>
+                                        <Setter Property="Text" Value="Yönetici Yetkisi"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsElevated}" Value="False">
-                                                <Setter Property="Text" Value="STANDARD USER"/>
+                                                <Setter Property="Text" Value="Standart Kullanıcı"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -115,17 +282,88 @@
                             </TextBlock>
                         </StackPanel>
                     </Border>
-
-                    <Button Command="{Binding ToggleProtectionCommand}" Style="{StaticResource PrimaryButtonStyle}">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconLock}" Fill="#0B0F19" Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Toggle Protection" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="54"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="Genel Bakış"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentTabName}" Value="Devices">
+                                            <Setter Property="Text" Value="Bağlı Donanımlar"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CurrentTabName}" Value="Metrics">
+                                            <Setter Property="Text" Value="Canlı Metrikler"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CurrentTabName}" Value="Simulator">
+                                            <Setter Property="Text" Value="Saldırı Simülatörü"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CurrentTabName}" Value="AuditLog">
+                                            <Setter Property="Text" Value="Güvenlik Denetim Günlüğü"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CurrentTabName}" Value="Settings">
+                                            <Setter Property="Text" Value="Yapılandırma ve Ayarlar"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border CornerRadius="4" Padding="10,5" Margin="0,0,12,0" Background="{StaticResource SurfaceAltBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Width="8" Height="8" CornerRadius="4" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
+                                                    <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                                <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Text" Value="KORUMA AKTİF"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
+                                                    <Setter Property="Text" Value="KORUMA DURAKLATILDI"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <Button Command="{Binding ToggleProtectionCommand}" Style="{StaticResource SecondaryButtonStyle}" Padding="12,5">
+                            <TextBlock Text="Korumayı Aç/Kapat" FontSize="12" VerticalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+        </Grid>
     </Grid>
 </Window>
