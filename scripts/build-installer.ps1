@@ -19,7 +19,11 @@ if (!(Test-Path $resolvedOutputDir)) {
     New-Item -ItemType Directory -Force -Path $resolvedOutputDir | Out-Null
 }
 
-if (!$SkipPublish) {
+$hasAppBinaries = (Test-Path "$appDistDir/HidGuard.App.exe")
+$hasSimBinaries = (Test-Path "$simDistDir/HidGuard.Simulator.exe")
+$shouldPublish = (!$SkipPublish) -or (!$hasAppBinaries) -or (!$hasSimBinaries)
+
+if ($shouldPublish) {
     Write-Host "Publishing self-contained application for installer..."
     dotnet publish src/HidGuard.App/HidGuard.App.csproj --configuration $Configuration --runtime win-x64 --self-contained true --output $appDistDir
 

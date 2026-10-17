@@ -41,7 +41,7 @@ jobs:
       - name: Build Installer Package
         shell: pwsh
         run: |
-          ./scripts/build-installer.ps1 -Version "${{ steps.extract_version.outputs.version }}" -Configuration Release -OutputDir "./artifacts" -SkipPublish
+          ./scripts/build-installer.ps1 -Version "${{ steps.extract_version.outputs.version }}" -Configuration Release -OutputDir "./artifacts"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
