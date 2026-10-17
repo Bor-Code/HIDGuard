@@ -68,8 +68,7 @@ Tek tıkla bağımsız bir `publish\HidGuard.App.exe` üretmek için:
 ## Detaylı Teknik Dokümantasyon
 
 Matematiksel zamanlama algoritmaları, Win32 API çağrıları ve derinlemesine teknik mimari için:
-- [Kullanıcı Rehberi ve Kullanım Kılavuzu (Türkçe)](docs/KULLANIM_KILAVUZU.md)
-- [User Guide & Threat Overview (İngilizce)](docs/USER_GUIDE.md)
+- [Kullanıcı Rehberi ve Tehdit Modeli (İngilizce)](docs/USER_GUIDE.md)
 - [Teknik Mimari ve Algoritma Detayları](docs/mimari-detaylar.tr.md)
 - [Mimari Derinlemesine İnceleme (İngilizce)](docs/architecture-and-deep-dive.md)
 - [Yapılandırma Rehberi](docs/configuration.md)

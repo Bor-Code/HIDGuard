@@ -68,8 +68,7 @@ To compile a standalone Release binary into `publish\`:
 ## Technical Documentation
 
 For user walkthroughs, mathematical timing models, Win32 raw input internals, and threat analysis:
-- [User Guide & Threat Overview (English)](docs/USER_GUIDE.md)
-- [Kullanım Kılavuzu (Türkçe)](docs/KULLANIM_KILAVUZU.md)
+- [User Guide & Threat Overview](docs/USER_GUIDE.md)
 - [Deep Dive Architecture & Technical Specification](docs/architecture-and-deep-dive.md)
 - [Teknik Mimari Detayları (Türkçe)](docs/mimari-detaylar.tr.md)
 - [Configuration Reference](docs/configuration.md)
