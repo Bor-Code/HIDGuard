@@ -86,6 +86,7 @@ public sealed class MainViewModelTests
         var overview = new OverviewViewModel(pipeline, audit);
         var devices = new DevicesViewModel(trust);
         var metrics = new MetricsViewModel();
+        var simulator = new SimulatorViewModel();
         var auditLog = new AuditLogViewModel(audit);
         var settings = new SettingsViewModel(config);
 
@@ -93,6 +94,7 @@ public sealed class MainViewModelTests
             overview,
             devices,
             metrics,
+            simulator,
             auditLog,
             settings,
             new StubUacElevationService(),
@@ -110,6 +112,10 @@ public sealed class MainViewModelTests
         vm.NavigateCommand.Execute("Metrics");
         vm.CurrentTabName.ShouldBe("Metrics");
         vm.CurrentView.ShouldBe(metrics);
+
+        vm.NavigateCommand.Execute("Simulator");
+        vm.CurrentTabName.ShouldBe("Simulator");
+        vm.CurrentView.ShouldBe(simulator);
 
         vm.NavigateCommand.Execute("AuditLog");
         vm.CurrentTabName.ShouldBe("AuditLog");
@@ -137,6 +143,7 @@ public sealed class MainViewModelTests
             new OverviewViewModel(pipeline, audit),
             new DevicesViewModel(trust),
             new MetricsViewModel(),
+            new SimulatorViewModel(),
             new AuditLogViewModel(audit),
             new SettingsViewModel(config),
             new StubUacElevationService(),

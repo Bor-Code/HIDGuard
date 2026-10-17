@@ -35,6 +35,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
   - Dedicated telemetry dashboard view displaying live inter-keystroke interval scatter graphs, moving averages, and anomaly threshold lines.
   - Statistical histogram visualizing interval frequency distributions with color-coded risk bands.
   - Live session metrics tracking peak typing speed, mean interval, jitter standard deviation, and anomaly count per hardware device.
+  - Integrated Attack Simulator Studio (`SimulatorViewModel` and `SimulatorView`) enabling operators to configure, execute, and monitor BadUSB attack profiles, DuckyScript payloads, safe dry-run emulation, and 7-scenario E2E compliance verification with real-time console output.
 
 - Advanced BadUSB Attack Simulator (`HidGuard.Simulator`):
   - Hak5 DuckyScript 1.0 and 2.0 parser and execution engine with dry-run capabilities.
