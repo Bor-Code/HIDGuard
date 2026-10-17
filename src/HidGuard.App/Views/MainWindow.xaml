@@ -42,6 +42,7 @@
                         <Button Content="Overview" Command="{Binding NavigateCommand}" CommandParameter="Overview" Style="{StaticResource NavButtonStyle}"/>
                         <Button Content="Devices" Command="{Binding NavigateCommand}" CommandParameter="Devices" Style="{StaticResource NavButtonStyle}"/>
                         <Button Content="Live Metrics" Command="{Binding NavigateCommand}" CommandParameter="Metrics" Style="{StaticResource NavButtonStyle}"/>
+                        <Button Content="Attack Simulator" Command="{Binding NavigateCommand}" CommandParameter="Simulator" Style="{StaticResource NavButtonStyle}"/>
                         <Button Content="Audit Trail" Command="{Binding NavigateCommand}" CommandParameter="AuditLog" Style="{StaticResource NavButtonStyle}"/>
                         <Button Content="Settings" Command="{Binding NavigateCommand}" CommandParameter="Settings" Style="{StaticResource NavButtonStyle}"/>
                     </StackPanel>

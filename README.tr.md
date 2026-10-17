@@ -235,6 +235,7 @@ Adli bilisim ve saldiri analizi icin gelistirilen olay depolama katmani en yukse
 - Overview: Canli koruma anahtari, anlik toplam tus vurusu, engellenen tuslar, tespit edilen saldirilar, notrlestirilen tehditler, anlik WPM ve anomali cubugu.
 - Devices: Entegre klavyelerin donanim kimlikleri (VID/PID), guven seviyeleri (Trusted, Unknown, Blocked) ve Trust / Block / Reset butonlari.
 - Live Metrics: Ortalama vurus araligi, standart sapma, hiz ve son vuruslarin zamanlama grafigi.
+- Attack Simulator Studio: BadUSB saldiri profillerini (Burst, Low-Jitter, Gaussian Human, Stealth Micro-Burst, Multi-Stage), ozel DuckyScript betiklerini, guvenli kuru calistirma (dry-run) modunu ve 7 senaryolu uctan uca guvenlik dogrulama paketini grafiksel olarak calistiran ve canli konsol ciktisi veren entegre arastirma studyosu.
 - Audit Trail: Filtrelenebilir ve aranabilir denetim izi tablosu ve olay raporu disari aktarma butonu (Export Report).
 - Settings: Kayan pencere boyutu, standart sapma esigi, karsi onlem anahtarlari ve Sifrelenmis Olay Deposu / Adli Bilisim yapilandirma karti.
 

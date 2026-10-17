@@ -133,6 +133,7 @@ In accordance with transparent defensive engineering principles, HIDGuard docume
 - **Single Instance Mutex**: Guarantees a single running instance per session via `Local\HIDGuard_Application_SingleInstance_Mutex`.
 - **UAC Awareness**: Detects elevation status and displays an administrative shield badge when elevated operations are available.
 - **Incident Forensics Controls**: Settings view includes a dedicated configuration card for incident store parameters (window size, retention, payload bounds). Audit Log view features one-click metadata report export in JSON or CSV format.
+- **Integrated Attack Simulator Studio**: Built-in graphical studio executing BadUSB attack profiles, custom DuckyScript payloads, safe dry-run emulation, and automated 7-scenario E2E compliance verification with real-time console output.
 
 ### 4.4 Attack Simulator and E2E Verification Suite (`HidGuard.Simulator`)
 - **DuckyScript 1.0 / 2.0 Parser**: Parses Hak5 Rubber Ducky scripts supporting `STRING`, `STRINGLN`, `DELAY`, `DEFAULT_DELAY`, `REPEAT`, and complex modifiers (`GUI r`, `CTRL ALT DEL`, `ALT F4`).
@@ -155,9 +156,9 @@ All components are covered by unit and integration test suites using xUnit and S
 | :--- | :--- | :--- | :--- |
 | HidGuard.Core.Tests | 169 | Passed | Timing engine, anomaly scoring, trust store, policy matrix, pipeline orchestration, audit trail, encrypted incident store, ring buffer, maintenance service, event log orchestration, interactive device prompt integration, CEF and RFC 5424 SIEM forwarder service |
 | HidGuard.Platform.Windows.Tests | 36 | Passed | Raw Input resolution, low-level hook suppression, device disabler, workstation locker, Serilog logging factory, DPAPI data protection, Windows Event Log publisher, startup registration service |
-| HidGuard.App.Tests | 37 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, release packaging validation, CI/CD pipeline readiness, view navigation, hardware recovery, runtime start with Windows toggle, device trust prompt dialog, hardware timing distribution histogram, live interval stream visualizer, session telemetry diagnostics |
+| HidGuard.App.Tests | 44 | Passed | MVVM commands, single instance mutex, device management, metrics, settings, incident export, installer script verification, release packaging validation, CI/CD pipeline readiness, view navigation, hardware recovery, runtime start with Windows toggle, device trust prompt dialog, hardware timing distribution histogram, live interval stream visualizer, session telemetry diagnostics, attack simulator studio UI, DuckyScript editor presets, dry-run simulation execution |
 | HidGuard.Simulator.Tests | 33 | Passed | DuckyScript parser, token mapping, advanced attack profiles, 7-scenario end-to-end verification suite |
-| **Total Solution** | **275** | **100% Green** | Zero warnings, zero errors |
+| **Total Solution** | **282** | **100% Green** | Zero warnings, zero errors |
 
 ---
 
