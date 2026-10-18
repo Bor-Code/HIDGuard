@@ -54,14 +54,22 @@ To compile a standalone Release binary into `publish\`:
 
 ---
 
-## Application Views
+## Screenshots & Application Views
 
-1. **Overview**: Real-time protection status, active defense counters, and recent activity.
-2. **Devices**: Hardware identification, connected keyboards, and trust management.
-3. **Live Metrics**: Inter-keystroke timing charts, WPM estimation, and latency histogram.
-4. **Attack Simulator**: 8 pre-configured attack profiles, custom DuckyScript studio, and pipeline verification.
-5. **Audit Log**: Tamper-evident incident history with JSON / CSV report export.
-6. **Settings**: Detection thresholds, countermeasures, startup preferences, and theme selector.
+| Overview & Protection Dashboard | Connected Devices & Trust Management |
+| :---: | :---: |
+| ![Overview](screenshots/1.png) | ![Connected Devices](screenshots/2.png) |
+| **Real-time protection status, active defense metrics, and incident alerts.** | **Hardware identification, trust enforcement, and PnP device control.** |
+
+| Live Biomechanical Metrics | Attack Simulator Studio |
+| :---: | :---: |
+| ![Live Metrics](screenshots/3.png) | ![Attack Simulator](screenshots/4.png) |
+| **Inter-keystroke timing charts, WPM estimation, and interval histogram.** | **Dry-run testing, DuckyScript studio, and automated verification suites.** |
+
+| Timing Detection Thresholds | Encrypted Forensics & Tray Options |
+| :---: | :---: |
+| ![Thresholds Settings](screenshots/5.png) | ![Forensics Settings](screenshots/6.png) |
+| **Statistical thresholds, sliding window sizes, and active countermeasures.** | **DPAPI-protected incident vault, log retention, and startup preferences.** |
 
 ---
 
