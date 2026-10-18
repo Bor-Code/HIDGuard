@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="HIDGuard - Donanım Düzeyi Klavye ve BadUSB Savunma Sistemi"
+        Title="HIDGuard - Hardware-Level Keyboard &amp; BadUSB Mitigation System"
         Icon="pack://application:,,,/Assets/app.ico"
         Height="780" Width="1200"
         MinHeight="650" MinWidth="1000"
@@ -32,10 +32,10 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="HIDGUARD" FontSize="15" FontWeight="Bold" Foreground="White"/>
-                            <TextBlock Text="v1.0.0 Kurumsal" FontSize="10" Foreground="{DynamicResource SidebarMutedBrush}"/>
+                            <TextBlock Text="v1.0.0 Enterprise" FontSize="10" Foreground="{DynamicResource SidebarMutedBrush}"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock Text="Donanım Güvenlik Merkezi" FontSize="11" Foreground="{DynamicResource SidebarMutedBrush}" Margin="0,8,0,0"/>
+                    <TextBlock Text="Hardware Defense Center" FontSize="11" Foreground="{DynamicResource SidebarMutedBrush}" Margin="0,8,0,0"/>
                     <Border Height="1" Background="{DynamicResource SidebarDividerBrush}" Margin="0,14,0,0"/>
                 </StackPanel>
 
@@ -55,7 +55,7 @@
                         </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconShield}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Genel Bakış" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Overview" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -74,7 +74,7 @@
                         </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconKeyboard}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Bağlı Donanımlar" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Connected Devices" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -93,7 +93,7 @@
                         </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconActivity}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Canlı Metrikler" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Live Metrics" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -112,7 +112,7 @@
                         </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconTerminal}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Saldırı Simülatörü" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Attack Simulator" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -131,7 +131,7 @@
                         </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconAudit}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Denetim Günlüğü" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Audit Log" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -150,7 +150,7 @@
                         </Button.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconSettings}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Yapılandırma" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="Settings" FontSize="13" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -179,10 +179,10 @@
                                 <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="White">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="Yönetici Yetkisi"/>
+                                            <Setter Property="Text" Value="Administrator Privileges"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsElevated}" Value="False">
-                                                    <Setter Property="Text" Value="Standart Kullanıcı"/>
+                                                    <Setter Property="Text" Value="Standard User"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -191,10 +191,10 @@
                                 <TextBlock FontSize="10" Foreground="{DynamicResource SidebarMutedBrush}" Margin="0,1,0,0">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="Tam Koruma Devrede"/>
+                                            <Setter Property="Text" Value="Full Protection Engaged"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsElevated}" Value="False">
-                                                    <Setter Property="Text" Value="Kısıtlı Cihaz Yönetimi"/>
+                                                    <Setter Property="Text" Value="Restricted Device Mgmt"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -224,22 +224,22 @@
                         <TextBlock FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="Genel Bakış"/>
+                                    <Setter Property="Text" Value="Overview"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CurrentTabName}" Value="Devices">
-                                            <Setter Property="Text" Value="Bağlı Giriş Donanımları"/>
+                                            <Setter Property="Text" Value="Connected Input Devices"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CurrentTabName}" Value="Metrics">
-                                            <Setter Property="Text" Value="Canlı Zamanlama Metrikleri"/>
+                                            <Setter Property="Text" Value="Live Timing Metrics"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CurrentTabName}" Value="Simulator">
-                                            <Setter Property="Text" Value="Saldırı Simülatörü ve Test Stüdyosu"/>
+                                            <Setter Property="Text" Value="Attack Simulator &amp; Test Studio"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CurrentTabName}" Value="AuditLog">
-                                            <Setter Property="Text" Value="Güvenlik Denetim ve Olay Günlüğü"/>
+                                            <Setter Property="Text" Value="Security Audit &amp; Event Log"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CurrentTabName}" Value="Settings">
-                                            <Setter Property="Text" Value="Güvenlik Yapılandırması ve Motor Ayarları"/>
+                                            <Setter Property="Text" Value="Security Configuration &amp; Engine Settings"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -274,7 +274,7 @@
                                     </Button.Style>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Ellipse Width="8" Height="8" Fill="#EF4444" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Kırmızı" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Red" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
@@ -302,7 +302,7 @@
                                     </Button.Style>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Yeşil" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Green" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
@@ -330,7 +330,7 @@
                                     </Button.Style>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Ellipse Width="8" Height="8" Fill="#3B82F6" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Mavi" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Blue" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -365,11 +365,11 @@
                                 <TextBlock FontSize="11" FontWeight="Bold" VerticalAlignment="Center">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="KORUMA AKTİF"/>
+                                            <Setter Property="Text" Value="PROTECTION ACTIVE"/>
                                             <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
-                                                    <Setter Property="Text" Value="KORUMA DURAKLATILDI"/>
+                                                    <Setter Property="Text" Value="PROTECTION PAUSED"/>
                                                     <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -383,13 +383,13 @@
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
                                     <Setter Property="Padding" Value="14,6"/>
-                                    <Setter Property="Content" Value="Korumayı Duraklat"/>
+                                    <Setter Property="Content" Value="Pause Protection"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsProtectionActive}" Value="False">
                                             <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
                                             <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                                             <Setter Property="Foreground" Value="White"/>
-                                            <Setter Property="Content" Value="Korumayı Etkinleştir"/>
+                                            <Setter Property="Content" Value="Resume Protection"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

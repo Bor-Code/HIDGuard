@@ -22,28 +22,28 @@
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="SİSTEM SAVUNMA DURUMU" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0"/>
+                            <TextBlock Text="SYSTEM DEFENSE STATUS" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,8,0"/>
                             <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1">
                                 <TextBlock Text="{Binding StatusText, Converter={StaticResource TurkishStatusConverter}}" FontSize="11" FontWeight="Bold" Foreground="{Binding StatusColor}"/>
                             </Border>
                         </StackPanel>
-                        <TextBlock Text="Gerçek Zamanlı Donanım Koruması" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,3,0,0"/>
-                        <TextBlock Text="Düşük seviyeli klavye kancası ve donanım doğrulama devrede. Yetkisiz BadUSB cihazları ve anormal enjeksiyonlar engellenir." FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                        <TextBlock Text="Real-Time Hardware Protection" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,3,0,0"/>
+                        <TextBlock Text="Low-level keyboard hook and hardware verification active. Unauthorized BadUSB devices and synthetic injection patterns are blocked." FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                     </StackPanel>
 
                     <Border Grid.Column="2" Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="14,10" VerticalAlignment="Center">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
                                 <Ellipse Width="6" Height="6" Fill="{DynamicResource SuccessBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Kanca: LL_KEYBOARD" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock Text="Hook: LL_KEYBOARD" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
                                 <Ellipse Width="6" Height="6" Fill="{DynamicResource SuccessBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="İşlem Gecikmesi: &lt; 0.5 ms" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock Text="Processing Latency: &lt; 0.5 ms" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Width="6" Height="6" Fill="{DynamicResource SuccessBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="Filtreleme: Heuristic + Inter-Key" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock Text="Filtering: Heuristic + Inter-Key" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -61,44 +61,44 @@
                 <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
                     <StackPanel>
                         <Grid>
-                            <TextBlock Text="TOPLAM TUŞ VURUŞU" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="TOTAL KEYSTROKES" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
                             <Path Data="{StaticResource IconKeyboard}" Fill="{DynamicResource AccentBrush}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.75"/>
                         </Grid>
                         <TextBlock Text="{Binding TotalKeystrokes}" Style="{StaticResource MetricValueText}" Margin="0,10,0,0"/>
-                        <TextBlock Text="İşlenen ve doğrulanan" Style="{StaticResource MetricNoteText}"/>
+                        <TextBlock Text="Processed &amp; verified" Style="{StaticResource MetricNoteText}"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="4,0,4,0">
                     <StackPanel>
                         <Grid>
-                            <TextBlock Text="ENGELLENEN TUŞLAR" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="SUPPRESSED KEYS" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
                             <Path Data="{StaticResource IconBan}" Fill="{DynamicResource WarningBrush}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.75"/>
                         </Grid>
                         <TextBlock Text="{Binding SuppressedKeystrokes}" Style="{StaticResource MetricValueText}" Foreground="{DynamicResource WarningBrush}" Margin="0,10,0,0"/>
-                        <TextBlock Text="Kanca ile düşürüldü" Style="{StaticResource MetricNoteText}"/>
+                        <TextBlock Text="Dropped in-flight by hook" Style="{StaticResource MetricNoteText}"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="2" Style="{StaticResource CardStyle}" Margin="4,0,4,0">
                     <StackPanel>
                         <Grid>
-                            <TextBlock Text="TESPİT EDİLEN SALDIRILAR" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="ATTACKS DETECTED" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
                             <Path Data="{StaticResource IconAlert}" Fill="{DynamicResource DangerBrush}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.75"/>
                         </Grid>
                         <TextBlock Text="{Binding AttacksDetected}" Style="{StaticResource MetricValueText}" Foreground="{DynamicResource DangerBrush}" Margin="0,10,0,0"/>
-                        <TextBlock Text="Anomali eşiğini aştı" Style="{StaticResource MetricNoteText}"/>
+                        <TextBlock Text="Exceeded anomaly threshold" Style="{StaticResource MetricNoteText}"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="3" Style="{StaticResource CardStyle}" Margin="8,0,0,0">
                     <StackPanel>
                         <Grid>
-                            <TextBlock Text="ETKİSİZ HALE GETİRİLENLER" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="THREATS NEUTRALIZED" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
                             <Path Data="{StaticResource IconShieldCheck}" Fill="{DynamicResource SuccessBrush}" Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.75"/>
                         </Grid>
                         <TextBlock Text="{Binding ThreatsNeutralized}" Style="{StaticResource MetricValueText}" Foreground="{DynamicResource SuccessBrush}" Margin="0,10,0,0"/>
-                        <TextBlock Text="Karşı önlem uygulandı" Style="{StaticResource MetricNoteText}"/>
+                        <TextBlock Text="Countermeasures deployed" Style="{StaticResource MetricNoteText}"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -112,9 +112,9 @@
                 <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,8,0">
                     <StackPanel>
                         <Grid Margin="0,0,0,8">
-                            <TextBlock Text="CANLI YAZMA HIZI" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="LIVE TYPING SPEED" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
                             <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <TextBlock Text="Pencere: 30 Tuş" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock Text="Window: 30 Keys" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </Border>
                         </Grid>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,8">
@@ -122,16 +122,16 @@
                             <TextBlock Text="WPM" Style="{StaticResource MetricUnitText}"/>
                         </StackPanel>
                         <ProgressBar Value="{Binding CurrentWpm}" Maximum="220" Style="{StaticResource MeterBarStyle}" Height="8" Margin="0,0,0,8"/>
-                        <TextBlock Text="Fizyolojik insan yazma sınırı ~160 WPM'dir. Otomatik BadUSB enjeksiyonları genellikle 1.000+ WPM hızına ulaşır." Style="{StaticResource MetricNoteText}"/>
+                        <TextBlock Text="Physiological human typing limit is ~160 WPM. Automated BadUSB payloads typically inject at 1,000+ WPM." Style="{StaticResource MetricNoteText}"/>
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="8,0,0,0">
                     <StackPanel>
                         <Grid Margin="0,0,0,8">
-                            <TextBlock Text="GÜNCEL ANOMALİ SKORU" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
+                            <TextBlock Text="CURRENT ANOMALY SCORE" Style="{StaticResource MetricLabelText}" VerticalAlignment="Center"/>
                             <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,2" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <TextBlock Text="Eşik: %65" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock Text="Threshold: 65%" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             </Border>
                         </Grid>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,8">
@@ -139,7 +139,7 @@
                             <TextBlock Text="%" Style="{StaticResource MetricUnitText}"/>
                         </StackPanel>
                         <ProgressBar Value="{Binding LatestAnomalyScore}" Maximum="100" Style="{StaticResource MeterBarStyle}" Height="8" Foreground="{DynamicResource DangerBrush}" Margin="0,0,0,8"/>
-                        <TextBlock Text="Son 30 tuş aralığının varyasyon katsayısı ve insan-altı aralık oranı istatistiksel olarak değerlendirilir." Style="{StaticResource MetricNoteText}"/>
+                        <TextBlock Text="Evaluates timing variance and sub-human intervals over the sliding 30-keystroke window." Style="{StaticResource MetricNoteText}"/>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -147,11 +147,11 @@
             <Border Style="{StaticResource CardStyle}">
                 <StackPanel>
                     <Grid Margin="0,0,0,14">
-                        <TextBlock Text="Son Güvenlik Olayları" Style="{StaticResource SectionTitleText}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Recent Security Incidents" Style="{StaticResource SectionTitleText}" VerticalAlignment="Center"/>
                         <Button Command="{Binding ClearStatsCommand}" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Right" Padding="12,5" FontSize="11">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Path Data="{StaticResource IconTrash}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="İstatistikleri Sıfırla" VerticalAlignment="Center"/>
+                                <TextBlock Text="Reset Statistics" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -171,8 +171,8 @@
                                 <Path Data="{StaticResource IconShieldCheck}" Fill="{DynamicResource SuccessBrush}" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Sistem Güvenli — Tehdit veya Anomali Tespit Edilmedi" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
-                                <TextBlock Text="Klavye girişleri arka planda analiz edilmektedir. Şüpheli bir tuş enjeksiyonu veya kural dışı anomali algılandığında olay kayıtları anında burada listelenir." FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
+                                <TextBlock Text="System Secure — No Threats or Anomalies Detected" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Keyboard inputs are continuously analyzed in the background. When synthetic injection or policy anomalies are identified, incident records appear here immediately." FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Grid>
                     </Border>

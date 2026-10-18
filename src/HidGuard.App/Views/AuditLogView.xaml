@@ -27,13 +27,13 @@
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,4">
-                        <TextBlock Text="ADLİ BİLİŞİM VE DENETİM İZİ" Style="{StaticResource MetricLabelText}" Margin="0,0,8,0"/>
+                        <TextBlock Text="FORENSIC AUDIT TRAIL" Style="{StaticResource MetricLabelText}" Margin="0,0,8,0"/>
                         <Border Background="{DynamicResource SurfaceAltBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Padding="6,1" VerticalAlignment="Center">
-                            <TextBlock Text="DEĞİŞTİRİLEMEZ KAYIT" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock Text="IMMUTABLE RECORD" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         </Border>
                     </StackPanel>
-                    <TextBlock Text="Güvenlik Denetim ve Olay Günlüğü" Style="{StaticResource PageTitleText}"/>
-                    <TextBlock Text="Tüm donanım yetkilendirmeleri ve aktif savunma eylemlerinin kriptografik olarak doğrulanabilir kaydı. Tuş vuruşları sıfır kayıt ilkesiyle korunur."
+                    <TextBlock Text="Security Audit &amp; Event Log" Style="{StaticResource PageTitleText}"/>
+                    <TextBlock Text="Cryptographically verifiable log of all hardware authorizations and active defense actions. Keystrokes are protected under zero-keylogging privacy guarantees."
                                Style="{StaticResource PageSubtitleText}"/>
                 </StackPanel>
 
@@ -44,7 +44,7 @@
                             Margin="0,0,10,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconExport}" Fill="{DynamicResource TextPrimaryBrush}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Raporu Dışa Aktar" VerticalAlignment="Center"/>
+                            <TextBlock Text="Export Report" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     <Button Command="{Binding RefreshCommand}"
@@ -52,7 +52,7 @@
                             Padding="12,6">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconRefresh}" Fill="White" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Günlüğü Yenile" VerticalAlignment="Center"/>
+                            <TextBlock Text="Refresh Log" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -96,7 +96,7 @@
                         Padding="12,6">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <Path Data="{StaticResource IconClose}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Filtreyi Temizle" VerticalAlignment="Center"/>
+                        <TextBlock Text="Clear Filter" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </Grid>
@@ -106,8 +106,8 @@
             <DataGrid ItemsSource="{Binding FilteredEvents}"
                       Style="{StaticResource ModernDataGridStyle}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ZAMAN DAMGASI" Binding="{Binding FormattedTimestamp}" Width="160"/>
-                    <DataGridTemplateColumn Header="OLAY TÜRÜ" Width="200">
+                    <DataGridTextColumn Header="TIMESTAMP" Binding="{Binding FormattedTimestamp}" Width="160"/>
+                    <DataGridTemplateColumn Header="EVENT TYPE" Width="200">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="6,4">
@@ -117,10 +117,10 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="EYLEM" Binding="{Binding ActionTaken, Converter={StaticResource TurkishStatusConverter}}" Width="140"/>
-                    <DataGridTextColumn Header="SONUÇ" Binding="{Binding Outcome, Converter={StaticResource TurkishStatusConverter}}" Width="110"/>
-                    <DataGridTextColumn Header="DONANIM KİMLİĞİ" Binding="{Binding DeviceId}" Width="180"/>
-                    <DataGridTextColumn Header="AYRINTILAR" Binding="{Binding Details}" Width="*"/>
+                    <DataGridTextColumn Header="ACTION" Binding="{Binding ActionTaken, Converter={StaticResource TurkishStatusConverter}}" Width="140"/>
+                    <DataGridTextColumn Header="OUTCOME" Binding="{Binding Outcome, Converter={StaticResource TurkishStatusConverter}}" Width="110"/>
+                    <DataGridTextColumn Header="HARDWARE ID" Binding="{Binding DeviceId}" Width="180"/>
+                    <DataGridTextColumn Header="DETAILS" Binding="{Binding Details}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

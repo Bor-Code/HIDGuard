@@ -24,15 +24,15 @@ public sealed class TrayIconService : ITrayIconService
 
         var contextMenu = new ContextMenuStrip();
 
-        var openItem = new ToolStripMenuItem("Kontrol Panelini Aç", null, (_, _) => onOpenRequested())
+        var openItem = new ToolStripMenuItem("Open Dashboard", null, (_, _) => onOpenRequested())
         {
             Font = new Font(contextMenu.Font, FontStyle.Bold)
         };
 
-        statusMenuItem = new ToolStripMenuItem("Koruma: Aktif", null, (_, _) => onToggleProtectionRequested());
-        var settingsItem = new ToolStripMenuItem("Ayarlar", null, (_, _) => onSettingsRequested());
-        var auditItem = new ToolStripMenuItem("Olay Günlüğü", null, (_, _) => onAuditRequested());
-        var exitItem = new ToolStripMenuItem("Çıkış", null, (_, _) => onExitRequested());
+        statusMenuItem = new ToolStripMenuItem("Protection: Active", null, (_, _) => onToggleProtectionRequested());
+        var settingsItem = new ToolStripMenuItem("Settings", null, (_, _) => onSettingsRequested());
+        var auditItem = new ToolStripMenuItem("Audit Log", null, (_, _) => onAuditRequested());
+        var exitItem = new ToolStripMenuItem("Exit", null, (_, _) => onExitRequested());
 
         contextMenu.Items.Add(openItem);
         contextMenu.Items.Add(new ToolStripSeparator());
@@ -56,7 +56,7 @@ public sealed class TrayIconService : ITrayIconService
         notifyIcon = new NotifyIcon
         {
             Icon = appIcon,
-            Text = "HIDGuard - Donanım Güvenliği ve Tuş Enjeksiyonu Koruması",
+            Text = "HIDGuard - Hardware Security & BadUSB Mitigation",
             ContextMenuStrip = contextMenu,
             Visible = true
         };
@@ -71,8 +71,8 @@ public sealed class TrayIconService : ITrayIconService
             return;
         }
 
-        statusMenuItem.Text = isProtected ? "Koruma: Aktif (Duraklatmak için tıklayın)" : "Koruma: Duraklatıldı (Sürdürmek için tıklayın)";
-        notifyIcon.Text = isProtected ? "HIDGuard - Koruma Aktif" : "HIDGuard - Koruma Duraklatıldı";
+        statusMenuItem.Text = isProtected ? "Protection: Active (Click to pause)" : "Protection: Paused (Click to resume)";
+        notifyIcon.Text = isProtected ? "HIDGuard - Protection Active" : "HIDGuard - Protection Paused";
     }
 
     public void ShowNotification(string title, string message, ToolTipIcon icon = ToolTipIcon.Info)

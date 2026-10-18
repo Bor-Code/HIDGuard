@@ -22,8 +22,8 @@
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="Saldırı Simülatörü ve Test Stüdyosu" Style="{StaticResource PageTitleText}"/>
-                        <TextBlock Text="BadUSB tuş enjeksiyon saldırılarını test edin, insan klavye dinamiklerini kıyaslayın ve aktif savunma mekanizmalarını doğrulayın."
+                        <TextBlock Text="Attack Simulator &amp; Test Studio" Style="{StaticResource PageTitleText}"/>
+                        <TextBlock Text="Safely test BadUSB keystroke injection attacks, compare biomechanical human dynamics, and verify active defense countermeasures."
                                    Style="{StaticResource PageSubtitleText}"/>
                     </StackPanel>
 
@@ -49,13 +49,13 @@
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                        <TextBlock Text="GÜVENLİK KONTROLLERİ" Style="{StaticResource MetricLabelText}"/>
-                        <TextBlock Text="Güvenli simülasyon modu, işletim sistemine gerçek tuş göndermeden zamanlama döngülerini ve analiz metriklerini çalıştırır."
+                        <TextBlock Text="SAFETY CONTROLS" Style="{StaticResource MetricLabelText}"/>
+                        <TextBlock Text="Dry-run simulation mode verifies timing pipelines and scoring metrics without injecting physical keys to the operating system."
                                    Style="{StaticResource SectionHintText}"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <CheckBox Content="Güvenli Simülasyon Modu (Önerilen)"
+                        <CheckBox Content="Dry-Run Simulation Mode (Recommended)"
                                   IsChecked="{Binding IsDryRun}"
                                   Style="{StaticResource FormCheckBoxStyle}"
                                   FontWeight="SemiBold"
@@ -63,12 +63,12 @@
                                   Margin="0,0,24,0"/>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Geri Sayım:" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Countdown:" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
                             <TextBox Text="{Binding CountdownSeconds, UpdateSourceTrigger=PropertyChanged}"
                                      Width="48"
                                      HorizontalContentAlignment="Center"
                                      Style="{StaticResource InputTextBoxStyle}"/>
-                            <TextBlock Text="sn" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                            <TextBlock Text="s" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -85,7 +85,7 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                             <Path Data="{StaticResource IconCrosshair}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="SALDIRI PROFİLLERİ" Style="{StaticResource SectionTitleText}"/>
+                            <TextBlock Text="ATTACK PROFILES" Style="{StaticResource SectionTitleText}"/>
                         </StackPanel>
 
                         <ListBox ItemsSource="{Binding AvailableProfiles}"
@@ -190,7 +190,7 @@
                             <Grid Margin="0,0,0,12">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <Path Data="{StaticResource IconSliders}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="SEÇİLİ PROFİL VE PARAMETRELER" Style="{StaticResource SectionTitleText}"/>
+                                    <TextBlock Text="SELECTED PROFILE &amp; PARAMETERS" Style="{StaticResource SectionTitleText}"/>
                                 </StackPanel>
                                 <TextBlock Text="{Binding SelectedProfile.Title, Converter={StaticResource TurkishStatusConverter}}"
                                            FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}"
@@ -203,7 +203,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Tuş Vuruşu Adedi:" Style="{StaticResource FieldLabelText}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Keystroke Count:" Style="{StaticResource FieldLabelText}" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="1" Text="{Binding KeystrokeCount, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" Style="{StaticResource InputTextBoxStyle}"/>
                                 </Grid>
 
@@ -212,24 +212,24 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Vuruş Aralığı (ms):" Style="{StaticResource FieldLabelText}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Interval (ms):" Style="{StaticResource FieldLabelText}" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="1" Text="{Binding IntervalMs, UpdateSourceTrigger=PropertyChanged}" Width="80" HorizontalContentAlignment="Center" Style="{StaticResource InputTextBoxStyle}"/>
                                 </Grid>
                             </StackPanel>
 
                             <StackPanel Visibility="{Binding IsDuckyScriptSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
-                                <TextBlock Text="Hazır Şablonlar:" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                                <TextBlock Text="Built-in Presets:" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
                                 <WrapPanel Margin="0,0,0,10">
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="Hello" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Path Data="{StaticResource IconCode}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Selam" FontSize="11" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Hello World" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="RunCmd" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="CMD Çalıştır" FontSize="11" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Run CMD" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="PowerShell" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
@@ -241,12 +241,12 @@
                                     <Button Command="{Binding LoadPresetCommand}" CommandParameter="Recon" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,6,6" Padding="8,4">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Path Data="{StaticResource IconCrosshair}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="Keşif" FontSize="11" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Recon" FontSize="11" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
                                 </WrapPanel>
 
-                                <TextBlock Text="Yük Betiği (DuckyScript):" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="Payload Script (DuckyScript):" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,4"/>
                                 <TextBox Text="{Binding DuckyScriptText, UpdateSourceTrigger=PropertyChanged}"
                                          Height="110"
                                          AcceptsReturn="True"
@@ -257,7 +257,7 @@
                             </StackPanel>
 
                             <StackPanel Visibility="{Binding IsVerificationSelected, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,12">
-                                <TextBlock Text="Yalıtılmış sentetik girdi hattı üzerinde 7 otomatik güvenlik senaryosunu çalıştırarak seri saldırı engelleme, düşük sapmalı düzenlilik tespiti, insan yazımı geçişi ve gizlilik ilkelerini denetler."
+                                <TextBlock Text="Executes 7 automated security verification scenarios on an isolated synthetic pipeline verifying burst blocking, low-jitter regularity detection, human typing passthrough, and privacy invariants."
                                            FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap"/>
                             </StackPanel>
 
@@ -274,7 +274,7 @@
                                         Height="36">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Path Data="{StaticResource IconPlay}" Fill="White" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Saldırıyı Başlat" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Launch Attack" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
 
@@ -284,7 +284,7 @@
                                         Height="36">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Path Data="{StaticResource IconStop}" Fill="{DynamicResource DangerBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Durdur" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Stop" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -306,13 +306,13 @@
 
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <Path Data="{StaticResource IconTerminal}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="KONSOL ÇIKTISI" Style="{StaticResource SectionTitleText}"/>
+                                    <TextBlock Text="CONSOLE OUTPUT" Style="{StaticResource SectionTitleText}"/>
                                 </StackPanel>
 
                                 <Button Grid.Column="1" Command="{Binding ClearConsoleCommand}" Style="{StaticResource SecondaryButtonStyle}" Padding="10,5">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Path Data="{StaticResource IconTrash}" Fill="{DynamicResource TextSecondaryBrush}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="Konsolu Temizle" FontSize="11" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Clear Console" FontSize="11" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -338,7 +338,7 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                 <Path Data="{StaticResource IconShieldCheck}" Fill="{DynamicResource AccentBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                <TextBlock Text="OTOMATİK DOĞRULAMA TEST SONUÇLARI" Style="{StaticResource SectionTitleText}"/>
+                                <TextBlock Text="AUTOMATED VERIFICATION TEST RESULTS" Style="{StaticResource SectionTitleText}"/>
                             </StackPanel>
 
                             <ItemsControl ItemsSource="{Binding VerificationScenarios}">
