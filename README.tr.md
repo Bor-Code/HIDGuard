@@ -54,14 +54,22 @@ Tek tıkla bağımsız bir `publish\HidGuard.App.exe` üretmek için:
 
 ---
 
-## Kullanıcı Arayüzü Sekmeleri
+## Ekran Görüntüleri ve Arayüz Sayfaları
+ 
+| Genel Bakış & Savunma Paneli | Bağlı Aygıtlar & Güven Yönetimi |
+| :---: | :---: |
+| ![Genel Bakış](screenshots/1.png) | ![Bağlı Aygıtlar](screenshots/2.png) |
+| **Canlı koruma durumu, anlık savunma metrikleri ve olay uyarıları.** | **Donanım kimliği doğrulama, güven durumu ve PnP aygıt kontrolü.** |
 
-1. **Genel Bakış (Overview)**: Canlı koruma durumu, son savunma eylemleri ve sistem özeti.
-2. **Aygıtlar (Devices)**: Sisteme bağlı tüm giriş donanımları, güvenilirlik durumları ve yetkilendirme listesi.
-3. **Canlı Metrikler (Metrics)**: Tuş vuruş frekansı, WPM, varyans ve gecikme dağılım histogramı.
-4. **Saldırı Simülatörü (Simulator)**: 8 hazır saldırı profili, DuckyScript derleyici ve otomatik doğrulama testleri.
-5. **Denetim Günlüğü (Audit Log)**: Değiştirilemez, kriptografik zaman damgalı olay kaydı ve dışa aktarma (JSON / CSV).
-6. **Yapılandırma (Settings)**: Eşik değerleri, koruma modları ve tema seçenekleri.
+| Canlı Biyomekanik Metrikler | Saldırı Simülatörü Stüdyosu |
+| :---: | :---: |
+| ![Canlı Metrikler](screenshots/3.png) | ![Saldırı Simülatörü](screenshots/4.png) |
+| **Tuşlar arası zamanlama grafikleri, WPM tahmini ve aralık histogramı.** | **Zararsız test ortamı, DuckyScript stüdyosu ve otomatik doğrulama.** |
+
+| Zamanlama Algılama Eşikleri | Şifreli Adli Delil Deposu & Seçenekler |
+| :---: | :---: |
+| ![Eşik Ayarları](screenshots/5.png) | ![Adli Delil Ayarları](screenshots/6.png) |
+| **İstatistiki eşikler, kayan pencere boyutu ve aktif karşı önlemler.** | **DPAPI korumalı olay deposu, kayıt saklama ve sistem tepsisi ayarları.** |
 
 ---
 
