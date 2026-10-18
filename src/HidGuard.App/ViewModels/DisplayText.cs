@@ -16,12 +16,12 @@ public static class DisplayText
 {
     public static string ForEventType(AuditEventType type) => type switch
     {
-        AuditEventType.DeviceConnected => "Cihaz bağlandı",
-        AuditEventType.DeviceDisconnected => "Cihaz çıkarıldı",
-        AuditEventType.DeviceTrustModified => "Güven durumu değişti",
-        AuditEventType.AnomalyDetected => "Anomali tespit edildi",
-        AuditEventType.CountermeasureExecuted => "Karşı önlem uygulandı",
-        AuditEventType.ConfigurationChanged => "Yapılandırma değişti",
+        AuditEventType.DeviceConnected => "Device connected",
+        AuditEventType.DeviceDisconnected => "Device disconnected",
+        AuditEventType.DeviceTrustModified => "Trust state changed",
+        AuditEventType.AnomalyDetected => "Anomaly detected",
+        AuditEventType.CountermeasureExecuted => "Countermeasure executed",
+        AuditEventType.ConfigurationChanged => "Configuration changed",
         _ => type.ToString()
     };
 }
